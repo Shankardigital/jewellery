@@ -1,0 +1,26 @@
+//
+// Labels
+//
+
+// For use with horizontal and inline forms, when you need the label (or legend)
+// text to align with the form controls.
+.col-form-label,
+.col-form-label-lg,
+.col-form-label-sm {
+  @include font-size($form-label-font-size); // Override the `<legend>` default
+  align-self: center;
+  
+}
+.form-label {
+  font-size: 0.857rem;
+  color: #000 !important;
+}
+
+
+// [dir] .form-control {
+//   padding: 0.571rem 1rem;
+//   background-color: #fff;
+//   background-clip: padding-box;
+//   border: 1px solid #fa2841de;
+//   border-radius: 0.357rem;
+// }
