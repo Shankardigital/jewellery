@@ -274,6 +274,9 @@ const Maladetails = () => {
                   <th >
                     pieces
                   </th>
+                  <th >
+                    status
+                  </th>
 
                   <th style={{ width: "140px" }}>
                     Action
@@ -314,6 +317,9 @@ const Maladetails = () => {
                   </td> */}
                     <td>
                       {data.totalPieces}
+                    </td>
+                    <td>
+                      {data.status}
                     </td>
 
                     <td>

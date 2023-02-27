@@ -364,6 +364,9 @@ const Casting = () => {
                   <th  >
                     WEIGHT OUT
                   </th>
+                  <th  >
+                    status
+                  </th>
                   {/* <th  >
                   FINISH IN
                   </th>
@@ -403,6 +406,9 @@ const Casting = () => {
                     </td>
                     <td>
                       {data.weightOut}
+                    </td>
+                    <td>
+                      {data.status}
                     </td>
                     <td>
 

@@ -273,6 +273,9 @@ const Bandinidetails = () => {
                   <th >
                     pieces
                   </th>
+                  <th >
+                    status
+                  </th>
 
                   <th style={{ width: "140px" }}>
                     Action
@@ -313,6 +316,9 @@ const Bandinidetails = () => {
                   </td> */}
                     <td>
                       {data.totalPieces}
+                    </td>
+                    <td>
+                      {data.status}
                     </td>
 
                     <td>

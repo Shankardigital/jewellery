@@ -58,69 +58,21 @@ const BreadCrumbs = () => {
     // setforms01(count)
   }
 
-  const handleChange2 = (e) => {
-    const myUser = { ...ordr }
-    myUser[e.target.name] = e.target.value
-    setordr(myUser)
-    const count = (ordr.receivedWeight * e.target.value) / 100
-    console.log(count)
-    setforms02(count.toFixed(3))
-    const count2 = parseFloat(ordr.issuedWeight) - (parseFloat(ordr.receivedWeight) + parseFloat(count))
-    setforms01(count2.toFixed(3))
-  }
+  const getvalue = ordr.issuedWeight - (parseFloat(ordr.receivedWeights) + parseFloat(ordr.wastages))
+  console.log(getvalue)
 
+  const recvalue = (getvalue.toString())
+  console.log(recvalue)
 
-  const actiordrs = () => {
-    const token = datas
-    const params = {
-      orderId:ordid,
-      itemName:caitem
-    }
-    // const docid = ordid
-    axios.post(`http://103.186.185.77:5023/omsanthoshjewellery/admin/ghatdetails/getghatdetailsbyid`, params,
-      {
-        headers: { Authorization: `Bearer ${token}` }
-      }, {}
-    ).then((res) => {
-      if (res.status === 200) {
-        console.log(res.data)
-        setordr(res.data.GhatDetails)
-      }
-        }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
-    })
-
-  }
-
-  const qrdetails = () => {
-    const docid = ordid
-    const token = datas
-    axios.post(`http://103.186.185.77:5023/omsanthoshjewellery/admin/drawing/getOrderDetails/${docid}`,
-      {
-        headers: { Authorization: `Bearer ${token}` }
-      }, {}
-    ).then((res) => {
-      if (res.status === 200) {
-        console.log(res.data)
-        setordr1(res.data.orderDetails)
-      }
-        }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
-    })
-
-  }
+  const [errorObject, seterrorObject] = useState({
+    finishIn: ""
+  })
 
   const activecust = () => {
     const docid = caid
     const token = datas
     const params = {
-      receivedDate:ordr.receivedDate,
+      receivedDate: ordr.receivedDate,
       wastage: parseFloat(forms02).toFixed(3),
       issuedWeight: parseFloat(ordr.issuedWeight).toFixed(3),
       receivedWeight: parseFloat(ordr.receivedWeight).toFixed(3),
@@ -142,29 +94,100 @@ const BreadCrumbs = () => {
         navigate("/ghat-details")
         // setcustomer(res.data.employeeData)
       }
-        }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
+    }).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.message)
+        toast.error(error.response.data.message)
+      }
+    })
+
+  }
+
+  const validateFun = (e) => {
+    console.log(e)
+    console.log(ordr)
+    if (ordr.receivedWeight === "" || ordr.receivedWeight > recvalue) {
+      const error = { ...errorObject }
+      error["receivedWeight"] = "Enter valid value"
+      seterrorObject(error)
+    } else {
+      activecust()
+    }
+  }
+
+  const handleChange2 = (e) => {
+    const myUser = { ...ordr }
+    myUser[e.target.name] = e.target.value
+    setordr(myUser)
+    const count = (ordr.receivedWeight * e.target.value) / 100
+    console.log(count)
+    setforms02(count.toFixed(3))
+    const count2 = parseFloat(ordr.issuedWeight) - (parseFloat(ordr.receivedWeight) + parseFloat(count))
+    setforms01(count2.toFixed(3))
+  }
+
+
+  const actiordrs = () => {
+    const token = datas
+    const params = {
+      orderId: ordid,
+      itemName: caitem
+    }
+    // const docid = ordid
+    axios.post(`http://103.186.185.77:5023/omsanthoshjewellery/admin/ghatdetails/getghatdetailsbyid`, params,
+      {
+        headers: { Authorization: `Bearer ${token}` }
+      }, {}
+    ).then((res) => {
+      if (res.status === 200) {
+        console.log(res.data)
+        setordr(res.data.GhatDetails)
+      }
+    }).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.message)
+        toast.error(error.response.data.message)
+      }
+    })
+
+  }
+
+  const qrdetails = () => {
+    const docid = ordid
+    const token = datas
+    axios.post(`http://103.186.185.77:5023/omsanthoshjewellery/admin/drawing/getOrderDetails/${docid}`,
+      {
+        headers: { Authorization: `Bearer ${token}` }
+      }, {}
+    ).then((res) => {
+      if (res.status === 200) {
+        console.log(res.data)
+        setordr1(res.data.orderDetails)
+      }
+    }).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.message)
+        toast.error(error.response.data.message)
+      }
     })
 
   }
 
   const handlesubmit = (e) => {
+    validateFun(e)
     e.preventDefault()
-    activecust()
+    // activecust()
   }
 
 
   // const [percent, setpercent] = useState([])
   // console.log(percent)
-const percent = []
-    for (let i = 0; i < 5; i = i + 0.1) {
-      percent.push(i.toFixed(1))
-      // setpercent(perdata)
-      // setpercent(i.toFixed(1))
-    }
+  const percent = []
+  for (let i = 0; i < 5; i = i + 0.1) {
+    percent.push(i.toFixed(1))
+    // setpercent(perdata)
+    // setpercent(i.toFixed(1))
+  }
   console.log(percent)
   // console.log(perdata)
   useEffect(() => {
@@ -191,53 +214,53 @@ const percent = []
                 <h5 className="text-center mb-1">Order Details</h5>
 
                 <div className="text-center justify">
-                <Row className="mt-2 ">
-                  <Col>
-                    <ul className="list-unstyled">
-                      <li className="mb-75">
-                        <span className=" me-25">Order No: </span>
-                        <span>{ordr1.orderNo}</span>
-                      </li>
-                      <li className="mb-75">
-                        <span className=" me-25">Customer Name : </span>
-                        <span>{ordr1.customerDetails}</span>
-                      </li>
-                      <li className="mb-75">
-                        <span className="  me-25">Item Name : </span>
-                        <span>
-                        {ordr.itemName}
-                        </span>
-                      </li>
-                      <li className="mb-75">
-                        <span className="  me-25">Purity : </span>
-                        <span>{ordr1.itemPurity}K </span>
-                      </li>
+                  <Row className="mt-2 ">
+                    <Col>
+                      <ul className="list-unstyled">
+                        <li className="mb-75">
+                          <span className=" me-25">Order No: </span>
+                          <span>{ordr1.orderNo}</span>
+                        </li>
+                        <li className="mb-75">
+                          <span className=" me-25">Customer Name : </span>
+                          <span>{ordr1.customerDetails}</span>
+                        </li>
+                        <li className="mb-75">
+                          <span className="  me-25">Item Name : </span>
+                          <span>
+                            {ordr.itemName}
+                          </span>
+                        </li>
+                        <li className="mb-75">
+                          <span className="  me-25">Purity : </span>
+                          <span>{ordr1.itemPurity}K </span>
+                        </li>
 
-                     
-                    </ul>
-                  </Col>
-                  <Col>
-                    <ul className="list-unstyled">
-                    <li className="mb-75">
-                        <span className="  me-25">Aprox Gold : </span>
-                        <span>{ordr1.goldWeight} grams</span>
-                      </li>
-                      <li className="mb-75">
-                        <span className="  me-25">Diamond : </span>
-                        <span>{ordr1.itemDimondRangeCarat} cts</span>
-                      </li>
-                      <li className="mb-75">
-                        <span className="  me-25">Stone : </span>
-                        <span>{ordr1.itemStoneCarat} cts</span>
-                      </li>
-                      <li className="mb-75">
-                        <span className="  me-25">Remarks : </span>
-                        <span>{ordr1.itemSpecialRemarks}</span>
-                      </li>
-                     
-                    </ul>
-                  </Col>
-                </Row>
+
+                      </ul>
+                    </Col>
+                    <Col>
+                      <ul className="list-unstyled">
+                        <li className="mb-75">
+                          <span className="  me-25">Aprox Gold : </span>
+                          <span>{ordr1.goldWeight} grams</span>
+                        </li>
+                        <li className="mb-75">
+                          <span className="  me-25">Diamond : </span>
+                          <span>{ordr1.itemDimondRangeCarat} cts</span>
+                        </li>
+                        <li className="mb-75">
+                          <span className="  me-25">Stone : </span>
+                          <span>{ordr1.itemStoneCarat} cts</span>
+                        </li>
+                        <li className="mb-75">
+                          <span className="  me-25">Remarks : </span>
+                          <span>{ordr1.itemSpecialRemarks}</span>
+                        </li>
+
+                      </ul>
+                    </Col>
+                  </Row>
 
                 </div>
                 {/* <p className='text-center'>The excellent set of cameras offer excellent 
@@ -277,10 +300,10 @@ const percent = []
                     Date <span className="text-danger">*</span>
                   </Label>
                   <Input required
-                  onChange={(e) => { handleChange(e) }}
-                  // max={new Date().toISOString().split("T")[0]}
-                  min={ordr.submittedDate}
-                  max={ordr1.deliveryDate}
+                    onChange={(e) => { handleChange(e) }}
+                    // max={new Date().toISOString().split("T")[0]}
+                    min={ordr.submittedDate}
+                    max={ordr1.deliveryDate}
                     //  value={ordr.submittedDate}
                     type="date" name="receivedDate" placeholder="Date" className="form-control mb-1" />
                 </Col>
@@ -305,30 +328,47 @@ const percent = []
                     //  onChange={ (e) => { handleChange(e) }}
                     type="text" placeholder="Enter Gold Weight Grams/kgs" className="form-control mb-1" />
                 </Col>
-                <Col md={3}>
+                <Col md={2}>
+                  <Label>
+                  Last  Received <span className="text-danger">*</span>
+                  </Label>
+                  <Input disabled value={ordr.receivedWeights} required  type="text" placeholder="Enter Gold Weight Grams/kgs" className="form-control mb-1" />
+                 
+                </Col>
+                <Col md={2}>
                   <Label>
                     Received Weight <span className="text-danger">*</span>
                   </Label>
-                  <Input max={ordr.issuedWeight} required name="receivedWeight" onChange={(e) => { handleChange(e) }} type="text" placeholder="Enter Gold Weight Grams/kgs" className="form-control mb-1" />
+                  <Input value={ordr.receivedWeight} required name="receivedWeight" onChange={(e) => { handleChange(e) }} type="text" placeholder="Enter Gold Weight Grams/kgs" className="form-control mb-1" />
+                  <span style={{ color: "#ff0000" }}>
+                    {errorObject.receivedWeight}
+                  </span>
+                </Col>
+                <Col md={2}>
+                  <Label>
+                  Last Wastage <span className="text-danger">*</span>
+                  </Label>
+                  <Input disabled value={ordr.wastages} required  type="text" placeholder="Enter Gold Weight Grams/kgs" className="form-control mb-1" />
+                 
                 </Col>
                 <Col md={2}>
                   <Label>
                     Percentage <span className="text-danger">*</span>
                   </Label>
-                  <select required onChange={ (e) => { handleChange2(e) }} className="form-select">
+                  <select required onChange={(e) => { handleChange2(e) }} className="form-select">
                     <option value="">Select</option>
                     {percent.map((x) => {
                       return <option value={x} >{x}</option>
                     })}
                   </select>
                 </Col>
-                <Col md={3}>
+                <Col md={2}>
                   <Label>
                     Wastage <span className="text-danger">*</span>
                   </Label>
-                  <Input  value={forms02} required name="balance" type="number" placeholder="Wastage" className="form-control mb-1" />
+                  <Input value={forms02} required name="balance" type="number" placeholder="Wastage" className="form-control mb-1" />
                 </Col>
-                <Col md={3}>
+                <Col md={2}>
                   <Label>
                     Balance <span className="text-danger">*</span>
                   </Label>

@@ -104,17 +104,23 @@ const Adddrawing = () => {
   const [itemval, setitemval] = useState([])
   console.log(itemval)
   console.log(selectedMulti)
+  const [tikpiece, settikpiece] = useState([])
+  const [tikweight, settikweight] = useState([])
+  const [totwastage, settotwastage] = useState([])
 
   function handleMulti1(data) {
+    console.log(data)
     setpurity1(data.purity)
     // console.log(data.stone)
-
+    settikpiece(data.tikliPiece)
+    settikweight(data.tikliWeight)
+    settotwastage(data.totalWastage)
     setselectedMulti(data)
     // setordritem(data.itemName)
 
     const token = datas
     const params = {
-      orderId:data.value
+      orderId: data.value
     }
     console.log(token)
     axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/ghatdetails/getorderitemdetils", params,
@@ -125,13 +131,13 @@ const Adddrawing = () => {
       if (res.status === 200) {
         console.log(res.data)
         setordritem(res.data.itemData)
-        
+
       }
-        }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
+    }).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.message)
+        toast.error(error.response.data.message)
+      }
     })
 
     if (data.purity === "18") {
@@ -200,7 +206,7 @@ const Adddrawing = () => {
     const myUser = [...costdet]
     myUser[i][e.target.name] = e.target.value
     setcostdet(myUser)
-    costdet[i].sellWeightInCtc = e.target.value * 5
+    // costdet[i].sellWeightInCtc = e.target.value * 5
     costdet[i].sellAmount = parseFloat(costdet[i].sellRatePerCtc) * (e.target.value)
 
   }
@@ -210,7 +216,7 @@ const Adddrawing = () => {
     myUser[i][e.target.name] = e.target.value
     setcostdet(myUser)
     costdet[i].sellAmount = parseFloat(costdet[i].sellRatePerCtc) * e.target.value
-    costdet[i].sellWeightInGr = e.target.value / 5
+    // costdet[i].sellWeightInGr = e.target.value / 5
   }
 
   // const handleChangesell = (e, i) => {
@@ -242,12 +248,15 @@ const Adddrawing = () => {
         // setnett(res.data.orderData.nett)
         setcostdet(res.data.stoneFinishArr)
         // setselldet(res.data.sellingFinishArr)
+        settikpiece(res.data.orderData.tikliPiece)
+        settikweight(res.data.orderData.tikliWeight)
+        settotwastage(res.data.orderData.totalWastage)
       }
-        }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
+    }).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.message)
+        toast.error(error.response.data.message)
+      }
     })
 
   }
@@ -265,11 +274,11 @@ const Adddrawing = () => {
         setordr(res.data.orderData)
         // setpurity1(res.data.orderData)
       }
-        }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
+    }).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.message)
+        toast.error(error.response.data.message)
+      }
     })
 
   }
@@ -371,11 +380,11 @@ const Adddrawing = () => {
         // setordr(res.data.orderData)
         // setpurity1(res.data.orderData)
       }
-        }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
+    }).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.message)
+        toast.error(error.response.data.message)
+      }
     })
 
   }
@@ -445,11 +454,11 @@ const Adddrawing = () => {
         navigate("/costing-details")
 
       }
-        }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
+    }).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.message)
+        toast.error(error.response.data.message)
+      }
     })
 
   }
@@ -548,6 +557,45 @@ const Adddrawing = () => {
                     multiple
                     onChange={changeHandler}
                     required
+                  />
+                </Col>
+                <Col md="2" sm="12" className="mb-1">
+                  <Label className="form-label" for="EmailMulti">
+                    Tikili Pieces <span className="text-danger">*</span>
+                  </Label>
+                  <Input
+                  disabled
+                    type="text"
+                    className="form-control"
+                    name="tikpiece"
+                    value={tikpiece}
+                    placeholder="Tikili Pieces"
+                  />
+                </Col>
+                <Col md="2" sm="12" className="mb-1">
+                  <Label className="form-label" for="EmailMulti">
+                    Tikili Weight <span className="text-danger">*</span>
+                  </Label>
+                  <Input
+                  disabled
+                    type="text"
+                    className="form-control"
+                    name="tikweight"
+                    value={tikweight}
+                    placeholder="Tikili Weight"
+                  />
+                </Col>
+                <Col md="2" sm="12" className="mb-1">
+                  <Label className="form-label" for="EmailMulti">
+                    Total Wastage <span className="text-danger">*</span>
+                  </Label>
+                  <Input
+                    type="text"
+                    disabled
+                    className="form-control"
+                    name="totwastage"
+                    value={totwastage}
+                    placeholder="Total Wastage"
                   />
                 </Col>
 

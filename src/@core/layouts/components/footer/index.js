@@ -9,7 +9,7 @@ const Footer = () => {
         <a target='_blank' rel='noopener noreferrer'>
         OM SANTOSH JEWELLERS
         </a>
-        <span className='d-none d-sm-inline-block'>, All rights Reserved</span>
+        <span className='d-none d-sm-inline-block'>, All rights reserved </span>
       </span>
       {/* <span className='float-md-end d-none d-md-block'>
         Hand-crafted & Made with

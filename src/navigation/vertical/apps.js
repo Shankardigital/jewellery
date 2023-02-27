@@ -225,13 +225,13 @@ export default [
         title: 'Stock in Hand',
         icon: <Circle />,
         navLink: '/stockes_in_hand'
+      },
+      {
+        id: 'stoke',
+        title: 'Workshop in Hand',
+        icon: <Circle />,
+        navLink: '/workshop'
       }
-      // {
-      //   id: 'stoke',
-      //   title: 'Purchase list',
-      //   icon: <Circle />,
-      //   navLink: '/paymetal'
-      // }
      
     ]
   },
@@ -403,6 +403,14 @@ export default [
       // }
     ]
   },
+
+  {
+    id: 'Delivery',
+    title: 'Delivery',
+    icon: <ShoppingBag />,
+    navLink: '/delivery_items'
+  },
+
   // {
   //   id: 'Purchase',
   //   title: 'Purchase',
@@ -700,6 +708,12 @@ export default [
         title: 'Summary Report',
         icon: <Circle />,
         navLink: '/summary'
+      },
+      {
+        id: 'Stone storage',
+        title: 'Party Balance',
+        icon: <Circle />,
+        navLink: '/partybalance'
       }
 
     ]

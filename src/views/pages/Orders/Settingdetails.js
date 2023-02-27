@@ -276,6 +276,9 @@ const Settingdetails = () => {
                   <th >
                     pieces
                   </th>
+                  <th >
+                    status
+                  </th>
 
                   <th style={{ width: "140px" }}>
                     Action
@@ -316,6 +319,9 @@ const Settingdetails = () => {
                   </td> */}
                     <td>
                       {data.totalPieces}
+                    </td>
+                    <td>
+                      {data.status}
                     </td>
 
                     <td>

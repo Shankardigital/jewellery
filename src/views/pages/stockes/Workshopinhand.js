@@ -23,7 +23,7 @@ import toast from 'react-hot-toast'
 
 const Usemetal = () => {
     const [customer, setcustomer] = useState([])
-    const [customer1, setcustomer1] = useState([])
+    // const [customer1, setcustomer1] = useState([])
     const [customer2, setcustomer2] = useState([])
     // const [customer3, setcustomer3] = useState([])
     console.log(customer)
@@ -40,16 +40,16 @@ const Usemetal = () => {
             percent: datapur
         }
         console.log(token)
-        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/stock/getfinishstockbypurity", params,
+        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/workshop/getallunfinishedbypurity", params,
             {
                 headers: { Authorization: `Bearer ${token}` }
             }, {}
         ).then((res) => {
             if (res.status === 200) {
                 console.log(res.data)
-                setcustomer(res.data.stockfinsishDataP)
-                setcustomer1(res.data.totalAmount)
-                setcustomer2(res.data.totalWeight)
+                setcustomer(res.data.empWisePurityData)
+                // setcustomer1(res.data.totalAmount)
+                setcustomer2(res.data.totalReceiveddWt)
                 // setcustomer3(res.data.closingBalance)
             }
             }).catch(function (error) {
@@ -86,11 +86,11 @@ const Usemetal = () => {
                 data-aos="fade-down"
                 data-aos-easing="linear"
                 data-aos-duration="1000">
-                <Breadcrumbs title='Stock in Hand' data={[{ title: 'Stock in Hand' }]} />
+                <Breadcrumbs title='Workshop in Hand' data={[{ title: 'Workshop in Hand' }]} />
                 <Row>
                     <div>
 
-                        <Link to="/stockes_in_hand" style={{ float: "right" }} > <Button className='m-1' color='info'> <i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> Back</Button></Link>
+                        <Link to="/workshop" style={{ float: "right" }} > <Button className='m-1' color='info'> <i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> Back</Button></Link>
                     </div>
 
                     <Col sm='12'>
@@ -114,15 +114,15 @@ const Usemetal = () => {
                                 <Table responsive bordered hover id="empTable">
                                     <thead>
                                         <tr>
-                                            <td colSpan="7" className='text-center text-danger' >|| JAI SHREE SHYAM ||</td>
+                                            <td colSpan="8" className='text-center text-danger' >|| JAI SHREE SHYAM ||</td>
                                         </tr>
                                         <tr>
-                                            <td colSpan="7"  >
+                                            <td colSpan="8"  >
                                                 <h1 className='text-center text-danger'> OM SANTOSH JEWELLERS PVT LTD</h1>
                                             </td>
                                         </tr>
                                         <tr className='text-center' >
-                                            <td colSpan="7" className="text-danger">{datapur} %</td>
+                                            <td colSpan="8" className="text-danger">{datapur} %</td>
                                         </tr>
                                         <tr className='text-center'>
                                             <th className='text-danger'>
@@ -132,7 +132,7 @@ const Usemetal = () => {
                                                 Date
                                             </th>
                                             <th className='text-danger'>
-                                                Party Name
+                                                Karigar Name
                                             </th>
                                             <th className='text-danger'>
                                                Order No
@@ -144,7 +144,10 @@ const Usemetal = () => {
                                                 Weight
                                             </th>
                                             <th className='text-danger'>
-                                                Amount
+                                                Stage
+                                            </th>
+                                            <th className='text-danger'>
+                                                Status
                                             </th>
 
                                         </tr>
@@ -159,7 +162,7 @@ const Usemetal = () => {
                                                     {data.submittedDate}
                                                 </td>
                                                 <td>
-                                                    {data.customerName}
+                                                    {data.employeeName}
                                                 </td>
                                                 <td>
                                                     {data.orderNo}
@@ -168,10 +171,14 @@ const Usemetal = () => {
                                                     {data.itemName}
                                                 </td>
                                                 <td>
-                                                    {data.nett}
+                                                    {data.receivedWeight}
                                                 </td>
                                                 <td>
-                                                    {data.selltotalamount}
+                                                    {data.stage}
+                                                </td>
+                                                
+                                                <td>
+                                                   {data.status}
                                                 </td>
                                                 {/* <td>
                                                 35.330
@@ -197,7 +204,9 @@ const Usemetal = () => {
                                         <tr>
                                             <td className='text-danger text-end' colSpan="5">Total</td>
                                             <td> {customer2}</td>
-                                            <td> {customer1}</td>
+                                            <td></td>
+                                            <td></td>
+                                            {/* <td> {customer1}</td> */}
                                         </tr>
                                         {/* <tr>
                                             <td className='text-danger text-end' colSpan="3">Closing Balance</td>

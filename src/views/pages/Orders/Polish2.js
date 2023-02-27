@@ -363,6 +363,9 @@ const Casting = () => {
                   <th  >
                     Gold out
                   </th>
+                  <th  >
+                    Status
+                  </th>
 
                   <th style={{ width: "140px" }}>
                     Action
@@ -395,6 +398,9 @@ const Casting = () => {
                     </td>
                     <td>
                       {data.issuedGold}
+                    </td>
+                    <td>
+                      {data.status}
                     </td>
 
 

@@ -48,14 +48,14 @@ const Metal = () => {
     const profiledet = () => {
         const token = datas
         console.log(token)
-        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/stock/allfinishedstockwtamount",
+        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/workshop/allunfinishedorders",
             {
                 headers: { Authorization: `Bearer ${token}` }
             }, {}
         ).then((res) => {
             if (res.status === 200) {
                 console.log(res.data)
-                setcustomer(res.data.finishedAll)
+                setcustomer(res.data.unfinihedObj)
             }
             }).catch(function (error) {
         if (error.response) {
@@ -238,7 +238,7 @@ const Metal = () => {
     const navigate = useNavigate()
     const metaldata = (data) => {
         sessionStorage.setItem("stockpurity", data.percent)
-        navigate("/stockes")
+        navigate("/workshopinhand")
     }
 
     return (
@@ -246,7 +246,7 @@ const Metal = () => {
             <div data-aos="fade-down"
                 data-aos-easing="linear"
                 data-aos-duration="1000">
-                <Breadcrumbs title='Stock in Hand' data={[{ title: 'Stock in Hand' }]} />
+                <Breadcrumbs title='Workshop in Hand' data={[{ title: 'Workshop in Hand' }]} />
                 <Row >
 
                     {/* <Col sm="4">
@@ -297,7 +297,7 @@ const Metal = () => {
                                         <th>Percentage</th>
                                         <th>Weight</th>
                                         <th>Fine</th>
-                                        <th>Amount</th>
+                                        {/* <th>Amount</th> */}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -307,9 +307,9 @@ const Metal = () => {
                                             <td>
                                                 <a className='text-primary' onClick={() => { metaldata(data) }}>{data.percent}</a>
                                             </td>
-                                            <td>{data.totalWeight}</td>
-                                            <td>{data.totalFine}</td>
-                                            <td>{data.totalAmount}</td>
+                                            <td>{data.totalReceivedWt}</td>
+                                            <td>{data.totalfine}</td>
+                                            {/* <td>{data.totalAmount}</td> */}
                                         </tr>
                                     ))}
 

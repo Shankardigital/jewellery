@@ -69,6 +69,8 @@ const Viewpurches = lazy(() => import('../../views/pages/Expence/Viewpurches'))
 const Returnview = lazy(() => import('../../views/pages/Expence/Returnview'))
 const Balance = lazy(() => import('../../views/pages/Paymentreports/Balance'))
 const Summery = lazy(() => import('../../views/pages/Paymentreports/Summery'))
+const Partybalance = lazy(() => import('../../views/pages/Paymentreports/Partybalance'))
+const Sngpartybalance = lazy(() => import('../../views/pages/Paymentreports/Sngpartybalance'))
 
 const Metal = lazy(() => import('../../views/pages/Matel/Metal'))
 const Paymetal = lazy(() => import('../../views/pages/Matel/Paymetal'))
@@ -76,6 +78,9 @@ const Usemetal = lazy(() => import('../../views/pages/Matel/Usemetal'))
 
 const Stocks = lazy(() => import('../../views/pages/stockes/Stocks'))
 const Stockes = lazy(() => import('../../views/pages/stockes/Stockes'))
+
+const Workshop = lazy(() => import('../../views/pages/stockes/Workshop'))
+const Workshopinhand = lazy(() => import('../../views/pages/stockes/Workshopinhand'))
 
 const Cadres = lazy(() => import('../../views/pages/recieveditems/Cadres'))
 const Castingres = lazy(() => import('../../views/pages/recieveditems/Castingres'))
@@ -88,6 +93,7 @@ const Malares = lazy(() => import('../../views/pages/recieveditems/Malares'))
 const Editsettingres = lazy(() => import('../../views/pages/recieveditems/Editsettingres'))
 const Editbandinires = lazy(() => import('../../views/pages/recieveditems/Editbandinires'))
 const Editmalares = lazy(() => import('../../views/pages/recieveditems/Editmalares'))
+const Delevery = lazy(() => import('../../views/pages/Delevery'))
 
 
 const AppRoutes = [
@@ -426,6 +432,14 @@ const AppRoutes = [
     path: '/summary'
   },
   {
+    element: <Partybalance />,
+    path: '/partybalance'
+  },
+  {
+    element: <Sngpartybalance />,
+    path: '/sngpartybalance'
+  },
+  {
     element: <Metal />,
     path: '/metal'
   },
@@ -444,6 +458,14 @@ const AppRoutes = [
   {
     element: <Stockes />,
     path: '/stockes'
+  },
+  {
+    element: <Workshop />,
+    path: '/workshop'
+  },
+  {
+    element: <Workshopinhand />,
+    path: '/workshopinhand'
   },
   {
     element: <Cadres />,
@@ -488,6 +510,10 @@ const AppRoutes = [
   {
     element: <Editmalares />,
     path: '/editmalares'
+  },
+  {
+    element: <Delevery />,
+    path: '/delivery_items'
   }
 ]
 

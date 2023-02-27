@@ -363,6 +363,9 @@ const Casting = () => {
                   <th  >
                     Issued To
                   </th>
+                  <th  >
+                    status
+                  </th>
                   <th style={{ width: "140px" }}>
                     Action
                   </th>
@@ -394,6 +397,9 @@ const Casting = () => {
                     </td>
                     <td>
                       {data.employeeName}
+                    </td>
+                    <td>
+                      {data.status}
                     </td>
                     <td>
                       {/* <Link to="/components/breadcrumbs">  */}
