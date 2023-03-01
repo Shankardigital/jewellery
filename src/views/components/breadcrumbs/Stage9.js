@@ -106,7 +106,7 @@ const BreadCrumbs = () => {
   const validateFun = (e) => {
     console.log(e)
     console.log(ordr)
-    if (ordr.receivedWeight === "" || ordr.receivedWeight > recvalue) {
+    if (ordr.receivedWeight === "" || ordr.issuedWeight < recvalue) {
       const error = { ...errorObject }
       error["receivedWeight"] = "Enter valid value"
       seterrorObject(error)
@@ -122,7 +122,7 @@ const BreadCrumbs = () => {
     const count = (ordr.receivedWeight * e.target.value) / 100
     console.log(count)
     setforms02(count.toFixed(3))
-    const count2 = parseFloat(ordr.issuedWeight) - (parseFloat(ordr.receivedWeight) + parseFloat(count))
+    const count2 = parseFloat(ordr.issuedWeight) - (parseFloat(ordr.receivedWeight) + parseFloat(count) + parseFloat(ordr.receivedWeights) + parseFloat(ordr.wastages))
     setforms01(count2.toFixed(3))
   }
 

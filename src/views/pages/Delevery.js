@@ -23,9 +23,8 @@ import {
     Form
 } from "reactstrap"
 // import qrcode from "../../../assets/images/qr.png"
-// import gold from "../../../assets/images/gold.jpg"
 import { ArrowRightCircle, X } from 'react-feather'
-import { useNavigate, Link } from 'react-router-dom'
+// import { useNavigate, Link } from 'react-router-dom'
 // import Nav from './Nav'
 import Select from 'react-select'
 import axios from "axios"
@@ -33,18 +32,31 @@ import toast from 'react-hot-toast'
 import ReactHTMLTableToExcel from "react-html-table-to-excel"
 import html2canvas from "html2canvas"
 import pdfMake from "pdfmake"
-
+import ReactPaginate from 'react-paginate'
+import Moment from 'react-moment'
+import trash from "../../assets/images/latest/trash.gif"
 
 const Adddrawing = () => {
 
     const [form, setform] = useState([])
-    console.log(form)
-    const navigate = useNavigate()
+    const [form1, setform1] = useState([])
+    // const [form2, setform2] = useState([])
+    // console.log(form2)
+    // const navigate = useNavigate()
     const [show, setshow] = useState(false)
     const [centeredModal, setCenteredModal] = useState(false)
+    const [centeredModal1, setCenteredModal1] = useState(false)
 
     const [ordr, setordr] = useState([])
+    console.log(ordr)
     const [customer, setcustomer] = useState([])
+    const [deli, setdeli] = useState([])
+
+    const [nettd, setnettd] = useState([])
+    // const [editdata, seteditdata] = useState([])
+    const [totamount, settotamount] = useState([])
+    const [balamount, setbalamount] = useState([])
+
     const datas = localStorage.getItem("accessToken")
     console.log(datas)
     const gets = localStorage.getItem("userData")
@@ -58,31 +70,78 @@ const Adddrawing = () => {
         myUser[e.target.name] = e.target.value
         setform(myUser)
     }
+    const handleChange1 = (e) => {
+        const myUser = { ...form }
+        myUser[e.target.name] = e.target.value
+        setform(myUser)
+        const count = totamount - e.target.value
+        setbalamount(count)
+    }
+    const handleChange2 = (e) => {
+        const myUser = { ...form1 }
+        myUser[e.target.name] = e.target.value
+        setform1(myUser)
+    }
+    const handleChange3 = (e) => {
+        const myUser = { ...form1 }
+        myUser[e.target.name] = e.target.value
+        setform1(myUser)
+        const count = totamount - e.target.value
+        setbalamount(count)
+    }
 
     const [selectedMulti1, setselectedMulti1] = useState([])
 
     console.log(selectedMulti1)
     function handleMulti(data) {
         setselectedMulti1(data)
+        console.log(data)
 
-    }
-    const [selectedMulti, setselectedMulti] = useState()
-    console.log(selectedMulti)
-    function handleMulti1(data) {
-        setselectedMulti(data)
-    }
-
-    const actiordrs = () => {
         const token = datas
-        console.log(token)
-        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/drawing/getorders",
+        const params = {
+            customerId: data.value
+        }
+        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/delivery/getfinishedallorder", params,
             {
                 headers: { Authorization: `Bearer ${token}` }
             }, {}
         ).then((res) => {
             if (res.status === 200) {
                 console.log(res.data)
-                setordr(res.data.orderDetails)
+                setordr(res.data.orderResult)
+                setnettd(res.data.nettData)
+                settotamount(res.data.selltotalamountData)
+            }
+        },
+            (error) => {
+                if (error.response && error.response.status === 400) {
+                    toast.error(error.response.data.message)
+                    console.log(error.data.message)
+
+                }
+            }
+        )
+
+    }
+    // const [selectedMulti, setselectedMulti] = useState()
+    // console.log(selectedMulti)
+    // console.log(selectedMulti)
+    // function handleMulti1(data) {
+    //     setselectedMulti(data)
+    // }
+
+    const deliverydata = () => {
+
+        const token = datas
+        console.log(token)
+        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/delivery/getalldelivery",
+            {
+                headers: { Authorization: `Bearer ${token}` }
+            }, {}
+        ).then((res) => {
+            if (res.status === 200) {
+                console.log(res.data)
+                setdeli(res.data.deliveryResult)
             }
         },
             (error) => {
@@ -99,14 +158,14 @@ const Adddrawing = () => {
 
         const token = datas
         console.log(token)
-        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/drawing/getemployee",
+        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/employeereport/customerorderreport/getallcustomers",
             {
                 headers: { Authorization: `Bearer ${token}` }
             }, {}
         ).then((res) => {
             if (res.status === 200) {
                 console.log(res.data)
-                setcustomer(res.data.employeeData)
+                setcustomer(res.data.customerResult)
             }
         },
             (error) => {
@@ -119,29 +178,35 @@ const Adddrawing = () => {
         )
     }
 
-    const ordrid = ordr.map((data) => (
-        { value: data._id, label: data.orderNo }
-    ))
+    // const ordrid = ordr.map((data) => (
+    //     { value: data.orderId, label: data.orderNo }
+    // ))
 
     const empid = customer.map((data) => (
-        { value: data._id, label: data.fullName }
+        { value: data._id, label: data.customerName }
     ))
 
     useEffect(() => {
+        deliverydata()
         activecust()
-        actiordrs()
+        // actiordrs()
     }, [])
 
     const addOrders = () => {
         const token = datas
         const params = {
-            orderID: selectedMulti,
-            employeeId: selectedMulti1.value,
-            submittedDate: form.submittedDate
+            customerId: selectedMulti1.value,
+            // orderIds: selectedMulti,
+            submittedDate: form.submittedDate,
+            goldWeight: nettd,
+            amount: totamount,
+            balance: balamount,
+            receivedGoldWeight: form.receivedGoldWeight,
+            receivedAmount: form.receivedAmount
         }
 
         console.log(token)
-        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/drawing/adddrawing", params,
+        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/delivery/adddelivery", params,
             {
                 headers: { Authorization: `Bearer ${token}` }
             }, {}
@@ -149,7 +214,9 @@ const Adddrawing = () => {
             if (res.status === 200) {
                 console.log(res.data)
                 toast.success(res.data.message)
-                navigate("/drawing")
+                setshow(false)
+                deliverydata()
+                // navigate("/drawing")
 
             }
         },
@@ -166,6 +233,93 @@ const Adddrawing = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
         addOrders()
+    }
+
+    const addOrders1 = () => {
+        const token = datas
+        const params = {
+            customerId: selectedMulti1.value,
+            // orderIds: selectedMulti,
+            submittedDate: form1.submittedDate,
+            goldWeight: nettd,
+            amount: totamount,
+            balance: balamount,
+            receivedGoldWeight: form1.receivedGoldWeight,
+            receivedAmount: form1.receivedAmount
+        }
+
+        console.log(token)
+        axios.put(`http://103.186.185.77:5023/omsanthoshjewellery/admin/delivery/editdelivery/${form1._id}`, params,
+            {
+                headers: { Authorization: `Bearer ${token}` }
+            }, {}
+        ).then((res) => {
+            if (res.status === 200) {
+                console.log(res.data)
+                toast.success(res.data.message)
+                setCenteredModal(false)
+                deliverydata()
+                // navigate("/drawing")
+
+            }
+        },
+            (error) => {
+                if (error.response && error.response.status === 400) {
+                    toast.error(error.response.data.message)
+                    console.log(error.data.message)
+
+                }
+            }
+        )
+    }
+
+    const handleSubmit1 = (e) => {
+        e.preventDefault()
+        addOrders1()
+    }
+
+
+    const cadtada1 = (data) => {
+        setCenteredModal1(true)
+        setform1(data)
+        // seteditdata1({ value: data.employeeId, label: data.employeeName })
+    }
+
+    const delOrders = () => {
+        const token = datas
+        const dataid = form1._id
+        axios.delete(`http://103.186.185.77:5023/omsanthoshjewellery/admin/delivery/deletedelivery/${dataid}`,
+            {
+                headers: { Authorization: `Bearer ${token}` }
+            }, {}
+        ).then((res) => {
+            if (res.status === 200) {
+                console.log(res.data)
+                toast.success(res.data.message)
+                setCenteredModal1(false)
+                deliverydata()
+                // navigate("/drawing")
+
+            }
+        },
+            (error) => {
+                if (error.response && error.response.status === 400) {
+                    toast.error(error.response.data.message)
+                    console.log(error.data.message)
+
+                }
+            }
+        )
+    }
+
+    const cadtada = (data) => {
+        setform1(data)
+        setCenteredModal(true)
+        setselectedMulti1({ value: data.customerId, label: data.customerName })
+        setnettd(data.goldWeight)
+        settotamount(data.amount)
+        setbalamount(data.balance)
+        // seteditdata1({ value: data.employeeId, label: data.employeeName })
     }
 
     const genPdf = () => {
@@ -193,6 +347,15 @@ const Adddrawing = () => {
         })
     }
 
+    const [listPerPage] = useState(10)
+    const [pageNumber, setPageNumber] = useState(0)
+
+    const pagesVisited = pageNumber * listPerPage
+    const lists = deli.slice(pagesVisited, pagesVisited + listPerPage)
+    const pageCount = Math.ceil(deli.length / listPerPage)
+    const changePage = ({ selected }) => {
+        setPageNumber(selected)
+    }
 
     return (
         <Fragment>
@@ -200,7 +363,7 @@ const Adddrawing = () => {
                 data-aos="fade-down"
                 data-aos-easing="linear"
                 data-aos-duration="1000">
-                <BreadCrumbsPage data={[{ title: "Delevery" }]} />
+                <BreadCrumbsPage data={[{ title: "Delivery" }]} />
 
                 {/* <Nav style={{width:'100%'}}/> */}
 
@@ -209,19 +372,20 @@ const Adddrawing = () => {
                         <CardBody>
                             <Form onSubmit={(e) => { handleSubmit(e) }}>
                                 <Row className="mb-1">
+
                                     <Col sm="3">
                                         <Label for="name" style={{ color: "black" }}>
                                             Date : <span className="text-danger">*</span>
                                         </Label>
                                         <Input
                                             required
-                                            max={new Date().toISOString().split("T")[0]}
+                                            min={new Date().toISOString().split("T")[0]}
                                             type="date" onChange={(e) => handleChange(e)} placeholder="Enter date" name="submittedDate" />
                                     </Col>
 
                                     <Col sm="3">
                                         <Label for="name" style={{ color: "black" }}>
-                                            Select Employee : <span className="text-danger">*</span>
+                                            Customers : <span className="text-danger">*</span>
                                         </Label>
                                         <Select
                                             name="employeeId"
@@ -232,7 +396,7 @@ const Adddrawing = () => {
                                         />
                                     </Col>
 
-                                    <Col sm="3">
+                                    {/* <Col sm="3">
                                         <Label for="name" style={{ color: "black" }}>
                                             Sales Order No : <span className="text-danger">*</span>
                                         </Label>
@@ -240,34 +404,41 @@ const Adddrawing = () => {
                                             value={selectedMulti}
                                             onChange={handleMulti1}
                                             required
-                                            name="orderID"
+                                            name="orderId"
                                             isMulti options={ordrid} />
+                                    </Col> */}
+
+                                    <Col sm="3">
+                                        <Label for="name" style={{ color: "black" }}>
+                                            Gold Weight : <span className="text-danger">*</span>
+                                        </Label>
+                                        <Input required name="goldWeigh" value={nettd} type="text" placeholder="Gold Weight" />
                                     </Col>
 
                                     <Col sm="3">
                                         <Label for="name" style={{ color: "black" }}>
                                             Amount : <span className="text-danger">*</span>
                                         </Label>
-                                        <Input type="text" placeholder="Total Amount" />
+                                        <Input required name="amount" value={totamount} type="text" placeholder=" Amount" />
                                     </Col>
                                     <Col sm="3">
                                         <Label for="name" style={{ color: "black" }}>
-                                            Gold Weight : <span className="text-danger">*</span>
+                                            Received Gold Weight :
                                         </Label>
-                                        <Input type="text" placeholder="Total Amount" />
+                                        <Input onChange={(e) => handleChange(e)} name="receivedGoldWeight" type="text" placeholder="Total Gold Weight" />
                                     </Col>
-
                                     <Col sm="3">
                                         <Label for="name" style={{ color: "black" }}>
                                             Received Amount : <span className="text-danger">*</span>
                                         </Label>
-                                        <Input type="text" placeholder="Total Amount" />
+                                        <Input required onChange={(e) => handleChange1(e)} name="receivedAmount" type="text" placeholder="Received Amount" />
                                     </Col>
+
                                     <Col sm="3">
                                         <Label for="name" style={{ color: "black" }}>
-                                            Received Gold Weight : <span className="text-danger">*</span>
+                                            Balance : <span className="text-danger">*</span>
                                         </Label>
-                                        <Input type="text" placeholder="Total Amount" />
+                                        <Input required value={balamount} name="balance" disabled type="text" placeholder="Balance Amount" />
                                     </Col>
 
                                 </Row>
@@ -328,9 +499,7 @@ const Adddrawing = () => {
                                                 <th>
                                                     Customer Name
                                                 </th>
-                                                <th>
-                                                    Order No
-                                                </th>
+
                                                 <th>
                                                     Gold Weight
                                                 </th>
@@ -344,23 +513,35 @@ const Adddrawing = () => {
                                                     Received Amount
                                                 </th>
                                                 <th>
+                                                    Balance
+                                                </th>
+                                                <th>
                                                     Action
                                                 </th>
                                             </tr>
                                         </thead>
                                         <tbody className='text-center'>
-                                            <tr>
-                                                <td>26/02/2023</td>
-                                                <td>Senkar</td>
-                                                <td>osj000056</td>
-                                                <td>10.5</td>
-                                                <td>100000</td>
-                                                <td>2.05</td>
-                                                <td>70000</td>
-                                                <td>
-                                                    <Button onClick={() => { setCenteredModal(!centeredModal) }} size="sm" outline color="success">Edit <i class="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
-                                                </td>
-                                            </tr>
+                                            {lists.map((data, key) => (
+                                                <tr key={key}>
+                                                    <td>
+                                                        <Moment format="DD/MM/YYYY">
+                                                            {data.submittedDate}
+                                                        </Moment>
+                                                    </td>
+                                                    <td>{data.customerName}</td>
+                                                    <td>{data.goldWeight}</td>
+                                                    <td>{data.amount}</td>
+                                                    <td>{data.receivedGoldWeight}</td>
+                                                    <td>{data.receivedAmount}</td>
+                                                    <td>{data.balance}</td>
+
+                                                    <td>
+                                                        <Button style={{margin:"5px"}} onClick={() => { cadtada(data) }} size="sm" outline color="success"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
+                                                        <Button style={{margin:"5px"}} onClick={() => { cadtada1(data) }} size="sm" outline color="danger"> <i class="fa fa-trash-o" aria-hidden="true"></i></Button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+
                                         </tbody>
                                         {/* <tfoot className='text-center' >
                                         <tr className='text-danger'>
@@ -375,7 +556,7 @@ const Adddrawing = () => {
 
                                     </Table>
 
-                                    {/* <Col sm='12'>
+                                    <Col sm='12'>
                                         <div className='d-flex mt-3 mb-1' style={{ float: 'right' }}>
                                             <ReactPaginate
                                                 previousLabel={"Previous"}
@@ -390,7 +571,7 @@ const Adddrawing = () => {
                                                 total={lists.length}
                                             />
                                         </div>
-                                    </Col> */}
+                                    </Col>
                                 </CardBody>
                             </Card>
                         </Col>
@@ -404,21 +585,23 @@ const Adddrawing = () => {
                 <Modal size="sm" isOpen={centeredModal} toggle={() => setCenteredModal(!centeredModal)} className='modal-dialog-centered'>
                     <ModalHeader toggle={() => setCenteredModal(!centeredModal)}>Edit Delivery Detials</ModalHeader>
                     <ModalBody>
-                        <Form onSubmit={(e) => { handleSubmit(e) }}>
-                            <div className="mb-1">
-                                <div>
+                        <Form onSubmit={(e) => { handleSubmit1(e) }}>
+                            <Row className="mb-1">
+
+                                <Col sm="6">
                                     <Label for="name" style={{ color: "black" }}>
                                         Date : <span className="text-danger">*</span>
                                     </Label>
                                     <Input
                                         required
-                                        max={new Date().toISOString().split("T")[0]}
-                                        type="date" onChange={(e) => handleChange(e)} placeholder="Enter date" name="submittedDate" />
-                                </div>
+                                        value={form1.submittedDate}
+                                        min={new Date().toISOString().split("T")[0]}
+                                        type="date" onChange={(e) => handleChange2(e)} placeholder="Enter date" name="submittedDate" />
+                                </Col>
 
-                                <div>
+                                <Col sm="6">
                                     <Label for="name" style={{ color: "black" }}>
-                                        Select Employee : <span className="text-danger">*</span>
+                                        Customers : <span className="text-danger">*</span>
                                     </Label>
                                     <Select
                                         name="employeeId"
@@ -427,62 +610,89 @@ const Adddrawing = () => {
                                         options={empid}
                                         required
                                     />
-                                </div>
+                                </Col>
 
-                                <div>
-                                    <Label for="name" style={{ color: "black" }}>
-                                        Sales Order No : <span className="text-danger">*</span>
-                                    </Label>
-                                    <Select
-                                        value={selectedMulti}
-                                        onChange={handleMulti1}
-                                        required
-                                        name="orderID"
-                                        isMulti options={ordrid} />
-                                </div>
+                                {/* <Col sm="6">
+                                        <Label for="name" style={{ color: "black" }}>
+                                            Sales Order No : <span className="text-danger">*</span>
+                                        </Label>
+                                        <Select
+                                            value={selectedMulti}
+                                            onChange={handleMulti1}
+                                            required
+                                            name="orderId"
+                                            isMulti options={ordrid} />
+                                    </Col> */}
 
-                                <div>
-                                    <Label for="name" style={{ color: "black" }}>
-                                        Amount : <span className="text-danger">*</span>
-                                    </Label>
-                                    <Input type="text" placeholder="Total Amount" />
-                                </div>
-                                <div>
+                                <Col sm="6">
                                     <Label for="name" style={{ color: "black" }}>
                                         Gold Weight : <span className="text-danger">*</span>
                                     </Label>
-                                    <Input type="text" placeholder="Total Amount" />
-                                </div>
+                                    <Input name="goldWeigh" value={nettd} type="text" placeholder="Gold Weight" />
+                                </Col>
 
-                                <div>
+                                <Col sm="6">
                                     <Label for="name" style={{ color: "black" }}>
-                                        Received Amount : <span className="text-danger">*</span>
+                                        Amount : <span className="text-danger">*</span>
                                     </Label>
-                                    <Input type="text" placeholder="Total Amount" />
-                                </div>
-                                <div>
+                                    <Input name="amount" value={totamount} type="text" placeholder=" Amount" />
+                                </Col>
+                                <Col sm="6">
                                     <Label for="name" style={{ color: "black" }}>
                                         Received Gold Weight : <span className="text-danger">*</span>
                                     </Label>
-                                    <Input type="text" placeholder="Total Amount" />
-                                </div>
+                                    <Input value={form1.receivedGoldWeight} onChange={(e) => handleChange2(e)} name="receivedGoldWeight" type="text" placeholder="Total Gold Weight" />
+                                </Col>
+                                <Col sm="6">
+                                    <Label for="name" style={{ color: "black" }}>
+                                        Received Amount : <span className="text-danger">*</span>
+                                    </Label>
+                                    <Input value={form1.receivedAmount} onChange={(e) => handleChange3(e)} name="receivedAmount" type="text" placeholder="Received Amount" />
+                                </Col>
 
-                            </div>
+                                <Col sm="6">
+                                    <Label for="name" style={{ color: "black" }}>
+                                        Balance : <span className="text-danger">*</span>
+                                    </Label>
+                                    <Input value={balamount} name="balance" disabled type="text" placeholder="Balance Amount" />
+                                </Col>
 
+                            </Row>
                             <Row style={{ float: "right" }}>
                                 <Col>
                                     {/* <Link to={"/drawing"}> */}
                                     <Button outline size="sm" className="me-1 mt-1" color="success" type="submit">
-                                        Submit
+                                        Submit <ArrowRightCircle className='font-medium-2 pl-1' />
                                     </Button>
                                     {/* </Link> */}
-                                    <Button onClick={() => { setCenteredModal(false) }} outline size="sm" className="me-1 mt-1" color="danger" type="button">
-                                        Cancel
+                                    {/* <Link to={"/drawing"}> */}
+                                    <Button onClick={() => { setCenteredModal(!centeredModal) }} outline size="sm" className="me-1 mt-1" color="danger" type="button">
+                                        <X className='font-medium-2 pl-1' /> Cancel
                                     </Button>
+                                    {/* </Link> */}
 
                                 </Col>
                             </Row>
                         </Form>
+
+                    </ModalBody>
+
+                </Modal>
+
+                <Modal size="sm" isOpen={centeredModal1} toggle={centeredModal1}>
+                    {/* <ModalHeader toggle={toggle}></ModalHeader> */}
+                    <ModalBody>
+                        <div>
+                            <div className="text-center">
+                                <img style={{ width: "280px" }} src={trash} />
+                            </div>
+                            <h5 className="text-center">Do you want delete</h5>
+                            <div className="text-end mt-2">
+                                <Button type="button"  onClick={() => { delOrders() }}  color="danger m-1" outline>Yes <i className="bx bx-check-circle"></i></Button>
+                                <Button type="button"  onClick={() => { setCenteredModal1(!centeredModal1) }} color="secondary m-1" outline>Cancel <i className="bx bx-x-circle"></i></Button>
+
+                            </div>
+                        </div>
 
                     </ModalBody>
 

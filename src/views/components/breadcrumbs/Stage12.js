@@ -183,7 +183,7 @@ const BreadCrumbs = () => {
     const count = (netwet * e.target.value) / 100
     console.log(count)
     setforms02(count.toFixed(3))
-    const count2 = parseFloat(ordr.outWeight) - (parseFloat(netwet) + parseFloat(count))
+    const count2 = parseFloat(ordr.outWeight) - (parseFloat(netwet) + parseFloat(ordr.netWeights) + parseFloat(ordr.wastages) + parseFloat(count))
     setforms01(count2.toFixed(3))
     console.log(count2)
   }

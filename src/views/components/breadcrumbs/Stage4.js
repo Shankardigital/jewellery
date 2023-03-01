@@ -138,6 +138,22 @@ const BreadCrumbs = () => {
   }, 0)
 
   // const [totalsum4, settotalsum4] = useState([])
+  const [netwet, setnetwet] = useState([])
+  const [forms01, setforms01] = useState([])
+  const [forms02, setforms02] = useState([])
+  console.log(forms02)
+  console.log(netwet)
+  // const [baln, setbaln] = useState([])
+
+  const handleChanges1 = (e) => {
+    const myUser = { ...ordr }
+    myUser[e.target.name] = e.target.value
+    setordr(myUser)
+    console.log(ordr.outWeight)
+    const netweights = e.target.value - parseFloat(totalsum4)
+    setnetwet(netweights.toFixed(3))
+
+  }
 
   const handleChange1 = (i, e) => {
     console.log(i)
@@ -149,8 +165,12 @@ const BreadCrumbs = () => {
     ordr01[i].netPiecesWt = ordr01[i].quantityGmCts - e.target.value
     const totalgm = parseFloat(ordr01[i].quantityGmCts) + parseFloat(ordr01[i].quantityGmCts)
     console.log(totalgm)
-    const totalrtgm = parseFloat(e.target.value) + parseFloat(e.target.value)
-    console.log(totalrtgm)
+    const netweights = ordr.inWeight - parseFloat(totalsum4)
+    console.log(netweights)
+    setnetwet(netweights.toFixed(3))
+
+    // const totalrtgm = parseFloat(e.target.value) + parseFloat(e.target.value)
+    // console.log(totalrtgm)
 
     // const res = toString(count).split("/")
 
@@ -178,22 +198,6 @@ const BreadCrumbs = () => {
     // }
   }
 
-  const [netwet, setnetwet] = useState([])
-  const [forms01, setforms01] = useState([])
-  const [forms02, setforms02] = useState([])
-  console.log(forms02)
-  console.log(netwet)
-  // const [baln, setbaln] = useState([])
-
-  const handleChanges1 = (e) => {
-    const myUser = { ...ordr }
-    myUser[e.target.name] = e.target.value
-    setordr(myUser)
-    console.log(ordr.outWeight)
-    const netweights = e.target.value - parseFloat(totalsum4)
-    setnetwet(netweights.toFixed(3))
-
-  }
   const handleChanges0 = (e) => {
     const myUser = { ...ordr }
     myUser[e.target.name] = e.target.value
@@ -211,7 +215,7 @@ const BreadCrumbs = () => {
     const count = (netwet * e.target.value) / 100
     console.log(count)
     setforms02(count.toFixed(3))
-    const count2 = parseFloat(ordrtot) - (parseFloat(netwet) + parseFloat(count))
+    const count2 = parseFloat(ordrtot) - (parseFloat(netwet)  + parseFloat(ordr.netWeights) + parseFloat(ordr.wastages) + parseFloat(count))
     setforms01(count2.toFixed(3))
   }
 
@@ -478,6 +482,7 @@ const BreadCrumbs = () => {
               </Row>
 
               {ordr01.map((index, i) => {
+                // index.returnPieces= (index.returnPieces) ? index.returnPieces : 0
                 return (<>
                   {/* {ordr01.map((index, i) => ( */}
                   <Row key={index}>

@@ -405,7 +405,7 @@ export default [
   },
 
   {
-    id: 'Delivery',
+    id: 'Deliverys',
     title: 'Delivery',
     icon: <ShoppingBag />,
     navLink: '/delivery_items'
@@ -531,7 +531,7 @@ export default [
     header: 'ORDER REPORTS'
   },
   {
-    id: 'Reports',
+    id: 'Stone storage',
     title: 'Reports',
     icon: <FileMinus  />,
     children: [
@@ -542,7 +542,7 @@ export default [
       //   navLink: '/employee-wise'
       // },
       {
-        id: 'Items Type',
+        id: 'Stone storage',
         title: 'Casting Karigar',
       icon: <Circle />,
         navLink: '/casting-rep'
@@ -629,7 +629,7 @@ export default [
       // },
       {
         id: 'Stone storage',
-        title: 'Delivery',
+        title: 'Delivery Invoices',
         icon: <Circle />,
         navLink: '/delivery'
       }

@@ -72,7 +72,7 @@ const BreadCrumbs = () => {
     const count = (ordr.receivedGold * e.target.value) / 100
     console.log(count)
     setforms02(count.toFixed(3))
-    const count2 = parseFloat(ordr.issuedGold) - (parseFloat(ordr.receivedGold) + parseFloat(count))
+    const count2 = parseFloat(ordr.issuedGold) - (parseFloat(ordr.receivedGold) + parseFloat(count) + parseFloat(ordr.receivedGolds) + parseFloat(ordr.wastages))
     setforms01(count2.toFixed(3))
   }
 
@@ -261,7 +261,7 @@ const BreadCrumbs = () => {
           <CardBody>
             <Form onSubmit={(e) => { handlesubmit(e) }}>
               <Row>
-                <Col md={3}>
+                <Col md={2}>
                   <Label>
                     Sales Order No <span className="text-danger">*</span>
                   </Label>
@@ -334,10 +334,23 @@ const BreadCrumbs = () => {
                 </Col>
                 <Col md={2}>
                   <Label>
+                  Last Received <span className="text-danger">*</span>
+                  </Label>
+                  <Input required disabled value={ordr.receivedGolds}  type="text" placeholder="Enter Gold Weight Grams/kgs" className="form-control mb-1" />
+                </Col>
+                <Col md={2}>
+                  <Label>
+                  Last Wastage<span className="text-danger">*</span>
+                  </Label>
+                  <Input required  disabled value={ordr.wastages}  type="text" placeholder="Enter Gold Weight Grams/kgs" className="form-control mb-1" />
+                </Col>
+                <Col md={2}>
+                  <Label>
                     Received Gold <span className="text-danger">*</span>
                   </Label>
                   <Input required name="receivedGold"  onChange={(e) => { handleChange(e) }} type="text" placeholder="Enter Gold Weight Grams/kgs" className="form-control mb-1" />
                 </Col>
+              
                 <Col md={2}>
                   <Label>
                     Percentage <span className="text-danger">*</span>
@@ -349,7 +362,7 @@ const BreadCrumbs = () => {
                     })}
                   </select>
                 </Col>
-                <Col md={3}>
+                <Col md={2}>
                   <Label>
                     Wastage <span className="text-danger">*</span>
                   </Label>

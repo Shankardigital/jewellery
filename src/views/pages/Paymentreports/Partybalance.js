@@ -211,7 +211,7 @@ const Sngsetting = () => {
                                                 S No
                                             </th>
                                             <th className="text-danger">
-                                                Karigar Name
+                                                Customer Name
                                             </th>
                                             <th className="text-danger">
                                                 Amount
