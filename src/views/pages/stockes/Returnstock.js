@@ -34,9 +34,9 @@ import html2canvas from "html2canvas"
 import pdfMake from "pdfmake"
 import ReactPaginate from 'react-paginate'
 import Moment from 'react-moment'
-import trash from "../../assets/images/latest/trash.gif"
+import trash from "../../../assets/images/latest/trash.gif"
 
-const Delivery = () => {
+const Returnstock = () => {
 
     const [form, setform] = useState([])
     const [form1, setform1] = useState([])
@@ -73,25 +73,25 @@ const Delivery = () => {
         myUser[e.target.name] = e.target.value
         setform(myUser)
     }
-    const handleChange1 = (e) => {
-        const myUser = { ...form }
-        myUser[e.target.name] = e.target.value
-        setform(myUser)
-        const count = totamount - e.target.value
-        setbalamount(count)
-    }
+    // const handleChange1 = (e) => {
+    //     const myUser = { ...form }
+    //     myUser[e.target.name] = e.target.value
+    //     setform(myUser)
+    //     const count = totamount - e.target.value
+    //     setbalamount(count)
+    // }
     const handleChange2 = (e) => {
         const myUser = { ...form1 }
         myUser[e.target.name] = e.target.value
         setform1(myUser)
     }
-    const handleChange3 = (e) => {
-        const myUser = { ...form1 }
-        myUser[e.target.name] = e.target.value
-        setform1(myUser)
-        const count = totamount - e.target.value
-        setbalamount(count)
-    }
+    // const handleChange3 = (e) => {
+    //     const myUser = { ...form1 }
+    //     myUser[e.target.name] = e.target.value
+    //     setform1(myUser)
+    //     const count = totamount - e.target.value
+    //     setbalamount(count)
+    // }
 
     const handleChange4 = (e) => {
         const myUser = { ...form2 }
@@ -141,12 +141,12 @@ const Delivery = () => {
         )
 
     }
-    // const [selectedMulti, setselectedMulti] = useState()
-    // console.log(selectedMulti)
-    // console.log(selectedMulti)
-    // function handleMulti1(data) {
-    //     setselectedMulti(data)
-    // }
+    const [selectedMulti, setselectedMulti] = useState()
+    console.log(selectedMulti)
+    console.log(selectedMulti)
+    function handleMulti1(data) {
+        setselectedMulti(data)
+    }
 
     const deliverydata = () => {
 
@@ -196,9 +196,9 @@ const Delivery = () => {
         )
     }
 
-    // const ordrid = ordr.map((data) => (
-    //     { value: data.orderId, label: data.orderNo }
-    // ))
+    const ordrid = ordr.map((data) => (
+        { value: data.orderId, label: data.orderNo }
+    ))
 
     const empid = customer.map((data) => (
         { value: data._id, label: data.customerName }
@@ -305,11 +305,11 @@ const Delivery = () => {
         setform1(data)
         // seteditdata1({ value: data.employeeId, label: data.employeeName })
     }
-    const cadtada2 = (data) => {
-        setCenteredModal2(true)
-        setform2(data)
-        // seteditdata1({ value: data.employeeId, label: data.employeeName })
-    }
+    // const cadtada2 = (data) => {
+    //     setCenteredModal2(true)
+    //     setform2(data)
+    //     // seteditdata1({ value: data.employeeId, label: data.employeeName })
+    // }
 
     const delOrders = () => {
         const token = datas
@@ -429,7 +429,7 @@ const Delivery = () => {
                 data-aos="fade-down"
                 data-aos-easing="linear"
                 data-aos-duration="1000">
-                <BreadCrumbsPage data={[{ title: "Delivery" }]} />
+                <BreadCrumbsPage data={[{ title: "Return Stock" }]} />
 
                 {/* <Nav style={{width:'100%'}}/> */}
 
@@ -437,7 +437,8 @@ const Delivery = () => {
                     <Card className="mt-1">
                         <CardBody>
                             <Form onSubmit={(e) => { handleSubmit(e) }}>
-                                <Row className="mb-1">
+                                <h5>Add Return Stock</h5>
+                                <Row className="mb-1 mt-2">
 
                                     <Col sm="3">
                                         <Label for="name" style={{ color: "black" }}>
@@ -462,14 +463,14 @@ const Delivery = () => {
                                         />
                                     </Col>
 
-                                    <Col sm="3">
+                                    {/* <Col sm="3">
                                         <Label for="name" style={{ color: "black" }}>
                                             Particulars : <span className="text-danger">*</span>
                                         </Label>
                                         <Input required onChange={(e) => handleChange(e)} name="particulars" type="text" placeholder="Particulars " />
-                                    </Col>
+                                    </Col> */}
 
-                                    {/* <Col sm="3">
+                                    <Col sm="3">
                                         <Label for="name" style={{ color: "black" }}>
                                             Sales Order No : <span className="text-danger">*</span>
                                         </Label>
@@ -478,8 +479,8 @@ const Delivery = () => {
                                             onChange={handleMulti1}
                                             required
                                             name="orderId"
-                                            isMulti options={ordrid} />
-                                    </Col> */}
+                                         options={ordrid} />
+                                    </Col>
 
                                     <Col sm="3">
                                         <Label for="name" style={{ color: "black" }}>
@@ -494,7 +495,21 @@ const Delivery = () => {
                                         </Label>
                                         <Input required name="amount" value={totamount} type="text" placeholder=" Amount" />
                                     </Col>
-                                    <Col sm="3">
+
+                                    {/* <Col sm="3">
+                                        <Label for="name" style={{ color: "black" }}>
+                                           Return Customers : <span className="text-danger">*</span>
+                                        </Label>
+                                        <Select
+                                            name="employeeId"
+                                            value={selectedMulti1}
+                                            onChange={handleMulti}
+                                            options={empid}
+                                            required
+                                        />
+                                    </Col> */}
+
+                                    {/* <Col sm="3">
                                         <Label for="name" style={{ color: "black" }}>
                                             Received Gold Weight :
                                         </Label>
@@ -512,8 +527,7 @@ const Delivery = () => {
                                             Balance : <span className="text-danger">*</span>
                                         </Label>
                                         <Input required value={balamount} name="balance" disabled type="text" placeholder="Balance Amount" />
-                                    </Col>
-
+                                    </Col> */}
 
                                 </Row>
                                 <Row style={{ float: "right" }}>
@@ -573,6 +587,10 @@ const Delivery = () => {
                                                 <th>
                                                     Customer Name
                                                 </th>
+                                               
+                                                <th>
+                                                Sales Order No
+                                                </th>
 
                                                 <th>
                                                     Gold Weight
@@ -580,15 +598,7 @@ const Delivery = () => {
                                                 <th>
                                                     Amount
                                                 </th>
-                                                <th>
-                                                    Received Gold Weight
-                                                </th>
-                                                <th>
-                                                    Received Amount
-                                                </th>
-                                                <th>
-                                                    Balance
-                                                </th>
+                                               
                                                 <th>
                                                     Action
                                                 </th>
@@ -603,15 +613,16 @@ const Delivery = () => {
                                                         </Moment>
                                                     </td>
                                                     <td>{data.customerName}</td>
+                                                    <td>OSJ00000002</td>
                                                     <td>{data.goldWeight}</td>
                                                     <td>{data.amount}</td>
-                                                    <td>{data.receivedGoldWeight}</td>
+                                                    {/* <td>{data.receivedGoldWeight}</td>
                                                     <td>{data.receivedAmount}</td>
-                                                    <td>{data.balance}</td>
+                                                    <td>{data.balance}</td> */}
 
                                                     <td>
                                                         <Button style={{ margin: "5px" }} onClick={() => { cadtada(data) }} size="sm" outline color="success"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
-                                                        <Button style={{ margin: "5px" }} onClick={() => { cadtada2(data) }} size="sm" outline color="warning"> <i class="fa fa-telegram" aria-hidden="true"></i></Button>
+                                                        {/* <Button style={{ margin: "5px" }} onClick={() => { cadtada2(data) }} size="sm" outline color="warning"> <i class="fa fa-telegram" aria-hidden="true"></i></Button> */}
                                                         <Button style={{ margin: "5px" }} onClick={() => { cadtada1(data) }} size="sm" outline color="danger"> <i class="fa fa-trash-o" aria-hidden="true"></i></Button>
                                                     </td>
                                                 </tr>
@@ -657,8 +668,8 @@ const Delivery = () => {
                     </Card>
                 )}
 
-                <Modal size="sm" isOpen={centeredModal} toggle={() => setCenteredModal(!centeredModal)} className='modal-dialog-centered'>
-                    <ModalHeader toggle={() => setCenteredModal(!centeredModal)}>Edit Delivery Detials</ModalHeader>
+                <Modal isOpen={centeredModal} toggle={() => setCenteredModal(!centeredModal)} className='modal-dialog-centered'>
+                    <ModalHeader toggle={() => setCenteredModal(!centeredModal)}>Edit Return Stock</ModalHeader>
                     <ModalBody>
                         <Form onSubmit={(e) => { handleSubmit1(e) }}>
                             <Row className="mb-1">
@@ -688,13 +699,6 @@ const Delivery = () => {
                                 </Col>
 
                                 <Col sm="6">
-                                    <Label for="name" style={{ color: "black" }}>
-                                        Particulars : <span className="text-danger">*</span>
-                                    </Label>
-                                    <Input required onChange={(e) => handleChange(e)} value={form1.particulars} name="particulars" type="text" placeholder="Particulars" />
-                                </Col>
-
-                                {/* <Col sm="6">
                                         <Label for="name" style={{ color: "black" }}>
                                             Sales Order No : <span className="text-danger">*</span>
                                         </Label>
@@ -703,8 +707,8 @@ const Delivery = () => {
                                             onChange={handleMulti1}
                                             required
                                             name="orderId"
-                                            isMulti options={ordrid} />
-                                    </Col> */}
+                                             options={ordrid} />
+                                    </Col>
 
                                 <Col sm="6">
                                     <Label for="name" style={{ color: "black" }}>
@@ -719,7 +723,20 @@ const Delivery = () => {
                                     </Label>
                                     <Input name="amount" value={totamount} type="text" placeholder=" Amount" />
                                 </Col>
-                                <Col sm="6">
+                                {/* <Col sm="6">
+                                    <Label for="name" style={{ color: "black" }}>
+                                       Return Customers : <span className="text-danger">*</span>
+                                    </Label>
+                                    <Select
+                                        name="employeeId"
+                                        value={selectedMulti1}
+                                        onChange={handleMulti}
+                                        options={empid}
+                                        required
+                                    />
+                                </Col> */}
+
+                                {/* <Col sm="6">
                                     <Label for="name" style={{ color: "black" }}>
                                         Received Gold Weight : <span className="text-danger">*</span>
                                     </Label>
@@ -737,7 +754,7 @@ const Delivery = () => {
                                         Balance : <span className="text-danger">*</span>
                                     </Label>
                                     <Input value={balamount} name="balance" disabled type="text" placeholder="Balance Amount" />
-                                </Col>
+                                </Col> */}
 
 
                             </Row>
@@ -855,4 +872,4 @@ const Delivery = () => {
         </Fragment>
     )
 }
-export default Delivery
+export default Returnstock

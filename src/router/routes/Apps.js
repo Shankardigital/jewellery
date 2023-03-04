@@ -81,6 +81,8 @@ const Stockes = lazy(() => import('../../views/pages/stockes/Stockes'))
 
 const Workshop = lazy(() => import('../../views/pages/stockes/Workshop'))
 const Workshopinhand = lazy(() => import('../../views/pages/stockes/Workshopinhand'))
+const Returnstock = lazy(() => import('../../views/pages/stockes/Returnstock'))
+const Transferstock = lazy(() => import('../../views/pages/stockes/Transferstock'))
 
 const Cadres = lazy(() => import('../../views/pages/recieveditems/Cadres'))
 const Castingres = lazy(() => import('../../views/pages/recieveditems/Castingres'))
@@ -466,6 +468,14 @@ const AppRoutes = [
   {
     element: <Workshopinhand />,
     path: '/workshopinhand'
+  },
+  {
+    element: <Returnstock />,
+    path: '/returnstock'
+  },
+  {
+    element: <Transferstock />,
+    path: '/transferstock'
   },
   {
     element: <Cadres />,

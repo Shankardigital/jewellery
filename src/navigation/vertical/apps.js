@@ -222,15 +222,27 @@ export default [
      
       {
         id: 'stoke',
-        title: 'Stock in Hand',
+        title: 'Finished Stock',
         icon: <Circle />,
         navLink: '/stockes_in_hand'
       },
       {
         id: 'stoke',
-        title: 'Workshop in Hand',
+        title: 'Work shop',
         icon: <Circle />,
         navLink: '/workshop'
+      }, 
+      {
+        id: 'stoke',
+        title: 'Return Stock',
+        icon: <Circle />,
+        navLink: '/returnstock'
+      },
+      {
+        id: 'stoke',
+        title: 'Transfer Stock',
+        icon: <Circle />,
+        navLink: '/transferstock'
       }
      
     ]
@@ -697,18 +709,18 @@ export default [
     title: 'Reports',
     icon: <FileMinus  />,
     children: [
-      {
-        id: 'Items Type',
-        title: 'Balance Sheet',
-        icon: <Circle />,
-        navLink: '/balance'
-      },
-      {
-        id: 'Stone storage',
-        title: 'Summary Report',
-        icon: <Circle />,
-        navLink: '/summary'
-      },
+      // {
+      //   id: 'Items Type',
+      //   title: 'Balance Sheet',
+      //   icon: <Circle />,
+      //   navLink: '/balance'
+      // },
+      // {
+      //   id: 'Stone storage',
+      //   title: 'Summary Report',
+      //   icon: <Circle />,
+      //   navLink: '/summary'
+      // },
       {
         id: 'Stone storage',
         title: 'Party Balance',

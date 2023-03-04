@@ -64,7 +64,24 @@ const BreadCrumbs = () => {
   const ordid = sessionStorage.getItem("ordobid")
 
   const changeHandler = (e) => {
-    setFiles(e.target.files)
+    const file = e.target.files
+    console.log(file)
+    const ext = file[0].name.split(".").pop()
+    const type = ext
+    console.log(type)
+    if (
+      type === "jpg" ||
+      type === "jpeg" ||
+      type === "png" 
+    ) {
+      setFiles(e.target.files)
+      console.log(e.target.files)
+      console.log("e.target.files")
+    } else {
+      e.target.value = null
+      toast.error("file format not supported. Pls choose jpg/jpeg/png")
+    }
+    // setFiles(e.target.files)
     // profileimg() 
   }
 

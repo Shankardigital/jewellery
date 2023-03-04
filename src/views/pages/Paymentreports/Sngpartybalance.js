@@ -24,26 +24,23 @@ import pdfMake from "pdfmake"
 const Employee = () => {
 
     const [empl, setempl] = useState([])
-    const [empl1, setempl1] = useState([])
+    // const [empl1, setempl1] = useState([])
     const datas = sessionStorage.getItem("accessToken")
-    const docid = sessionStorage.getItem("castrepid")
-    const purity = sessionStorage.getItem("castrepprt")
+    const customerNamess = sessionStorage.getItem("customerNamess")
     const profiledet = () => {
         const token = datas
+        const docid = sessionStorage.getItem("customerId")
         console.log(token)
-        const params = {
-            percent: purity,
-            employeeId: docid
-        }
-        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/employeereport/castingReport/empwisecasting", params,
+    
+        axios.post(`http://103.186.185.77:5023/omsanthoshjewellery/admin/partybalance/getdeliveyledger/${docid}`,
             {
                 headers: { Authorization: `Bearer ${token}` }
             }, {}
         ).then((res) => {
             if (res.status === 200) {
                 console.log(res.data)
-                setempl(res.data.finalDatacastingEmp)
-                setempl1(res.data.castingTotals)
+                setempl(res.data.deliveryData)
+                // setempl1(res.data.castingTotals)
             }
             }).catch(function (error) {
         if (error.response) {
@@ -136,11 +133,17 @@ const Employee = () => {
                                                 <h1 className='text-center text-danger'> OM SANTOSH JEWELLERS PVT LTD</h1>
                                             </td>
                                         </tr>
-                                        <tr className='text-center' >
-                                            <td colSpan="10" className="text-danger">{empl1.employeeName}</td>
+                                        <tr>
+                                            <td  className='text-center text-danger' colSpan="10">
+                                                Plot No 5, House No 8-2-267/1/a/5, Aurora Colony Phase 2, Banjarahills Road No 3, Hyderabad, T.S. 
+                                           
+                                            </td>
                                         </tr>
-                                        <tr className='text-center'>
-                                            <th className='text-danger'>
+                                        <tr className='text-center' >
+                                            <td colSpan="10" className="text-danger">{customerNamess}</td>
+                                        </tr>
+                                        <tr className='text-center text-danger'>
+                                            <th className=''>
                                                 S No
                                             </th>
                                             <th className='text-danger'>
@@ -150,28 +153,25 @@ const Employee = () => {
                                                 Date In
                                             </th> */}
                                             <th>
-                                                Order No
+                                               Particulars
                                             </th>
                                             <th >
-                                                Item
+                                                Metal Issue
                                             </th>
                                             <th >
-                                                Qty
+                                            Metal Receipt
                                             </th>
                                             <th >
-                                                Rate
-                                            </th>
-                                            <th>
-                                                Amount
-                                            </th>
-                                            <th>
-                                                Receipt
+                                                Metal Balance
                                             </th>
                                             <th >
-                                                Issue
+                                                Amount Issue
                                             </th>
-                                            <th>
-                                                Balance
+                                            <th >
+                                            Amount Receipt
+                                            </th>
+                                            <th >
+                                            Amount Balance
                                             </th>
                                         </tr>
                                     </thead>
@@ -190,46 +190,37 @@ const Employee = () => {
                                                     </Moment>
                                                 </td> */}
                                                 <td>
-                                                    {data.orderNo}
+                                                    {data.particulars}
                                                 </td>
                                                 <td>
-                                                    {data.itemName}
+                                                    {data.goldWeight}
                                                 </td>
                                                 <td>
-                                                    {data.weightOut}
+                                                    {data.balanceGoldWeight}
                                                 </td>
                                                 <td>
-                                                    10000
-                                                    {/* {data.finishIn} */}
+                                                    {data.balanceGoldWeight}
                                                 </td>
                                                 <td>
-                                                    180000
-                                                    {/* {data.scapIn} */}
+                                                    {data.amount}
                                                 </td>
                                                 <td>
-                                                180000
-                                                    {/* {data.loss} */}
+                                                    {data.receivedAmount}
+                                                </td>
+                                                <td>
+                                                    {data.balance}
                                                 </td>
                                                 
-                                                <td>
-                                                    -
-                                                    {/* {data.balance} */}
-                                                </td>
-                                                <td>
-                                                180000
-                                                    {/* {data.loss} */}
-                                                </td>
                                             </tr>
                                         ))}
-                                        <tr className="text-danger">
+                                        {/* <tr className="text-danger">
                                             <td className='text-end' colSpan="5">Total</td>
                                             <td>{empl1.totalweightOut}</td>
                                             <td>{empl1.totalReceivedWt}</td>
                                             <td>{empl1.totalscapIn}</td>
                                             <td>-</td>
                                             <td>{empl1.totalloss}</td>
-                                            {/* <td>{empl1.totalBalance}</td> */}
-                                        </tr>
+                                        </tr> */}
                                     </tbody>
                                 </Table>
                                {/* </div> */}

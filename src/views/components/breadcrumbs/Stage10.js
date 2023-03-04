@@ -109,7 +109,8 @@ function Stage1() {
   const validateFun = (e) => {
     console.log(e)
     console.log(ordr)
-    if (ordr.finishIn === "" || ordr.finishIn > recvalue) {
+    // || ordr.finishIn > ordr.weightOut
+    if (ordr.finishIn === "") {
       const error = { ...errorObject }
       error["finishIn"] = "Enter valid value"
       seterrorObject(error)

@@ -29,24 +29,27 @@ const Sngsetting = () => {
     const [empl, setempl] = useState([])
     // const [ghatp, setghatp] = useState([])
     const [empltot, setempltot] = useState([])
+    const [empltot1, setempltot1] = useState([])
     const datas = localStorage.getItem("accessToken")
     const gets = localStorage.getItem("userData")
     const data1 = JSON.parse(gets)
     const adrole = data1.role
     const access = data1.rolesPermissions
+
     const profiledet = () => {
         const token = datas
         console.log(token)
-        const purity = "18"
-        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/employeereport/castingReport/getallcastingempreport", { purity },
+        // const purity = "18"
+        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/partybalance/alldeliveredcustomer", 
             {
                 headers: { Authorization: `Bearer ${token}` }
             }, {}
         ).then((res) => {
             if (res.status === 200) {
                 console.log(res.data)
-                setempl(res.data.castingArry)
-                setempltot(res.data.castingArrTotal)
+                setempl(res.data.deliveryData)
+                setempltot(res.data.balanceAmountTotal)
+                setempltot1(res.data.balanceGoldWeightTotal)
             }
             }).catch(function (error) {
         if (error.response) {
@@ -101,8 +104,8 @@ const Sngsetting = () => {
     }
 
     const navigatedata = (data) => {
-        sessionStorage.setItem("castrepid", data.employeeId)
-        sessionStorage.setItem("castrepprt", data.percentage)
+        sessionStorage.setItem("customerId", data.customerId)
+        sessionStorage.setItem("customerNamess", data.customerName)
         navigate("/sngpartybalance")
     }
     // const htmlToImage = require('html-to-image')
@@ -214,7 +217,10 @@ const Sngsetting = () => {
                                                 Customer Name
                                             </th>
                                             <th className="text-danger">
-                                                Amount
+                                                Metal Balance
+                                            </th>
+                                            <th className="text-danger">
+                                               Balance Amount
                                             </th>
                                             {/* <th className="text-danger">
                                                 %
@@ -230,11 +236,14 @@ const Sngsetting = () => {
                                                 <th scope="row">{((pageNumber - 1) * 10) + key + 11}</th>
                                                 <td className='text-danger'>
                                                     <a onClick={() => { navigatedata(data) }}>
-                                                        {data.employeeName}
+                                                        {data.customerName}
                                                     </a>
                                                 </td>
                                                 <td>
-                                                   5894551
+                                                {data.balanceGoldWeight}
+                                                </td>
+                                                <td>
+                                                   {data.balance}
                                                 </td>
                                                 {/* <td>
                                                     {data.percentage}
@@ -258,7 +267,10 @@ const Sngsetting = () => {
                                                 Total
                                             </td>
                                             <td >
-                                                {empltot.castingTotalWt}
+                                                {empltot1}
+                                            </td>
+                                            <td >
+                                                {empltot}
                                             </td>
                                             {/* <td >
                                             </td>
