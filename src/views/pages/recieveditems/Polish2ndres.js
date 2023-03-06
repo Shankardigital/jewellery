@@ -57,7 +57,7 @@ const Casting = () => {
     const count = (forms1.receivedGold * e.target.value) / 100
     console.log(count)
     setforms02(count.toFixed(3))
-    const count2 = parseFloat(forms1.issuedGold) - (parseFloat(forms1.receivedGold) + parseFloat(count))
+    const count2 = parseFloat(forms1.issuedGold) - (parseFloat(forms1.receivedGold))
     setforms01(count2.toFixed(3))
   }
 

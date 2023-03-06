@@ -73,7 +73,7 @@ const BreadCrumbs = () => {
     const count = (ordr.receivedGold * e.target.value) / 100
     console.log(count)
     setforms02(count.toFixed(3))
-    const count2 = parseFloat(ordr.issuedGold) - (parseFloat(ordr.receivedGold) + parseFloat(count) + parseFloat(ordr.receivedGolds) + parseFloat(ordr.wastages))
+    const count2 = parseFloat(ordr.issuedGold) - (parseFloat(ordr.receivedGold) + parseFloat(ordr.receivedGolds) + parseFloat(ordr.wastages))
     setforms01(count2.toFixed(3))
   }
 

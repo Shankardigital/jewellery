@@ -36,12 +36,12 @@ import ReactPaginate from 'react-paginate'
 import Moment from 'react-moment'
 import trash from "../../../assets/images/latest/trash.gif"
 
-const Transferstock = () => {
+const Returnstock = () => {
 
     const [form, setform] = useState([])
     const [form1, setform1] = useState([])
     const [form2, setform2] = useState([])
-    console.log(form2)
+    console.log(form1)
     // const [form2, setform2] = useState([])
     // console.log(form2)
     // const navigate = useNavigate()
@@ -55,9 +55,11 @@ const Transferstock = () => {
     const [customer, setcustomer] = useState([])
     const [deli, setdeli] = useState([])
 
-    const [nettd, setnettd] = useState([])
-    // const [editdata, seteditdata] = useState([])
-    const [totamount, settotamount] = useState([])
+    const [deliwa, setdeliwa] = useState([])
+
+    // const [nettd, setnettd] = useState([])
+    // // const [editdata, seteditdata] = useState([])
+    // const [totamount, settotamount] = useState([])
     const [balamount, setbalamount] = useState([])
 
     const datas = localStorage.getItem("accessToken")
@@ -110,6 +112,8 @@ const Transferstock = () => {
 
     const [selectedMulti1, setselectedMulti1] = useState([])
 
+    const [selectedMulti2, setselectedMulti2] = useState([])
+
     console.log(selectedMulti1)
     function handleMulti(data) {
         setselectedMulti1(data)
@@ -119,16 +123,16 @@ const Transferstock = () => {
         const params = {
             customerId: data.value
         }
-        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/delivery/getfinishedallorder", params,
+        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/transferstock/finishedorders", params,
             {
                 headers: { Authorization: `Bearer ${token}` }
             }, {}
         ).then((res) => {
             if (res.status === 200) {
                 console.log(res.data)
-                setordr(res.data.orderResult)
-                setnettd(res.data.nettData)
-                settotamount(res.data.selltotalamountData)
+                setordr(res.data.unDeliveredOrders)
+                // setnettd(res.data.nettData)
+                // settotamount(res.data.selltotalamountData)
             }
         },
             (error) => {
@@ -141,25 +145,58 @@ const Transferstock = () => {
         )
 
     }
+
+    function handleMulti2(data) {
+        setselectedMulti2(data)
+        console.log(data)
+    }
+
     const [selectedMulti, setselectedMulti] = useState()
     console.log(selectedMulti)
     console.log(selectedMulti)
     function handleMulti1(data) {
         setselectedMulti(data)
-    }
 
-    const deliverydata = () => {
-
+        
         const token = datas
-        console.log(token)
-        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/delivery/getalldelivery",
+        const params = {
+            orderId: data.value
+        }
+        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/transferstock/getundeliveredorderwtamount", params,
             {
                 headers: { Authorization: `Bearer ${token}` }
             }, {}
         ).then((res) => {
             if (res.status === 200) {
                 console.log(res.data)
-                setdeli(res.data.deliveryResult)
+                setdeliwa(res.data.unDeliveredOrder)
+                // setordr(res.data.deliveredOrder)
+                // setnettd(res.data.nettData)
+                // settotamount(res.data.selltotalamountData)
+            }
+        },
+            (error) => {
+                if (error.response && error.response.status === 400) {
+                    toast.error(error.response.data.message)
+                    console.log(error.data.message)
+
+                }
+            }
+        )
+    }
+
+    const deliverydata = () => {
+
+        const token = datas
+        console.log(token)
+        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/transferstock/getalltransferstock",
+            {
+                headers: { Authorization: `Bearer ${token}` }
+            }, {}
+        ).then((res) => {
+            if (res.status === 200) {
+                console.log(res.data)
+                setdeli(res.data.getallTransferstock)
             }
         },
             (error) => {
@@ -214,19 +251,16 @@ const Transferstock = () => {
         const token = datas
         const params = {
             customerId: selectedMulti1.value,
-            // orderIds: selectedMulti,
+            orderId: selectedMulti.value,
             submittedDate: form.submittedDate,
-            goldWeight: nettd,
-            amount: totamount,
-            balance: balamount,
-            receivedGoldWeight: form.receivedGoldWeight,
-            receivedAmount: form.receivedAmount,
-            particulars: form.particulars
-
+            goldWeight: deliwa.nett,
+            amount: deliwa.selltotalamount,
+            finishId:deliwa._id,
+            returnCustomerId: selectedMulti2.value
         }
 
         console.log(token)
-        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/delivery/adddelivery", params,
+        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/transferstock/addtransferstock", params,
             {
                 headers: { Authorization: `Bearer ${token}` }
             }, {}
@@ -236,6 +270,10 @@ const Transferstock = () => {
                 toast.success(res.data.message)
                 setshow(false)
                 deliverydata()
+                setselectedMulti2("")
+                setselectedMulti1("")
+                setselectedMulti("")
+                setdeliwa("")
                 // navigate("/drawing")
 
             }
@@ -300,11 +338,11 @@ const Transferstock = () => {
     }
 
 
-    const cadtada1 = (data) => {
-        setCenteredModal1(true)
-        setform1(data)
-        // seteditdata1({ value: data.employeeId, label: data.employeeName })
-    }
+    // const cadtada1 = (data) => {
+    //     setCenteredModal1(true)
+    //     setform1(data)
+    //     // seteditdata1({ value: data.employeeId, label: data.employeeName })
+    // }
     // const cadtada2 = (data) => {
     //     setCenteredModal2(true)
     //     setform2(data)
@@ -313,11 +351,17 @@ const Transferstock = () => {
 
     const delOrders = () => {
         const token = datas
-        const dataid = form1._id
-        axios.delete(`http://103.186.185.77:5023/omsanthoshjewellery/admin/delivery/deletedelivery/${dataid}`,
+        // const dataid = form1._id
+        // console.log(dataid)
+        const custdet = {
+            returnStockId:form1._id,
+            finishId:form1.finishId
+        }
+        console.log(custdet)
+        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/returnstock/deletereturnstock", custdet,
             {
                 headers: { Authorization: `Bearer ${token}` }
-            }, {}
+            }
         ).then((res) => {
             if (res.status === 200) {
                 console.log(res.data)
@@ -378,15 +422,15 @@ const Transferstock = () => {
         addOrders2()
     }
 
-    const cadtada = (data) => {
-        setform1(data)
-        setCenteredModal(true)
-        setselectedMulti1({ value: data.customerId, label: data.customerName })
-        setnettd(data.goldWeight)
-        settotamount(data.amount)
-        setbalamount(data.balance)
-        // seteditdata1({ value: data.employeeId, label: data.employeeName })
-    }
+    // const cadtada = (data) => {
+    //     setform1(data)
+    //     setCenteredModal(true)
+    //     setselectedMulti1({ value: data.customerId, label: data.customerName })
+    //     // setnettd(data.goldWeight)
+    //     // settotamount(data.amount)
+    //     setbalamount(data.balance)
+    //     // seteditdata1({ value: data.employeeId, label: data.employeeName })
+    // }
 
     const genPdf = () => {
         html2canvas(document.getElementById("empTable")).then((canvas) => {
@@ -437,7 +481,7 @@ const Transferstock = () => {
                     <Card className="mt-1">
                         <CardBody>
                             <Form onSubmit={(e) => { handleSubmit(e) }}>
-                                <h5>Add Transfer Stock</h5>
+                                <h5>Add Return Stock</h5>
                                 <Row className="mb-1 mt-2">
 
                                     <Col sm="3">
@@ -455,7 +499,7 @@ const Transferstock = () => {
                                             Customers : <span className="text-danger">*</span>
                                         </Label>
                                         <Select
-                                            name="employeeId"
+                                            name="customerId"
                                             value={selectedMulti1}
                                             onChange={handleMulti}
                                             options={empid}
@@ -486,17 +530,28 @@ const Transferstock = () => {
                                         <Label for="name" style={{ color: "black" }}>
                                             Gold Weight : <span className="text-danger">*</span>
                                         </Label>
-                                        <Input required name="goldWeigh" value={nettd} type="text" placeholder="Gold Weight" />
+                                        <Input required name="goldWeight" value={deliwa.nett} type="text" placeholder="Gold Weight" />
                                     </Col>
 
                                     <Col sm="3">
                                         <Label for="name" style={{ color: "black" }}>
                                             Amount : <span className="text-danger">*</span>
                                         </Label>
-                                        <Input required name="amount" value={totamount} type="text" placeholder=" Amount" />
+                                        <Input required name="amount" value={deliwa.selltotalamount} type="text" placeholder=" Amount" />
                                     </Col>
-
                                     <Col sm="3">
+                                        <Label for="name" style={{ color: "black" }}>
+                                            Customers : <span className="text-danger">*</span>
+                                        </Label>
+                                        <Select
+                                            name="returnCustomerId"
+                                            value={selectedMulti2}
+                                            onChange={handleMulti2}
+                                            options={empid}
+                                            required
+                                        />
+                                    </Col>
+                                    {/* <Col sm="3">
                                         <Label for="name" style={{ color: "black" }}>
                                            Return Customers : <span className="text-danger">*</span>
                                         </Label>
@@ -507,7 +562,7 @@ const Transferstock = () => {
                                             options={empid}
                                             required
                                         />
-                                    </Col>
+                                    </Col> */}
 
                                     {/* <Col sm="3">
                                         <Label for="name" style={{ color: "black" }}>
@@ -588,8 +643,9 @@ const Transferstock = () => {
                                                     Customer Name
                                                 </th>
                                                 <th>
-                                                  Return Customer Name
+                                                RETURN CUSTOMER NAME
                                                 </th>
+                                               
                                                 <th>
                                                 Sales Order No
                                                 </th>
@@ -600,10 +656,7 @@ const Transferstock = () => {
                                                 <th>
                                                     Amount
                                                 </th>
-                                               
-                                                <th>
-                                                    Action
-                                                </th>
+                                          
                                             </tr>
                                         </thead>
                                         <tbody className='text-center'>
@@ -615,19 +668,18 @@ const Transferstock = () => {
                                                         </Moment>
                                                     </td>
                                                     <td>{data.customerName}</td>
-                                                    <td>senkar</td>
-                                                    <td>OSJ00000002</td>
+                                                    <td>{data.returnCustomerName}</td>
+                                                    <td>{data.orderNo}</td>
                                                     <td>{data.goldWeight}</td>
                                                     <td>{data.amount}</td>
                                                     {/* <td>{data.receivedGoldWeight}</td>
                                                     <td>{data.receivedAmount}</td>
                                                     <td>{data.balance}</td> */}
-
-                                                    <td>
+                                                    {/* <td>
                                                         <Button style={{ margin: "5px" }} onClick={() => { cadtada(data) }} size="sm" outline color="success"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
-                                                        {/* <Button style={{ margin: "5px" }} onClick={() => { cadtada2(data) }} size="sm" outline color="warning"> <i class="fa fa-telegram" aria-hidden="true"></i></Button> */}
+                                                        <Button style={{ margin: "5px" }} onClick={() => { cadtada2(data) }} size="sm" outline color="warning"> <i class="fa fa-telegram" aria-hidden="true"></i></Button>
                                                         <Button style={{ margin: "5px" }} onClick={() => { cadtada1(data) }} size="sm" outline color="danger"> <i class="fa fa-trash-o" aria-hidden="true"></i></Button>
-                                                    </td>
+                                                    </td> */}
                                                 </tr>
                                             ))}
 
@@ -672,7 +724,7 @@ const Transferstock = () => {
                 )}
 
                 <Modal isOpen={centeredModal} toggle={() => setCenteredModal(!centeredModal)} className='modal-dialog-centered'>
-                    <ModalHeader toggle={() => setCenteredModal(!centeredModal)}>Edit Transfer Stock</ModalHeader>
+                    <ModalHeader toggle={() => setCenteredModal(!centeredModal)}>Edit Return Stock</ModalHeader>
                     <ModalBody>
                         <Form onSubmit={(e) => { handleSubmit1(e) }}>
                             <Row className="mb-1">
@@ -717,16 +769,16 @@ const Transferstock = () => {
                                     <Label for="name" style={{ color: "black" }}>
                                         Gold Weight : <span className="text-danger">*</span>
                                     </Label>
-                                    <Input name="goldWeigh" value={nettd} type="text" placeholder="Gold Weight" />
+                                    <Input name="goldWeigh" type="text" placeholder="Gold Weight" />
                                 </Col>
 
                                 <Col sm="6">
                                     <Label for="name" style={{ color: "black" }}>
                                         Amount : <span className="text-danger">*</span>
                                     </Label>
-                                    <Input name="amount" value={totamount} type="text" placeholder=" Amount" />
+                                    <Input name="amount" type="text" placeholder=" Amount" />
                                 </Col>
-                                <Col sm="6">
+                                {/* <Col sm="6">
                                     <Label for="name" style={{ color: "black" }}>
                                        Return Customers : <span className="text-danger">*</span>
                                     </Label>
@@ -737,7 +789,7 @@ const Transferstock = () => {
                                         options={empid}
                                         required
                                     />
-                                </Col>
+                                </Col> */}
 
                                 {/* <Col sm="6">
                                     <Label for="name" style={{ color: "black" }}>
@@ -861,7 +913,7 @@ const Transferstock = () => {
                             </div>
                             <h5 className="text-center">Do you want delete</h5>
                             <div className="text-end mt-2">
-                                <Button type="button" onClick={() => { delOrders() }} color="danger m-1" outline>Yes <i className="bx bx-check-circle"></i></Button>
+                                <Button type="button" onClick={(data) => { delOrders(data) }} color="danger m-1" outline>Yes <i className="bx bx-check-circle"></i></Button>
                                 <Button type="button" onClick={() => { setCenteredModal1(!centeredModal1) }} color="secondary m-1" outline>Cancel <i className="bx bx-x-circle"></i></Button>
 
                             </div>
@@ -875,4 +927,4 @@ const Transferstock = () => {
         </Fragment>
     )
 }
-export default Transferstock
+export default Returnstock

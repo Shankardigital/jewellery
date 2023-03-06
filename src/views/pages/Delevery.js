@@ -236,6 +236,10 @@ const Delivery = () => {
                 toast.success(res.data.message)
                 setshow(false)
                 deliverydata()
+                setselectedMulti1("")
+                setnettd("")
+                settotamount("")
+                setbalamount("")
                 // navigate("/drawing")
 
             }
@@ -429,7 +433,7 @@ const Delivery = () => {
                 data-aos="fade-down"
                 data-aos-easing="linear"
                 data-aos-duration="1000">
-                <BreadCrumbsPage data={[{ title: "Delivery" }]} />
+                <BreadCrumbsPage data={[{ title: "Payments" }]} />
 
                 {/* <Nav style={{width:'100%'}}/> */}
 
@@ -658,7 +662,7 @@ const Delivery = () => {
                 )}
 
                 <Modal size="sm" isOpen={centeredModal} toggle={() => setCenteredModal(!centeredModal)} className='modal-dialog-centered'>
-                    <ModalHeader toggle={() => setCenteredModal(!centeredModal)}>Edit Delivery Detials</ModalHeader>
+                    <ModalHeader toggle={() => setCenteredModal(!centeredModal)}>Edit Payment Detials</ModalHeader>
                     <ModalBody>
                         <Form onSubmit={(e) => { handleSubmit1(e) }}>
                             <Row className="mb-1">

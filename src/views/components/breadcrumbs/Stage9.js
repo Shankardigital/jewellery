@@ -106,7 +106,7 @@ const BreadCrumbs = () => {
   const validateFun = (e) => {
     console.log(e)
     console.log(ordr)
-    if (ordr.receivedWeight === "" || ordr.issuedWeight < recvalue) {
+    if (ordr.receivedWeight === "") {
       const error = { ...errorObject }
       error["receivedWeight"] = "Enter valid value"
       seterrorObject(error)

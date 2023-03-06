@@ -298,12 +298,22 @@ const Adddrawing = () => {
   // }, 0)
   // console.log(sum)
 
-  const sum2 = costdet.reduce(function (prev, current) {
-    return prev + +current.costWeightInGr
+  // const sum2 = costdet.reduce(function (prev, current) {
+  //   return prev + +current.costWeightInGr0
+  // }, 0)
+  const costWeightInGr = costdet.map((x) => (
+   (x.costItemType !== "IGI" && x.costItemType !== "Making" &&  x.costItemType !== "Gold 18K" && x.costItemType !== "Gold 22K" && x.costItemType !== "Gold 24K") ? parseFloat(x.costWeightInGr).toFixed(3) : '0'
+  ))
+    const sum2 = costWeightInGr.reduce(function (prev, next) {
+    return prev + +next
   }, 0)
-  // console.log(sum2)
-  const sum3 = costdet.reduce(function (prev, current) {
-    return prev + +current.costWeightInCtc
+
+  const costWeightInCtc = costdet.map((x) => (
+    (x.costItemType !== "IGI" && x.costItemType !== "Making" &&  x.costItemType !== "Gold 18K" && x.costItemType !== "Gold 22K" && x.costItemType !== "Gold 24K") ? parseFloat(x.costWeightInCtc).toFixed(3) : '0'
+   ))
+
+  const sum3 = costWeightInCtc.reduce(function (prev, current) {
+    return prev + +current
   }, 0)
   // console.log(sum3)
 
@@ -311,12 +321,20 @@ const Adddrawing = () => {
     return prev + +current.costAmount
   }, 0)
   // console.log(sum4)
+  const sellWeightInGr = costdet.map((x) => (
+    (x.sellItemType !== "IGI" && x.sellItemType !== "Making" &&  x.sellItemType !== "Gold 18K" && x.sellItemType !== "Gold 22K" && x.sellItemType !== "Gold 24K") ? parseFloat(x.sellWeightInGr).toFixed(3) : '0'
+   ))
 
-  const sum5 = costdet.reduce(function (prev, current) {
-    return prev + +current.sellWeightInGr
+  const sum5 = sellWeightInGr.reduce(function (prev, current) {
+    return prev + +current
   }, 0)
-  const sum6 = costdet.reduce(function (prev, current) {
-    return prev + +current.sellWeightInCtc
+
+  const sellWeightInCtc = costdet.map((x) => (
+    (x.sellItemType !== "IGI" && x.sellItemType !== "Making" &&  x.sellItemType !== "Gold 18K" && x.sellItemType !== "Gold 22K" && x.sellItemType !== "Gold 24K") ? parseFloat(x.sellWeightInCtc).toFixed(3) : '0'
+   ))
+
+  const sum6 = sellWeightInCtc.reduce(function (prev, current) {
+    return prev + +current
   }, 0)
 
   const sum7 = costdet.reduce(function (prev, current) {
@@ -564,7 +582,7 @@ const Adddrawing = () => {
 
                 <Col md="3" sm="12" className="mb-1">
                       <Label className="form-label" for="EmailMulti">
-                        Item Image 
+                        Item Image                                     
                       </Label>
                       <Input
                         type="file"
@@ -601,7 +619,7 @@ const Adddrawing = () => {
                       {costdet.map((data, i) => (
                         <tr className="text-center">
                           <td className="tabpad"> {data.costItemType} </td>
-                          <td className="tabpad"> <input dir="rtl" name="costWeightInGr" value={data.costWeightInGr} onChange={(e) => { handleChangecost2(e, i) }} className="tableinput" type="text" /> </td>
+                          <td className="tabpad"> <input dir="rtl" name="costWeightInGr"  value={data.costWeightInGr} onChange={(e) => { handleChangecost2(e, i) }} className="tableinput" type="text" /> </td>
                           <td className="tabpad"> <input dir="rtl" name="costWeightInCtc" value={data.costWeightInCtc} onChange={(e) => { handleChangecost3(e, i) }} className="tableinput" type="text" /> </td>
                           <td className="tabpad"> <input dir="rtl" name="costRatePerCtc" value={data.costRatePerCtc} onChange={(e) => { handleChangecost1(e, i, data.costItemType) }} className="tableinput" type="text" /> </td>
                           <td className="tabpad"> <input dir="rtl" name="costAmount" value={Math.round(data.costAmount)} onChange={(e) => { handleChangecost(e, i) }} className="tableinput" type="text" /> </td>

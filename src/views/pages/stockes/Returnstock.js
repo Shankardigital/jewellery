@@ -41,7 +41,7 @@ const Returnstock = () => {
     const [form, setform] = useState([])
     const [form1, setform1] = useState([])
     const [form2, setform2] = useState([])
-    console.log(form2)
+    console.log(form1)
     // const [form2, setform2] = useState([])
     // console.log(form2)
     // const navigate = useNavigate()
@@ -55,9 +55,11 @@ const Returnstock = () => {
     const [customer, setcustomer] = useState([])
     const [deli, setdeli] = useState([])
 
-    const [nettd, setnettd] = useState([])
-    // const [editdata, seteditdata] = useState([])
-    const [totamount, settotamount] = useState([])
+    const [deliwa, setdeliwa] = useState([])
+
+    // const [nettd, setnettd] = useState([])
+    // // const [editdata, seteditdata] = useState([])
+    // const [totamount, settotamount] = useState([])
     const [balamount, setbalamount] = useState([])
 
     const datas = localStorage.getItem("accessToken")
@@ -119,16 +121,16 @@ const Returnstock = () => {
         const params = {
             customerId: data.value
         }
-        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/delivery/getfinishedallorder", params,
+        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/returnstock/getdeliveredorders", params,
             {
                 headers: { Authorization: `Bearer ${token}` }
             }, {}
         ).then((res) => {
             if (res.status === 200) {
                 console.log(res.data)
-                setordr(res.data.orderResult)
-                setnettd(res.data.nettData)
-                settotamount(res.data.selltotalamountData)
+                setordr(res.data.deliveredOrder)
+                // setnettd(res.data.nettData)
+                // settotamount(res.data.selltotalamountData)
             }
         },
             (error) => {
@@ -146,20 +148,47 @@ const Returnstock = () => {
     console.log(selectedMulti)
     function handleMulti1(data) {
         setselectedMulti(data)
-    }
 
-    const deliverydata = () => {
-
+        
         const token = datas
-        console.log(token)
-        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/delivery/getalldelivery",
+        const params = {
+            orderId: data.value
+        }
+        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/returnstock/getdeliveredorderwtamount", params,
             {
                 headers: { Authorization: `Bearer ${token}` }
             }, {}
         ).then((res) => {
             if (res.status === 200) {
                 console.log(res.data)
-                setdeli(res.data.deliveryResult)
+                setdeliwa(res.data.deliveredOrder)
+                // setordr(res.data.deliveredOrder)
+                // setnettd(res.data.nettData)
+                // settotamount(res.data.selltotalamountData)
+            }
+        },
+            (error) => {
+                if (error.response && error.response.status === 400) {
+                    toast.error(error.response.data.message)
+                    console.log(error.data.message)
+
+                }
+            }
+        )
+    }
+
+    const deliverydata = () => {
+
+        const token = datas
+        console.log(token)
+        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/returnstock/getallreturnstock",
+            {
+                headers: { Authorization: `Bearer ${token}` }
+            }, {}
+        ).then((res) => {
+            if (res.status === 200) {
+                console.log(res.data)
+                setdeli(res.data.getallreturnstock)
             }
         },
             (error) => {
@@ -214,19 +243,15 @@ const Returnstock = () => {
         const token = datas
         const params = {
             customerId: selectedMulti1.value,
-            // orderIds: selectedMulti,
+            orderId: selectedMulti.value,
             submittedDate: form.submittedDate,
-            goldWeight: nettd,
-            amount: totamount,
-            balance: balamount,
-            receivedGoldWeight: form.receivedGoldWeight,
-            receivedAmount: form.receivedAmount,
-            particulars: form.particulars
-
+            goldWeight: deliwa.nett,
+            amount: deliwa.selltotalamount,
+            finishId:deliwa._id
         }
 
         console.log(token)
-        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/delivery/adddelivery", params,
+        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/returnstock/addreturnstock", params,
             {
                 headers: { Authorization: `Bearer ${token}` }
             }, {}
@@ -236,6 +261,9 @@ const Returnstock = () => {
                 toast.success(res.data.message)
                 setshow(false)
                 deliverydata()
+                setselectedMulti1("")
+                setselectedMulti("")
+                setdeliwa("")
                 // navigate("/drawing")
 
             }
@@ -313,11 +341,17 @@ const Returnstock = () => {
 
     const delOrders = () => {
         const token = datas
-        const dataid = form1._id
-        axios.delete(`http://103.186.185.77:5023/omsanthoshjewellery/admin/delivery/deletedelivery/${dataid}`,
+        // const dataid = form1._id
+        // console.log(dataid)
+        const custdet = {
+            returnStockId:form1._id,
+            finishId:form1.finishId
+        }
+        console.log(custdet)
+        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/returnstock/deletereturnstock", custdet,
             {
                 headers: { Authorization: `Bearer ${token}` }
-            }, {}
+            }
         ).then((res) => {
             if (res.status === 200) {
                 console.log(res.data)
@@ -378,15 +412,15 @@ const Returnstock = () => {
         addOrders2()
     }
 
-    const cadtada = (data) => {
-        setform1(data)
-        setCenteredModal(true)
-        setselectedMulti1({ value: data.customerId, label: data.customerName })
-        setnettd(data.goldWeight)
-        settotamount(data.amount)
-        setbalamount(data.balance)
-        // seteditdata1({ value: data.employeeId, label: data.employeeName })
-    }
+    // const cadtada = (data) => {
+    //     setform1(data)
+    //     setCenteredModal(true)
+    //     setselectedMulti1({ value: data.customerId, label: data.customerName })
+    //     // setnettd(data.goldWeight)
+    //     // settotamount(data.amount)
+    //     setbalamount(data.balance)
+    //     // seteditdata1({ value: data.employeeId, label: data.employeeName })
+    // }
 
     const genPdf = () => {
         html2canvas(document.getElementById("empTable")).then((canvas) => {
@@ -486,14 +520,14 @@ const Returnstock = () => {
                                         <Label for="name" style={{ color: "black" }}>
                                             Gold Weight : <span className="text-danger">*</span>
                                         </Label>
-                                        <Input required name="goldWeigh" value={nettd} type="text" placeholder="Gold Weight" />
+                                        <Input required name="goldWeight" value={deliwa.nett} type="text" placeholder="Gold Weight" />
                                     </Col>
 
                                     <Col sm="3">
                                         <Label for="name" style={{ color: "black" }}>
                                             Amount : <span className="text-danger">*</span>
                                         </Label>
-                                        <Input required name="amount" value={totamount} type="text" placeholder=" Amount" />
+                                        <Input required name="amount" value={deliwa.selltotalamount} type="text" placeholder=" Amount" />
                                     </Col>
 
                                     {/* <Col sm="3">
@@ -613,15 +647,14 @@ const Returnstock = () => {
                                                         </Moment>
                                                     </td>
                                                     <td>{data.customerName}</td>
-                                                    <td>OSJ00000002</td>
+                                                    <td>{data.orderNo}</td>
                                                     <td>{data.goldWeight}</td>
                                                     <td>{data.amount}</td>
                                                     {/* <td>{data.receivedGoldWeight}</td>
                                                     <td>{data.receivedAmount}</td>
                                                     <td>{data.balance}</td> */}
-
                                                     <td>
-                                                        <Button style={{ margin: "5px" }} onClick={() => { cadtada(data) }} size="sm" outline color="success"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
+                                                        {/* <Button style={{ margin: "5px" }} onClick={() => { cadtada(data) }} size="sm" outline color="success"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i></Button> */}
                                                         {/* <Button style={{ margin: "5px" }} onClick={() => { cadtada2(data) }} size="sm" outline color="warning"> <i class="fa fa-telegram" aria-hidden="true"></i></Button> */}
                                                         <Button style={{ margin: "5px" }} onClick={() => { cadtada1(data) }} size="sm" outline color="danger"> <i class="fa fa-trash-o" aria-hidden="true"></i></Button>
                                                     </td>
@@ -714,14 +747,14 @@ const Returnstock = () => {
                                     <Label for="name" style={{ color: "black" }}>
                                         Gold Weight : <span className="text-danger">*</span>
                                     </Label>
-                                    <Input name="goldWeigh" value={nettd} type="text" placeholder="Gold Weight" />
+                                    <Input name="goldWeigh" type="text" placeholder="Gold Weight" />
                                 </Col>
 
                                 <Col sm="6">
                                     <Label for="name" style={{ color: "black" }}>
                                         Amount : <span className="text-danger">*</span>
                                     </Label>
-                                    <Input name="amount" value={totamount} type="text" placeholder=" Amount" />
+                                    <Input name="amount" type="text" placeholder=" Amount" />
                                 </Col>
                                 {/* <Col sm="6">
                                     <Label for="name" style={{ color: "black" }}>
@@ -858,7 +891,7 @@ const Returnstock = () => {
                             </div>
                             <h5 className="text-center">Do you want delete</h5>
                             <div className="text-end mt-2">
-                                <Button type="button" onClick={() => { delOrders() }} color="danger m-1" outline>Yes <i className="bx bx-check-circle"></i></Button>
+                                <Button type="button" onClick={(data) => { delOrders(data) }} color="danger m-1" outline>Yes <i className="bx bx-check-circle"></i></Button>
                                 <Button type="button" onClick={() => { setCenteredModal1(!centeredModal1) }} color="secondary m-1" outline>Cancel <i className="bx bx-x-circle"></i></Button>
 
                             </div>

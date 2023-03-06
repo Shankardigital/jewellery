@@ -246,7 +246,7 @@ const Metal = () => {
             <div data-aos="fade-down"
                 data-aos-easing="linear"
                 data-aos-duration="1000">
-                <Breadcrumbs title='Workshop in Hand' data={[{ title: 'Workshop in Hand' }]} />
+                <Breadcrumbs title='Work Shop' data={[{ title: 'Work Shop' }]} />
                 <Row >
 
                     {/* <Col sm="4">

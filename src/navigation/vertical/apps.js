@@ -417,8 +417,8 @@ export default [
   },
 
   {
-    id: 'Deliverys',
-    title: 'Delivery',
+    id: 'shops',
+    title: 'Payments',
     icon: <ShoppingBag />,
     navLink: '/delivery_items'
   },
