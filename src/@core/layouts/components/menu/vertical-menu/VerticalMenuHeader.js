@@ -11,14 +11,14 @@ import themeConfig from '@configs/themeConfig'
 
 
 // ** Utils
-import { getUserData, getHomeRouteForLoggedInUser } from '@utils'
+// import { getUserData } from '@utils'
 
 const VerticalMenuHeader = props => {
   // ** Props
   const { menuCollapsed, setMenuCollapsed, setMenuVisibility, setGroupOpen, menuHover } = props
 
   // ** Vars
-  const user = getUserData()
+  // const user = getUserData()
 
   // ** Reset open group
   useEffect(() => {
@@ -49,10 +49,10 @@ const VerticalMenuHeader = props => {
   }
 
   return (
-    <div className='navbar-header'>
+    <div className='navbar-header'>    
       <ul className='nav navbar-nav flex-row'>
         <li className='nav-item '>
-          <NavLink to={user ? getHomeRouteForLoggedInUser(user.role) : '/'} className='navbar-brand'>
+          <NavLink to="/dashboard/ecommerce" className='navbar-brand'>
             <span className='brand-logo'>
               <img src={themeConfig.app.appLogoImage} alt='logo' />
             </span>

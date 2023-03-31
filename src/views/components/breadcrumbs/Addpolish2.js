@@ -50,6 +50,8 @@ const Adddrawing = () => {
 
   const [form, setform] = useState([])
   const [purity1, setpurity1] = useState([])
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
 
   // const [picker, setPicker] = useState(new Date())
   console.log(form)
@@ -87,7 +89,9 @@ const Adddrawing = () => {
     // setordritem(data.itemName)
     setordrdate(data.deldate)
     setselectedMulti(data)
-
+    if (selectedMulti && selectedMulti.value !== data.value) {
+      setordritem([])
+    }
     const token = datas
     const params = {
       orderId:data.value
@@ -219,12 +223,14 @@ const Adddrawing = () => {
         console.log(res.data)
         toast.success(res.data.message)
         navigate("/polish2-details")
+        setIsSubmitting(false)
 
       }
         }).catch(function (error) {
         if (error.response) {
             console.log(error.response.data.message)
             toast.error(error.response.data.message)
+            setIsSubmitting(false)
         }
     })
 
@@ -233,6 +239,7 @@ const Adddrawing = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     addOrders()
+    setIsSubmitting(true)
   }
 
   return (
@@ -326,8 +333,8 @@ const Adddrawing = () => {
               <Row style={{ float: "right" }}>
                 <Col>
                   {/* <Link to={"/drawing"}> */}
-                  <Button outline size="sm" className="me-1 mt-1" color="success" type="submit">
-                    Submit <ArrowRightCircle className='font-medium-2 pl-1' />
+                  <Button disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
+                  {isSubmitting ? 'Submitting...' : 'Submit'} <ArrowRightCircle className='font-medium-2 pl-1' />
                   </Button>
                   {/* </Link> */}
                   <Link to={"/polish2-details"}>

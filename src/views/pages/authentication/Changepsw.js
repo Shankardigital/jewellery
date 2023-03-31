@@ -44,17 +44,26 @@ const sendotp = () => {
   }
   axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/adminEmp/resetpassword", params).then((res) => {
  
+  // if (res.status === 200) {
+  //   console.log(res.data)
+  //   toast.success(res.data.message)
+  //   navigate("/login")
+  //  }
+  // },
+  // (error) => {
+  //   if (error.response && error.response.status === 400) {
+  //     toast.error(error.response.data.message)
+  //     console.log(error.data.message)
+  //   }
   if (res.status === 200) {
-    console.log(res.data)
     toast.success(res.data.message)
     navigate("/login")
+ }
+   }).catch(function (error) {
+   if (error.response) {
+       console.log(error.response.data.message)
+       toast.error(error.response.data.message)
    }
-  },
-  (error) => {
-    if (error.response && error.response.status === 400) {
-      toast.error(error.response.data.message)
-      console.log(error.data.message)
-    }
   }
   )
 }

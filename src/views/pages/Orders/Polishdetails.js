@@ -26,6 +26,8 @@ import Moment from 'react-moment'
 const Casting = () => {
 
   const [centeredModal, setCenteredModal] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   // const [picker, setPicker] = useState(new Date())
   // const [picker, setPicker] = useState(new Date())
   const [show, setshow] = useState(false)
@@ -137,7 +139,7 @@ const Casting = () => {
         }).catch(function (error) {
         if (error.response) {
             console.log(error.response.data.message)
-            toast.error(error.response.data.message)
+            // toast.error(error.response.data.message)
         }
     })
 
@@ -159,7 +161,7 @@ const Casting = () => {
         }).catch(function (error) {
         if (error.response) {
             console.log(error.response.data.message)
-            toast.error(error.response.data.message)
+            // toast.error(error.response.data.message)
         }
     })
 
@@ -199,7 +201,7 @@ const Casting = () => {
         }).catch(function (error) {
         if (error.response) {
             console.log(error.response.data.message)
-            toast.error(error.response.data.message)
+            // toast.error(error.response.data.message)
         }
     })
 
@@ -227,11 +229,13 @@ const Casting = () => {
         setCenteredModal(false)
         toast.success(res.data.message)
         actiordrs()
+        setIsSubmitting(false)
       }
         }).catch(function (error) {
         if (error.response) {
             console.log(error.response.data.message)
             toast.error(error.response.data.message)
+            setIsSubmitting(false)
         }
     })
 
@@ -240,6 +244,7 @@ const Casting = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     Addcasting()
+    setIsSubmitting(true)
   }
 
   const navigate = useNavigate()
@@ -535,8 +540,8 @@ const Casting = () => {
               <Row style={{ float: "right" }}>
                 <Col>
                   {/* <Link to={"/drawing"}> */}
-                  <Button outline size="sm" className="me-1 mt-1" color="success" type="submit">
-                    Submit
+                  <Button disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
+                  {isSubmitting ? 'Submitting...' : 'Submit'}
                   </Button>
                   {/* </Link> */}
                   <Link to={"/polish-details"}>

@@ -32,6 +32,7 @@ const BreadCrumbs = () => {
 
   // const [form, setform] = useState("")
   // console.log(form)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const navigate = useNavigate()
   const [ordr, setordr] = useState([])
@@ -153,6 +154,7 @@ console.log(percent)
               console.log(res.data)
               toast.success(res.data.message)
               navigate("/polish2-details")
+              setIsSubmitting(false)
               // setcustomer(res.data.employeeData)
           }
       },
@@ -160,6 +162,7 @@ console.log(percent)
               if (error.response && error.response.status === 400) {
                   toast.error(error.response.data.message)
                   console.log(error.data.message)
+                  setIsSubmitting(false)
 
               }
           }
@@ -169,6 +172,7 @@ console.log(percent)
   const handlesubmit = (e) => {
     e.preventDefault()
     activecust()
+    setIsSubmitting(true)
   }
 
   useEffect(() => {
@@ -379,8 +383,8 @@ console.log(percent)
             <Row className="mt-1" style={{ float: "right" }}>
               <Col>
               {/* <Link to={"/polish-details"}> */}
-                <Button outline size="sm" className="me-1 mt-1" color="success" type="submit">
-                  Submit <ArrowRightCircle className='font-medium-2 pl-1' />
+                <Button  disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
+                {isSubmitting ? 'Submitting...' : 'Submit'} <ArrowRightCircle className='font-medium-2 pl-1' />
                 </Button>
                 {/* </Link> */}
                <Link to={"/polish2-details"}>

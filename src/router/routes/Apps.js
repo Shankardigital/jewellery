@@ -96,6 +96,7 @@ const Editsettingres = lazy(() => import('../../views/pages/recieveditems/Editse
 const Editbandinires = lazy(() => import('../../views/pages/recieveditems/Editbandinires'))
 const Editmalares = lazy(() => import('../../views/pages/recieveditems/Editmalares'))
 const Delevery = lazy(() => import('../../views/pages/Delevery'))
+const Deliverys = lazy(() => import('../../views/pages/Delivery'))
 
 
 const AppRoutes = [
@@ -263,7 +264,7 @@ const AppRoutes = [
   },
   {
     element: <Castingrep />,
-    path: '/casting-rep'
+    path: '/rep-casting'
   },
   {
     element: <Sngcasting />,
@@ -523,7 +524,11 @@ const AppRoutes = [
   },
   {
     element: <Delevery />,
-    path: '/delivery_items'
+    path: '/payments'
+  },
+  {
+    element: <Deliverys />,
+    path: '/order_delivery'
   }
 ]
 

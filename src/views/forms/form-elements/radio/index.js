@@ -51,6 +51,7 @@ const Radio = () => {
   }
 
   const [Files, setFiles] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const [inputList, setInputList] = useState([{ itemName: "" }])
   console.log(inputList)
@@ -216,6 +217,7 @@ const Radio = () => {
         console.log(res.data)
         toast.success(res.data.message)
         // sessionStorage.setItem("ordobid", res.data._id)
+        setIsSubmitting(false)
         navigate("/orderlist")
         // setforms1("")
         // profiledet()
@@ -224,6 +226,7 @@ const Radio = () => {
         }).catch(function (error) {
         if (error.response) {
             console.log(error.response.data.message)
+            setIsSubmitting(false)
             toast.error(error.response.data.message)
         }
     })
@@ -233,6 +236,7 @@ const Radio = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     addOrders()
+    setIsSubmitting(true)
   }
 
   // const deprt = (e) => {
@@ -535,8 +539,9 @@ const Radio = () => {
                           style={{ margin: "5px" }}
                           color="success"
                           type="submit"
+                          disabled={isSubmitting}
                         >
-                          Submit
+                          {isSubmitting ? 'Submitting...' : 'Submit'}
                         </Button>
 
                         <Link to="/orderlist">

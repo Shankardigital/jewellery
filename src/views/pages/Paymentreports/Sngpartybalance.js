@@ -32,14 +32,14 @@ const Employee = () => {
         const docid = sessionStorage.getItem("customerId")
         console.log(token)
     
-        axios.post(`http://103.186.185.77:5023/omsanthoshjewellery/admin/partybalance/getdeliveyledger/${docid}`,
+        axios.post(`http://103.186.185.77:5023/omsanthoshjewellery/admin/partybalance/getpaymentsbycustomerid/${docid}`,
             {
                 headers: { Authorization: `Bearer ${token}` }
             }, {}
         ).then((res) => {
             if (res.status === 200) {
                 console.log(res.data)
-                setempl(res.data.deliveryData)
+                setempl(res.data.paymentsData)
                 // setempl1(res.data.castingTotals)
             }
             }).catch(function (error) {
@@ -196,7 +196,7 @@ const Employee = () => {
                                                     {data.goldWeight}
                                                 </td>
                                                 <td>
-                                                    {data.balanceGoldWeight}
+                                                    {data.receivedGoldWeight}
                                                 </td>
                                                 <td>
                                                     {data.balanceGoldWeight}
@@ -208,7 +208,7 @@ const Employee = () => {
                                                     {data.receivedAmount}
                                                 </td>
                                                 <td>
-                                                    {data.balance}
+                                                    {data.balanceAmount}
                                                 </td>
                                                 
                                             </tr>

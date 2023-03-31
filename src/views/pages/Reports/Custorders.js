@@ -28,8 +28,8 @@ const Custorders = () => {
     console.log(ordr)
     const [show, setshow] = useState(false)
     const [customer, setcustomer] = useState([])
-    console.log(empl)
     const [form, setform] = useState([])
+    console.log(form)
     // const [empl1, setempl1] = useState([])
 
     const datas = sessionStorage.getItem("accessToken")
@@ -46,6 +46,7 @@ const Custorders = () => {
     }
     const [selectedMulti, setselectedMulti] = useState([])
     console.log(selectedMulti)
+
     function handleMulti1(data) {
         console.log(data)
         setselectedMulti(data)
@@ -69,13 +70,15 @@ const Custorders = () => {
             if (res.status === 200) {
                 console.log(res.data)
                 setordr(res.data.orderResult)
+                // setselectedMulti("")
+                // setform("")
             }
-            }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
-    })
+        }).catch(function (error) {
+            if (error.response) {
+                console.log(error.response.data.message)
+                toast.error(error.response.data.message)
+            }
+        })
 
 
     }
@@ -117,19 +120,34 @@ const Custorders = () => {
                 console.log(res.data)
                 setcustomer(res.data.customerResult)
             }
-            }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
-    })
+        }).catch(function (error) {
+            if (error.response) {
+                console.log(error.response.data.message)
+                toast.error(error.response.data.message)
+            }
+        })
 
     }
 
-    const ordrids = selectedMulti.map((data) => (
-       data.value
-    ))
-   
+    const cleardata = () => {
+        setselectedMulti1("")
+        setselectedMulti("")
+        setform("")
+        setshow(false)
+
+    }
+
+    // const ordrids = selectedMulti.map((data) => (
+    //     data.value
+    // ))
+
+    let ordrids = []
+
+    if (Array.isArray(selectedMulti)) {
+        ordrids = selectedMulti.map((data) => data.value)
+      } else {
+      }
+
 
     const actiordrs = () => {
         const token = datas
@@ -147,13 +165,14 @@ const Custorders = () => {
                 console.log(res.data)
                 setempl(res.data.finishingobj)
                 setshow(false)
+                cleardata()
             }
-            }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
-    })
+        }).catch(function (error) {
+            if (error.response) {
+                console.log(error.response.data.message)
+                toast.error(error.response.data.message)
+            }
+        })
 
     }
 
@@ -163,10 +182,10 @@ const Custorders = () => {
     }
 
     const ordrid = ordr.flatMap((data) => (
-       [{ value: data.orderId, label: data.orderNo }]
+        [{ value: data.orderId, label: data.orderNo }]
     ))
-    
-console.log(ordrid)
+
+    console.log(ordrid)
     const empid = customer.map((data) => (
         { value: data._id, label: data.customerName }
     ))
@@ -202,6 +221,7 @@ console.log(ordrid)
             a.click()
         })
     }
+
 
     const [listPerPage] = useState(10)
     const [pageNumber, setPageNumber] = useState(0)
@@ -251,17 +271,18 @@ console.log(ordrid)
                                     <Col md="3" className="mb-1">
                                         <Label>Select Orders <span className="text-danger">*</span> </Label>
                                         <Select
-                                            value={selectedMulti}
-                                            onChange={handleMulti1}
-                                            required
-                                            name="orderID"
-                                            isMulti
-                                            options={ordrid} />
+                                                value={selectedMulti}
+                                                onChange={handleMulti1}
+                                                required
+                                                name="orderID"
+                                                isMulti
+                                                options={ordrid} />
+
                                     </Col>
                                     <Col md="3">
                                         <Row style={{ marginTop: "30px" }}>
                                             <Col><Button size="sm" type='submit' color="success" >Search <i class="fa fa-search" aria-hidden="true"></i></Button></Col>
-                                            <Col><Button onClick={() => { setshow(!show) }} outline size="sm" color="danger" >Cancel <i class="fa fa-times-circle-o" aria-hidden="true"></i></Button></Col>
+                                            <Col><Button onClick={() => { cleardata() }} outline size="sm" color="danger" >Cancel <i class="fa fa-times-circle-o" aria-hidden="true"></i></Button></Col>
                                         </Row>
                                     </Col>
                                 </Row>
@@ -431,7 +452,7 @@ console.log(ordrid)
                                                         {data.igiAmount}
                                                     </td>
                                                     <td>
-                                                       {data.amount}
+                                                        {data.amount}
                                                     </td>
 
                                                     <td>

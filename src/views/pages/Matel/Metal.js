@@ -355,15 +355,15 @@ const Metal = () => {
                             <Row >
                                 <div>
                                     <Label>Date</Label>
-                                    <Input name='submittedDate' type="date" onChange={(e) => { handleChange2(e) }} placeholder='Enter Name' className='form-control' />
+                                    <Input name='submittedDate' required type="date" onChange={(e) => { handleChange2(e) }} placeholder='Enter Name' className='form-control' />
                                 </div>
                                 <div>
                                     <Label>Party Name</Label>
-                                    <Input name='partyName' type="text" onChange={(e) => { handleChange2(e) }} placeholder='Enter Name' className='form-control' />
+                                    <Input name='partyName' type="text" required onChange={(e) => { handleChange2(e) }} placeholder='Enter Name' className='form-control' />
                                 </div>
                                 <div>
                                     <Label>Purity</Label>
-                                    <select name='purity' onChange={(e) => { handleChange2(e) }} className='form-select'>
+                                    <select required name='purity' onChange={(e) => { handleChange2(e) }} className='form-select'>
                                         <option value="">Select </option>
                                         <option value="18">18K </option>
                                         <option value="22">22K </option>
@@ -372,7 +372,7 @@ const Metal = () => {
                                 </div>
                                 <div>
                                     <Label>Weight</Label>
-                                    <Input name='weight' onChange={(e) => { handleChange2(e) }} type="number" placeholder='Enter Weight' className='form-control' />
+                                    <Input name='weight' required onChange={(e) => { handleChange2(e) }} type="number" placeholder='Enter Weight' className='form-control' />
                                 </div>
                             </Row>
 

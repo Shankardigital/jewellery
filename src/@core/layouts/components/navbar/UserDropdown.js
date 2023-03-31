@@ -1,5 +1,5 @@
 // ** React Imports
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 // import { useEffect, useState } from 'react'
 
 // ** Custom Components
@@ -18,8 +18,9 @@ import { User, Mail, CheckSquare, MessageSquare, Settings, CreditCard, HelpCircl
 
 // ** Reactstrap Imports
 import { UncontrolledDropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap'
-import { useEffect, useState  } from 'react'
+import { useEffect, useState } from 'react'
 import axios from "axios"
+import { Link } from 'react-router-dom'
 
 // ** Default Avatar Image
 // import defaultAvatar from '@src/assets/images/portrait/small/avatar-s-11.jpg'
@@ -40,38 +41,57 @@ const UserDropdown = () => {
   const [pfdata, setpfdata] = useState([])
   const gets = localStorage.getItem("userData")
   const data1 = JSON.parse(gets)
-  console.log(data1.fullName)
-  const datas =  localStorage.getItem("accessToken")
+  const datas = localStorage.getItem("accessToken")
   console.log(datas)
+  // const navigate = useNavigate()
 
-const profiledet = () => {
-  const token = datas 
-   console.log(token)
-  axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/adminEmp/getprofile", 
-  {
-  headers: { Authorization: `Bearer ${token}` }
-}, {}
-  ).then((res) => {
-   if (res.status === 200) {
-    console.log(res.data)
-    setpfdata(res.data.profileResult)
-    // toast.success(res.data.message)
-    // navigate("/otp")
-   }
-  },
-  (error) => {
-    if (error.response && error.response.status === 400) {
-      toast.error(error.response.data.message)
-      console.log(error.data.message)
+  const profiledet = () => {
+    const token = datas
+    console.log(token)
+    axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/adminEmp/getprofile",
+      {
+        headers: { Authorization: `Bearer ${token}` }
+      }, {}
+    ).then((res) => {
+      if (res.status === 200) {
+        console.log(res.data)
+        setpfdata(res.data.profileResult)
+        // toast.success(res.data.message)
+        // navigate("/otp")
+      }
+    },
+      (error) => {
+        if (error.response && error.response.status === 400) {
+          toast.error(error.response.data.message)
+          console.log(error.data.message)
 
-    }
+        }
+      }
+    )
   }
-  )
-}
 
-useEffect(() => {
-  profiledet()
-}, [])
+  // const redirect = () => {
+  //   if (datas === null) {
+  //     console.log("logout")
+  //     navigate("/login")
+  //   } else {
+  //     console.log("testing")
+  //   }
+  // }
+
+  if (datas === null) {
+    console.log("logout")
+    // window.location.href("/login")
+    window.location.assign("/login")
+    // navigate("/login")
+  } else {
+    console.log("testing")
+  }
+
+  useEffect(() => {
+    // redirect()
+    profiledet()
+  }, [])
 
   //** Vars
   // const userAvatar = (userData && userData.avatar) || defaultAvatar
@@ -87,7 +107,7 @@ useEffect(() => {
         {pfdata.profilePic === undefined ? (
           <Avatar img={sj} imgHeight='40' imgWidth='40' status='online' />
         ) : (
-        <Avatar img={`http://103.186.185.77:5023/${pfdata.profilePic}`} imgHeight='40' imgWidth='40' status='online' />
+          <Avatar img={`http://103.186.185.77:5023/${pfdata.profilePic}`} imgHeight='40' imgWidth='40' status='online' />
         )}
 
       </DropdownToggle>

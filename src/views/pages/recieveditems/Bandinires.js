@@ -24,6 +24,7 @@ const Bandinidetails = () => {
 
   const [centeredModal, setCenteredModal] = useState(false)
 //   const [show, setshow] = useState(false)
+// const [isSubmitting, setIsSubmitting] = useState(false)
 
   const [actitm, setactitm] = useState([])
   const [forms, setforms] = useState([])

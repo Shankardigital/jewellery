@@ -86,7 +86,7 @@ const Usemetal = () => {
                 data-aos="fade-down"
                 data-aos-easing="linear"
                 data-aos-duration="1000">
-                <Breadcrumbs title='Workshop in Hand' data={[{ title: 'Workshop in Hand' }]} />
+                <Breadcrumbs title='Work Shop' data={[{ title: 'Work Shop' }]} />
                 <Row>
                     <div>
 
@@ -135,6 +135,9 @@ const Usemetal = () => {
                                                 Karigar Name
                                             </th>
                                             <th className='text-danger'>
+                                                Weight
+                                            </th>
+                                            {/* <th className='text-danger'>
                                                Order No
                                             </th>
                                             <th className='text-danger'>
@@ -148,7 +151,7 @@ const Usemetal = () => {
                                             </th>
                                             <th className='text-danger'>
                                                 Status
-                                            </th>
+                                            </th> */}
 
                                         </tr>
                                     </thead>
@@ -164,7 +167,7 @@ const Usemetal = () => {
                                                 <td>
                                                     {data.employeeName}
                                                 </td>
-                                                <td>
+                                                {/* <td>
                                                     {data.orderNo}
                                                 </td>
                                                 <td>
@@ -175,10 +178,10 @@ const Usemetal = () => {
                                                 </td>
                                                 <td>
                                                     {data.stage}
-                                                </td>
+                                                </td> */}
                                                 
                                                 <td>
-                                                   {data.status}
+                                                   {data.goldWeight}
                                                 </td>
                                                 {/* <td>
                                                 35.330
@@ -202,10 +205,10 @@ const Usemetal = () => {
 
 
                                         <tr>
-                                            <td className='text-danger text-end' colSpan="5">Total</td>
+                                            <td className='text-danger text-end' colSpan="3">Total</td>
                                             <td> {customer2}</td>
-                                            <td></td>
-                                            <td></td>
+                                            {/* <td></td>
+                                            <td></td> */}
                                             {/* <td> {customer1}</td> */}
                                         </tr>
                                         {/* <tr>

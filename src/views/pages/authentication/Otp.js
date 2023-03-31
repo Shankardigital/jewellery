@@ -35,21 +35,21 @@ const ForgotPassword = () => {
   const navigate = useNavigate()
 
 const sendotp = () => {
+  const myemailid = sessionStorage.getItem("emailid")
   const params = {
+    emailId:myemailid,
     emailOtp:user.emailOtp
   }
   axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/adminEmp/compareotp", params).then((res) => {
   
   if (res.status === 200) {
-    console.log(res.data)
-    toast.success(res.data.message)
+     toast.success(res.data.message)
     navigate("/change-password")
-   }
-  },
-  (error) => {
-    if (error.response && error.response.status === 400) {
-      toast.error(error.response.data.message)
-      console.log(error.data.message)
+  }
+    }).catch(function (error) {
+    if (error.response) {
+        console.log(error.response.data.message)
+        toast.error(error.response.data.message)
     }
   }
   )

@@ -32,12 +32,16 @@ import toast from 'react-hot-toast'
 
 
 const Addsetting = () => {
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     const ordid = sessionStorage.getItem("ordobid6")
     const settid = sessionStorage.getItem("bandid")
     const settitem = sessionStorage.getItem("banditem")
     const [form, setform] = useState([])
 
+
+    const [selectedMulti2, setselectedMulti2] = useState([{ label: "", value: "", item: "" }])
+    console.log(selectedMulti2)
 
     const navigate = useNavigate()
     const [inputList, setInputList] = useState([{ stoneOutWeight: "", item: "", pieces: "", quantityGmCts: "", StoneRange: "" }])
@@ -58,6 +62,7 @@ const Addsetting = () => {
 
     const handleAddClick = () => {
         setInputList([...inputList, { stoneOutWeight: "", item: "", pieces: "", quantityGmCts: "", StoneRange: "" }])
+        setselectedMulti2([...selectedMulti2, { label: "", value: "", item: "" }])
     }
 
 
@@ -101,14 +106,16 @@ const Addsetting = () => {
     //     setselectedMulti(data)
     //     // setorders(set)
     // }
-    const [selectedMulti2, setselectedMulti2] = useState()
+ 
     // console.log(selectedMulti.value)
     function handleMulti2(data, i) {
         console.log(data)
-        inputList[i]['itemType'] = data.itemType
-        // setpurity1(data.purity)
+        inputList[i]['item'] = data.item
+        console.log(data.item)
         const set = [...orders, data]
-        setselectedMulti2(data)
+        selectedMulti2[i]['label'] = data.label
+        selectedMulti2[i]['value'] = data.value
+        selectedMulti2[i]['item'] = data.item
         setorders(set)
     }
 
@@ -150,35 +157,44 @@ const Addsetting = () => {
         const token = datas
         // const docid = ordid
         const params = {
-          orderId:ordid,
-          itemName:settitem
+            orderId: ordid,
+            itemName: settitem
         }
         axios.post(`http://103.186.185.77:5023/omsanthoshjewellery/admin/bandini/getbandinibyid`, params,
-          {
-            headers: { Authorization: `Bearer ${token}` }
-          }, {}
+            {
+                headers: { Authorization: `Bearer ${token}` }
+            }, {}
         ).then((res) => {
-          if (res.status === 200) {
-            console.log(res.data)
-            setform(res.data.bandiniFound)
-            setInputList(res.data.bandiniFound.otherDetails)
-            // setitemval(res.data.settingResult.outWeight)
-            // setselectedMulti({ label: res.data.bandiniFound.orderNo, value: res.data.bandiniFound.orderId })
-            setselectedMulti1({ label: res.data.bandiniFound.employeeName, value: res.data.bandiniFound.employeeId })
-   
-            // setInputList(res.data.bandiniFound.otherDetails)
-            setselectedMulti2({ label: res.data.bandiniFound.otherDetails.stoneOutWeight, value: res.data.bandiniFound.otherDetails.stoneOutWeight, item: res.data.bandiniFound.otherDetails.item })
-        }
-        },
-          (error) => {
-            if (error.response && error.response.status === 400) {
-              toast.error(error.response.data.message)
-              console.log(error.data.message)
-    
+            if (res.status === 200) {
+                console.log(res.data)
+                setform(res.data.bandiniFound)
+                setInputList(res.data.bandiniFound.otherDetails)
+                // setitemval(res.data.settingResult.outWeight)
+                // setselectedMulti({ label: res.data.bandiniFound.orderNo, value: res.data.bandiniFound.orderId })
+                setselectedMulti1({ label: res.data.bandiniFound.employeeName, value: res.data.bandiniFound.employeeId })
+
+                setInputList(res.data.bandiniFound.otherDetails)
+                const vsr = res.data.bandiniFound.otherDetails
+                console.log(vsr)
+                const label = vsr.map((data) => (
+                    { value: data.stoneOutWeight, label: data.stoneOutWeight, item: data.item }
+                ))
+                setselectedMulti2(label)
+                console.log(res.data.bandiniFound.otherDetails)
+
+                // setInputList(res.data.bandiniFound.otherDetails)
+                // setselectedMulti2({ label: res.data.bandiniFound.otherDetails.stoneOutWeight, value: res.data.bandiniFound.otherDetails.stoneOutWeight, item: res.data.bandiniFound.otherDetails.item })
             }
-          }
+        },
+            (error) => {
+                if (error.response && error.response.status === 400) {
+                    toast.error(error.response.data.message)
+                    console.log(error.data.message)
+
+                }
+            }
         )
-      }
+    }
 
     // const actiordrs123 = () => {
     //     const token = datas
@@ -197,7 +213,7 @@ const Addsetting = () => {
     //             settotalwe(res.data.settingResult.tikliTotalWt)
     //             setselectedMulti({ label: res.data.settingResult.orderNo, value: res.data.settingResult.orderId, itemName: res.data.settingResult.itemName })
     //             setselectedMulti1({ label: res.data.settingResult.employeeName, value: res.data.settingResult.employeeId })
-            
+
     //             setInputList(res.data.settingResult.otherDetails)
     //             setselectedMulti2({ label: res.data.settingResult.otherDetails.stoneOutWeight, value: res.data.settingResult.otherDetails.stoneOutWeight })
     //         }
@@ -247,12 +263,12 @@ const Addsetting = () => {
                 console.log(res.data)
                 setstpkts(res.data.activestonestorage)
             }
-            }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
-    })
+        }).catch(function (error) {
+            if (error.response) {
+                console.log(error.response.data.message)
+                toast.error(error.response.data.message)
+            }
+        })
 
     }
 
@@ -268,12 +284,12 @@ const Addsetting = () => {
                 console.log(res.data)
                 setcustomer(res.data.employeeData)
             }
-            }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
-    })
+        }).catch(function (error) {
+            if (error.response) {
+                console.log(error.response.data.message)
+                toast.error(error.response.data.message)
+            }
+        })
 
     }
 
@@ -303,11 +319,11 @@ const Addsetting = () => {
         //const data=[]
         const data = inputList.map((x, i) => (
             {
-                stoneOutWeight: orders[i]["value"],
-                item: orders[i]["item"],
+                stoneOutWeight: selectedMulti2[i]["value"],
+                item: selectedMulti2[i]["item"],
                 pieces: x.pieces,
                 quantityGm: x.quantityGm,
-                quantityGmCts :(x.quantityGm === "Cts") ? parseFloat(x.quantityGmCts).toFixed(2) : parseFloat(x.quantityGmCts).toFixed(3) 
+                quantityGmCts: (x.quantityGm === "Cts") ? parseFloat(x.quantityGmCts).toFixed(2) : parseFloat(x.quantityGmCts).toFixed(3)
                 // quantityGmCts: parseFloat(x.quantityGmCts).toFixed(3)
                 //  finishIn : x.finishIn,
                 //  scapIn : x.scapIn, 
@@ -337,21 +353,25 @@ const Addsetting = () => {
         ).then((res) => {
             if (res.status === 200) {
                 console.log(res.data)
+                toast.success(res.data.message)
                 navigate("/bandhini-details")
+                setIsSubmitting(false)
                 // setcustomer(res.data.employeeData)
             }
-            }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
-    })
+        }).catch(function (error) {
+            if (error.response) {
+                console.log(error.response.data.message)
+                toast.error(error.response.data.message)
+                setIsSubmitting(false)
+            }
+        })
 
     }
 
     const castsubmit = (e) => {
         e.preventDefault()
         Addcasting()
+        setIsSubmitting(true)
     }
 
     return (
@@ -456,7 +476,7 @@ const Addsetting = () => {
                                                     // defaultValue={{""}}
                                                     // onChange={handleMulti1}
                                                     value={pktsid.find(function (pktsid) {
-                                                        return pktsid.value === selectedMulti2
+                                                        return pktsid.value === selectedMulti2[i]['value']
                                                     })}
                                                     // value={x.orderId}
                                                     required
@@ -494,7 +514,7 @@ const Addsetting = () => {
                                                         <option>Select</option>
                                                         {/* <option>Cts</option> */}
                                                         <option value="Cts">Cts</option>
-                                                        <option value="grms">grams</option>
+                                                        {/* <option value="grms">grams</option> */}
                                                     </Input>
                                                 </Col>
                                             </Col>
@@ -520,7 +540,7 @@ const Addsetting = () => {
                                                 </Col>
                                             </>) : null}
 
-                                         
+
                                             <Col sm="2" style={{ marginTop: "30px" }}>
                                                 <div className="btn-box">
                                                     {inputList.length !== 1 && <button
@@ -538,8 +558,8 @@ const Addsetting = () => {
                             <Row className="mt-1" style={{ float: "right" }}>
                                 <Col>
                                     {/* <Link to={"/casting"}> */}
-                                    <Button outline size="sm" className="me-1 mt-1" color="success" type="submit">
-                                        Submit <ArrowRightCircle className='font-medium-2 pl-1' />
+                                    <Button  disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
+                                    {isSubmitting ? 'Submitting...' : 'Submit'} <ArrowRightCircle className='font-medium-2 pl-1' />
                                     </Button>
                                     {/* </Link> */}
                                     <Link to={"/bandhini-details"}>

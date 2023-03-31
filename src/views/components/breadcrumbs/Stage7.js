@@ -36,6 +36,8 @@ const BreadCrumbs = () => {
   console.log(ordr.outWeight)
   const [ordr1, setordr1] = useState([])
   const [ordr01, setordr01] = useState([])
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isDisabled, setIsDisabled] = useState(true)
 
   console.log(ordr01)
   // const [pieces, setpieces] = useState([])
@@ -97,6 +99,7 @@ const BreadCrumbs = () => {
     console.log(totalgm)
     const totalrtgm = parseFloat(e.target.value) + parseFloat(e.target.value)
     console.log(totalrtgm)
+    setIsDisabled(false)
 
     // const res = toString(count).split("/")
 
@@ -183,7 +186,7 @@ const BreadCrumbs = () => {
     const count = (netwet * e.target.value) / 100
     console.log(count)
     setforms02(count.toFixed(3))
-    const count2 = parseFloat(ordr.outWeight) - (parseFloat(netwet) +  parseFloat(ordr.netWeights) + parseFloat(ordr.wastages))
+    const count2 = parseFloat(ordr.outWeight) - (parseFloat(netwet))
     setforms01(count2.toFixed(3))
     console.log(count2)
   }
@@ -282,13 +285,16 @@ const BreadCrumbs = () => {
     ).then((res) => {
       if (res.status === 200) {
         console.log(res.data)
+        toast.success(res.data.message)
         navigate("/bandhini-details")
+        setIsSubmitting(false)
         // setcustomer(res.data.employeeData)
       }
         }).catch(function (error) {
         if (error.response) {
             console.log(error.response.data.message)
             toast.error(error.response.data.message)
+            setIsSubmitting(false)
         }
     })
 
@@ -297,6 +303,7 @@ const BreadCrumbs = () => {
   const setsubmit = (e) => {
     e.preventDefault()
     updateset()
+    setIsSubmitting(true)
   }
 
   
@@ -427,7 +434,7 @@ console.log(percent)
                   <Label>
                     In Weight <span className="text-danger">*</span>
                   </Label>
-                  <Input required type="text" name="inWeight" onChange={(e) => { handleChanges1(e) }} placeholder="Enter In Weight" className="form-control mb-1" />
+                  <Input disabled={isDisabled} required type="text" name="inWeight" onChange={(e) => { handleChanges1(e) }} placeholder="Enter In Weight" className="form-control mb-1" />
                 </Col>
                 <Col md={2}>
                   <Label>
@@ -518,12 +525,12 @@ console.log(percent)
                         <div className="col-12 col-md-6"><Label>
                           pieces<span className="text-danger">*</span>
                         </Label>
-                          <Input disabled type="text" name="netPieces" key={i} value={index.netPieces} placeholder=" pieces" className="form-control mb-1" />
+                          <Input disabled type="number" name="netPieces" key={i} value={index.netPieces} placeholder=" pieces" className="form-control mb-1" />
                         </div>
                         <div className="col-12 col-md-6"><Label>
                           Weight <span className="text-danger">*</span>
                         </Label>
-                          <Input disabled type="text" name="netPiecesWt" key={i} value={index.netPiecesWt} placeholder="Weight" className="form-control mb-1" />
+                          <Input disabled type="text" name="netPiecesWt" key={i} value={parseFloat(index.netPiecesWt).toFixed(2)} placeholder="Weight" className="form-control mb-1" />
                         </div>
                       </Row>
                     </Col>
@@ -564,8 +571,8 @@ console.log(percent)
               <Row className="mt-1" style={{ float: "right" }}>
                 <Col>
                   {/* <Link to={"/setting-details"}> */}
-                  <Button outline size="sm" className="me-1 mt-1" color="success" type="submit">
-                    Submit <ArrowRightCircle className='font-medium-2 pl-1' />
+                  <Button  disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
+                  {isSubmitting ? 'Submitting...' : 'Submit'} <ArrowRightCircle className='font-medium-2 pl-1' />
                   </Button>
                   {/* </Link> */}
                   <Link to={"/bandhini-details"}>

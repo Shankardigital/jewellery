@@ -267,7 +267,7 @@ const Metal = () => {
                     </Col> */}
 
                     <Col sm='12'>
-                        {access.metalAdd === true || adrole === "admin" ? (
+                        {access.finishedview === true || adrole === "admin" ? (
                             <Card>
                             <div>
                                 {/* <h5 className='p-1'>Metal in Hand List</h5> */}

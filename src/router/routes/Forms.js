@@ -19,6 +19,7 @@ const Textarea = lazy(() => import('../../views/forms/form-elements/textarea'))
 const InputMask = lazy(() => import('../../views/forms/form-elements/input-mask'))
 const Checkboxes = lazy(() => import('../../views/forms/form-elements/checkboxes'))
 const Customerlist = lazy(() => import('../../views/forms/form-elements/checkboxes/Customerlist'))
+const Partyamount = lazy(() => import('../../views/forms/form-elements/checkboxes/Partyamount'))
 const Editcust = lazy(() => import('../../views/forms/form-elements/checkboxes/Editcust'))
 const Datepickers = lazy(() => import('../../views/forms/form-elements/datepicker'))
 const InputGroups = lazy(() => import('../../views/forms/form-elements/input-groups'))
@@ -49,6 +50,10 @@ const FormRoutes = [
   {
     element: <Customerlist />,
     path: '/customer-list'
+  },
+  {
+    element: <Partyamount />,
+    path: '/partyamount'
   },
   {
     element: <Editcust />,

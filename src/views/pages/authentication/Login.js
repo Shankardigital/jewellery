@@ -47,7 +47,7 @@ const ToastContent = ({ role }) => {
           <h6>{name}</h6>
           <X size={12} className='cursor-pointer' onClick={() => toast.dismiss(t.id)} />
         </div> */}
-        <span>Your successfully logged in as an  {role}</span>
+        <span>You've successfully logged in as an  {role}</span>
       </div>
     </div>
   )
@@ -97,7 +97,13 @@ const Login = () => {
           ))
           navigate(getHomeRouteForLoggedInUser("admin"))
         })
-        .catch(err => console.log(err))
+        // .catch(err => console.log(err))
+        .catch(function (error) {
+          if (error.response) {
+            console.log(error.response.data.message)
+            toast.error(error.response.data.message)
+          }
+        })
     } else {
       for (const key in data) {
         if (data[key].length === 0) {

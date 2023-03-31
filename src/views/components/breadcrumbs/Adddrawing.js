@@ -49,6 +49,7 @@ import toast from 'react-hot-toast'
 const Adddrawing = () => {
 
   const [form, setform] = useState([])
+  const [isSubmitting, setIsSubmitting] = useState(false)
     // const [picker, setPicker] = useState(new Date())
   console.log(form)
   const navigate = useNavigate()
@@ -175,6 +176,7 @@ const Adddrawing = () => {
               console.log(res.data)
               toast.success(res.data.message)
               navigate("/drawing")
+              setIsSubmitting(false)
              
           }
       },
@@ -182,6 +184,7 @@ const Adddrawing = () => {
               if (error.response && error.response.status === 400) {
                   toast.error(error.response.data.message)
                   console.log(error.data.message)
+                  setIsSubmitting(false)
 
               }
           }
@@ -191,6 +194,7 @@ const Adddrawing = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     addOrders()
+    setIsSubmitting(true)
   }
 
   return (
@@ -251,8 +255,8 @@ const Adddrawing = () => {
             <Row style={{ float: "right" }}>
               <Col>
               {/* <Link to={"/drawing"}> */}
-                <Button outline size="sm" className="me-1 mt-1" color="success" type="submit">
-                  Submit <ArrowRightCircle className='font-medium-2 pl-1' />
+                <Button disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
+                {isSubmitting ? 'Submitting...' : 'Submit'} <ArrowRightCircle className='font-medium-2 pl-1' />
                 </Button> 
                 {/* </Link> */}
               <Link to={"/drawing"}>

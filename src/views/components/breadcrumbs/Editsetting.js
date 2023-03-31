@@ -44,8 +44,11 @@ const Addsetting = () => {
     // const [formValues, setFormValues] = useState([{ orderId: "", purity: "", weightOut: "", finishIn: "", scapIn: "", loss: "" }])
     const [form, setform] = useState([])
     console.log(form)
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
 
+    const [selectedMulti2, setselectedMulti2] = useState([{ label: "", value: "", item: "" }])
+    console.log(selectedMulti2)
     const navigate = useNavigate()
     const [inputList, setInputList] = useState([{ stoneOutWeight: "", item: "", pieces: "", quantityGmCts: "", StoneRange: "" }])
 
@@ -66,6 +69,7 @@ const Addsetting = () => {
 
     const handleAddClick = () => {
         setInputList([...inputList, { stoneOutWeight: "", item: "", pieces: "", quantityGmCts: "", StoneRange: "" }])
+        setselectedMulti2([...selectedMulti2, { label: "", value: "", item: "" }])
     }
 
     // const [ordr, setordr] = useState([])
@@ -125,8 +129,7 @@ const Addsetting = () => {
     //     // const set = [...orders, data]
     //     // setorders(set)
     // }
-    const [selectedMulti2, setselectedMulti2] = useState([{ label: "", value: "", item: "" }])
-    console.log(selectedMulti2)
+
 
     const handleChange1 = (e) => {
         const myUser = { ...form }
@@ -141,8 +144,16 @@ const Addsetting = () => {
         console.log(data.item)
         // setpurity1(data.purity)
         const set = [...orders, data]
-        setselectedMulti2(data)
+
+        // const label = vsr.map((data) => (
+        //     { value: data.stoneOutWeight, label: data.stoneOutWeight }
+        // ))
+        selectedMulti2[i]['label'] = data.label
+        selectedMulti2[i]['value'] = data.value
+        selectedMulti2[i]['item'] = data.item
+
         setorders(set)
+        
     }
 
     // function handleselect (data, i) {
@@ -187,8 +198,16 @@ const Addsetting = () => {
                 // setordrtot(res.data.tikliTotalWt)
                 // console.log(res.data.tikliTotalWt)
                 setInputList(res.data.settingResult.otherDetails)
+                const vsr = res.data.settingResult.otherDetails
+                console.log(vsr)
+                const label = vsr.map((data) => (
+                    { value: data.stoneOutWeight, label: data.stoneOutWeight, item: data.item }
+                ))
+                setselectedMulti2(label)
+                console.log(res.data.settingResult.otherDetails)
                 // setstpkts(res.data.settingResult.otherDetails.stoneOutWeight)
-                setselectedMulti2({ label: res.data.settingResult.otherDetails.stoneOutWeight, value: res.data.settingResult.otherDetails.stoneOutWeight, item: res.data.settingResult.otherDetails.item })
+                //setselectedMulti2({ label: res.data.settingResult.otherDetails.stoneOutWeight, value: res.data.settingResult.otherDetails.stoneOutWeight, item: res.data.settingResult.otherDetails.item })
+
             }
         // }).catch(function (error) {
         //     if (error.response) {
@@ -312,8 +331,8 @@ const Addsetting = () => {
         //const data=[]
         const data = inputList.map((x, i) => (
             {
-                stoneOutWeight: orders[i]["value"],
-                item: orders[i]["item"],
+                stoneOutWeight: selectedMulti2[i]["value"],
+                item: selectedMulti2[i]["item"],
                 pieces: x.pieces,
                 quantityGm: x.quantityGm,
                 quantityGmCts: (x.quantityGm === "Cts") ? parseFloat(x.quantityGmCts).toFixed(2) : parseFloat(x.quantityGmCts).toFixed(3)
@@ -340,7 +359,9 @@ const Addsetting = () => {
         ).then((res) => {
             if (res.status === 200) {
                 console.log(res.data)
+                toast.success(res.data.message)
                 navigate("/setting-details")
+                setIsSubmitting(false)
                 // setcustomer(res.data.employeeData)
             }
         },
@@ -348,6 +369,7 @@ const Addsetting = () => {
                 if (error.response && error.response.status === 400) {
                     toast.error(error.response.data.message)
                     console.log(error.data.message)
+                    setIsSubmitting(false)
                 }
             }
         )
@@ -356,6 +378,7 @@ const Addsetting = () => {
     const castsubmit = (e) => {
         e.preventDefault()
         Addcasting()
+        setIsSubmitting(true)
     }
 
     return (
@@ -478,16 +501,17 @@ const Addsetting = () => {
                                                     Stone Packet : <span className="text-danger">*</span>
                                                 </Label>
                                                 <Select
-                                                    // value={selectedMulti}
+                                                   // value={selectedMulti2}
                                                     // defaultValue={selectedMulti2}
-                                                    defaultValue={selectedMulti2.label}
+                                                    // defaultValue={selectedMulti2.label}
                                                     onChange={e => handleMulti2(e, i)}
                                                     // defaultValue={{""}}
                                                     // onChange={handleMulti1}
+                                                    //return selectedMulti2.some(item =>  pktsid.value === item.value)
                                                     value={pktsid.find(function (pktsid) {
-                                                        return pktsid.value === selectedMulti2
+                                                        return pktsid.value  === selectedMulti2[i]["value"]
                                                     })}
-                                                    // value={x.orderId}
+                                                    // value={x.stoneOutWeight}
                                                     required
                                                     // classNamePrefix="select"
                                                     // clearIndicator
@@ -517,7 +541,7 @@ const Addsetting = () => {
                                                     Pieces :
                                                 </Label>
                                                 <Input
-                                                    name="pieces" required value={x.pieces} onChange={e => handleInputChange(e, i)}
+                                                    name="pieces" required max={x.pieces} value={x.pieces} onChange={e => handleInputChange(e, i)}
                                                     type="text" id="select-basic" placeholder="Enter Pieces" className="form-control mb-1" />
                                             </Col>
 
@@ -533,7 +557,7 @@ const Addsetting = () => {
                                                         <option value="">Select</option>
                                                         {/* <option>Cts</option> */}
                                                         <option value="Cts">Cts</option>
-                                                        <option value="grms">grams</option>
+                                                        {/* <option value="grms">grams</option> */}
                                                     </select>
                                                 </Col>
                                             </Col>
@@ -578,8 +602,8 @@ const Addsetting = () => {
                             <Row className="mt-1" style={{ float: "right" }}>
                                 <Col>
                                     {/* <Link to={"/casting"}> */}
-                                    <Button outline size="sm" className="me-1 mt-1" color="success" type="submit">
-                                        Submit <ArrowRightCircle className='font-medium-2 pl-1' />
+                                    <Button  disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
+                                    {isSubmitting ? 'Submitting...' : 'Submit'} <ArrowRightCircle className='font-medium-2 pl-1' />
                                     </Button>
                                     {/* </Link> */}
                                     <Link to={"/setting-details"}>

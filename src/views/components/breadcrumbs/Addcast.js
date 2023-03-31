@@ -1,3 +1,4 @@
+
 // ** React Imports
 import { Fragment, useState, useEffect } from "react"
 import BreadCrumbsPage from "@components/breadcrumbs"
@@ -104,7 +105,6 @@ const Addsetting = () => {
     setform(myUser)
   }
 
-
   const [ordr, setordr] = useState([])
   const [orders, setorders] = useState([])
   //const [purity1, setpurity1] = useState([])
@@ -116,6 +116,8 @@ const Addsetting = () => {
   console.log(datas)
 
   const [selectedMulti1, setselectedMulti1] = useState([])
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
 
   console.log(selectedMulti1)
   function handleMulti(data) {
@@ -134,18 +136,25 @@ const Addsetting = () => {
     console.log(data)
     setitemdate(data.caddate)
     setordrdate(data.ordrdate)
+
+    // if (selectedMulti && selectedMulti.value !== data.value) {
+    //   setites([])
+    // }
+
     inputList[i]['purity'] = data.purity
     inputList[i]['itemNameMulti'] = data.itemName
+    inputList[i]['value'] = data.value
+    inputList[i]['label'] = data.label
+    inputList[i]['weightOut'] = ""
     console.log(inputList)
-    //setpurity1(data.purity)
     const set = [...orders, data]
     setselectedMulti(data)
-    // setselectitem(data)
     setorders(set)
+    console.log(data)
 
     const token = datas
     const params = {
-      orderId:data.value
+      orderId: data.value
     }
     console.log(token)
     axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/casting/getorderitems", params,
@@ -155,14 +164,25 @@ const Addsetting = () => {
     ).then((res) => {
       if (res.status === 200) {
         console.log(res.data)
-        setites(res.data.itemData)
-        
-      }
-        }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
+        if (res.data.itemData.length > 0) {
+
+          // const objIndex = ites.findIndex((obj) => res.data.itemData.every((obj2) => obj2._id === obj._id))
+
+          //  const objIndex = ites.findIndex((obj) => obj._id === res.data.itemData[0]["_id"])
+
+          const arr = [...ites]
+          console.log(ites)
+          arr.push(res.data.itemData)
+          setites(arr)
+          // console.log(ites)
+          // console.log(objIndex, "objeindex")
         }
+      }
+    }).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.message)
+        toast.error(error.response.data.message)
+      }
     })
 
   }
@@ -180,13 +200,13 @@ const Addsetting = () => {
         setordr(res.data.orderData)
         // setitemdate(res.data.orderData.cadReceivedDate)  
         // setordrdate(res.data.orderData.orderDeliveryDate)
-        
+
       }
-        }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
+    }).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.message)
+        // toast.error(error.response.data.message)
+      }
     })
 
   }
@@ -207,15 +227,15 @@ const Addsetting = () => {
       }
     }).catch(function (error) {
       if (error.response) {
-          console.log(error.response.data.message)
-          toast.error(error.response.data.message)
+        console.log(error.response.data.message)
+        toast.error(error.response.data.message)
       }
-  })
+    })
 
   }
 
   const ordrid = ordr.map((data) => (
-    { value: data._id, label: data.orderNo, purity: data.itemPurity, caddate:data.cadReceivedDate, ordrdate:data.orderDeliveryDate }
+    { value: data._id, label: data.orderNo, purity: data.itemPurity, caddate: data.cadReceivedDate, ordrdate: data.orderDeliveryDate }
   ))
   // setselectitem(ordrid.itemName)
   console.log(ordrid)
@@ -232,10 +252,10 @@ const Addsetting = () => {
   const Addcasting = () => {
     const token = datas
     //const data=[]
-    const data = inputList.map((x, i) => (
+    const data = inputList.map((x) => (
       {
-        orderId: orders[i]["value"],
-        purity: orders[i]["purity"],
+        orderId: x.value,
+        purity: x.purity,
         itemId: x.itemId,
         weightOut: parseFloat(x.weightOut).toFixed(3)
         //  finishIn : x.finishIn,
@@ -263,14 +283,17 @@ const Addsetting = () => {
     ).then((res) => {
       if (res.status === 200) {
         console.log(res.data)
+        toast.success(res.data.message)
         navigate("/casting")
+        setIsSubmitting(false)
         // setcustomer(res.data.employeeData)
       }
-        }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
+    }).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.message)
+        toast.error(error.response.data.message)
+        setIsSubmitting(false)
+      }
     })
 
   }
@@ -278,6 +301,7 @@ const Addsetting = () => {
   const castsubmit = (e) => {
     e.preventDefault()
     Addcasting()
+    setIsSubmitting(true)
   }
 
   return (
@@ -300,9 +324,9 @@ const Addsetting = () => {
                     Date <span className="text-danger">*</span>
                   </Label>
                   <Input
-                  required
-                  max={ordrdate}
-                  min={itemdate}
+                    required
+                    max={ordrdate}
+                    min={itemdate}
                     // max={new Date().toISOString().split("T")[0]}
                     name="submittedDate" type="date" placeholder="Enter Date" className="form-control mb-1"
                     onChange={(e) => { handleChange1(e) }}
@@ -331,9 +355,7 @@ const Addsetting = () => {
                         </Label>
                         <Select
                           // value={selectedMulti}
-                          onChange={e => handleMulti1(e, i)}
-                          // defaultValue={{""}}
-                          // onChange={handleMulti1}
+                          onChange={(e) => handleMulti1(e, i)}
                           value={ordrid.find(function (ordrid) {
                             return ordrid.value === selectedMulti
                           })}
@@ -348,11 +370,18 @@ const Addsetting = () => {
                         <Label for="name" style={{ color: "black" }}>
                           Item  : <span className="text-danger">*</span>
                         </Label>
-                        <select onChange={e => handleInputChange(e, i)} className="form-select" required name="itemId" placeholder="Item" type="text">
+                        <select onChange={e => handleInputChange(e, i)} className="form-select"
+                          required name="itemId" placeholder="Item" type="text">
                           <option value="">Select</option>
-                          {ites.map((data) => (
-                            <option value={data._id} >{data.itemName}</option>
+                          {/* {
+                            (ites.length > 0) ? ites[i].map((data) => (
+                              <option value={data._id} >{data.itemName}</option>
+                            )) : ""
+                          } */}
+                          {ites?.length > 0 && ites[i]?.map((data) => (
+                            <option key={data._id} value={data._id}>{data.itemName}</option>
                           ))}
+
                         </select>
                         {/* <Select
                           // value={selectedMulti}
@@ -408,8 +437,8 @@ const Addsetting = () => {
               <Row className="mt-1" style={{ float: "right" }}>
                 <Col>
                   {/* <Link to={"/casting"}> */}
-                  <Button outline size="sm" className="me-1 mt-1" color="success" type="submit">
-                    Submit <ArrowRightCircle className='font-medium-2 pl-1' />
+                  <Button disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
+                    {isSubmitting ? 'Submitting...' : 'Submit'} <ArrowRightCircle className='font-medium-2 pl-1' />
                   </Button>
                   {/* </Link> */}
                   <Link to={"/casting"}>

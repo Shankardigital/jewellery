@@ -147,40 +147,42 @@ const AccountTabs = ({ data }) => {
         // toast.success(res.data.message)
         // navigate("/otp")
       }
-        }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
-    })
-
-  }
-
-  const profileimg = () => {
-    const token = datas
-    const dataArray = new FormData()
-    for (let i = 0; i < Files.length; i++) {
-      dataArray.append("avatar", Files[i])
-    }
-    axios.put("http://103.186.185.77:5023/omsanthoshjewellery/admin/adminEmp/updateprofilepic", dataArray,
-      {
-        headers: { Authorization: `Bearer ${token}` }
-      }, {}
-    ).then((res) => {
-      if (res.status === 200) {
-        console.log(res.data)
-        toast.success(res.data.message)
-        profiledet()
-        window.location.reload(false)
+    }).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.message)
+        toast.error(error.response.data.message)
       }
-        }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
     })
 
   }
+
+  // const profileimg = () => {
+  //   const token = datas
+
+  //   console.log(Files)
+  //   const dataArray = new FormData()
+  //   for (let i = 0; i < Files.length; i++) {
+  //     dataArray.append("avatar", Files[i])
+  // }
+  //   axios.put("http://103.186.185.77:5023/omsanthoshjewellery/admin/adminEmp/updateprofilepic", dataArray,
+  //     {
+  //       headers: { Authorization: `Bearer ${token}` }
+  //     }, {}
+  //   ).then((res) => {
+  //     if (res.status === 200) {
+  //       console.log(res.data)
+  //       toast.success(res.data.message)
+  //       profiledet()
+  //       window.location.reload(false)
+  //     }
+  //   }).catch(function (error) {
+  //     if (error.response) {
+  //       console.log(error.response.data.message)
+  //       toast.error(error.response.data.message)
+  //     }
+  //   })
+
+  // }
 
   const profiledit = () => {
     const token = datas
@@ -205,35 +207,47 @@ const AccountTabs = ({ data }) => {
         toast.success(res.data.message)
         // navigate("/otp")
       }
-        }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
+    }).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.message)
+        toast.error(error.response.data.message)
+      }
     })
 
   }
 
   const changeHandler = (e) => {
     const file = e.target.files
+  
+    setFiles(e.target.files)
+
+    const token = datas
+
     console.log(file)
-    const ext = file[0].name.split(".").pop()
-    const type = ext
-    console.log(type)
-    if (
-      type === "jpg" ||
-      type === "jpeg" ||
-      type === "png" 
-    ) {
-      setFiles(e.target.files)
-      console.log(e.target.files)
-      console.log("e.target.files")
-    } else {
-      e.target.value = null
-      toast.error("file format not supported. Pls choose jpg/jpeg/png")
-    }
-    // setFiles(e.target.files)
-    profileimg()
+ 
+    const dataArray = new FormData()
+    for (let i = 0; i < file.length; i++) {
+      dataArray.append("avatar", file[i])
+  }
+    axios.put("http://103.186.185.77:5023/omsanthoshjewellery/admin/adminEmp/updateprofilepic", dataArray,
+      {
+        headers: { Authorization: `Bearer ${token}` }
+      }, {}
+    ).then((res) => {
+      if (res.status === 200) {
+        console.log(res.data)
+        toast.success(res.data.message)
+        profiledet()
+        window.location.reload(false)
+      }
+    }).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.message)
+        toast.error(error.response.data.message)
+      }
+    })
+    
+   
   }
 
   // const prolfilechange = (e) => {
@@ -275,9 +289,11 @@ const AccountTabs = ({ data }) => {
             </div>
             <div className='d-flex align-items-end mt-75 ms-1'>
               <div>
-                <Button tag={Label} className='mb-75 me-75' size='sm' color='primary'>
+                <Button  tag={Label} className='mb-75 me-75' size='sm' color='primary'>
                   Upload
-                  <Input name="avatar" type='file' onChange={changeHandler} hidden accept='image/*' />
+                  <Input onChange={(e) => { changeHandler(e) }}  required type="file" name="uploadImg" id="select-basic" hidden accept='image/*' />
+
+                  {/* <Input name="avatar" type='file' onChange={(e) => { changeHandler(e) }} hidden accept='image/*' /> */}
                 </Button>
                 {/* <Button className='mb-75' color='secondary' size='sm' outline onClick={handleImgReset}>
                   Reset

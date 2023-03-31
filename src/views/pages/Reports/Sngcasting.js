@@ -103,7 +103,7 @@ const Employee = () => {
                 <Row>
                     <div>
 
-                        <Link to="/casting-rep" style={{ float: "right" }} > <Button className='m-1' color='info'> <i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> Back</Button></Link>
+                        <Link to="/rep-casting" style={{ float: "right" }} > <Button className='m-1' color='info'> <i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> Back</Button></Link>
                     </div>
 
                     <Col sm='12'>

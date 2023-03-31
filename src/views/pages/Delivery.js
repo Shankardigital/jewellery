@@ -43,6 +43,8 @@ const Delivery = () => {
     const [form1, setform1] = useState([])
     const [form2, setform2] = useState([])
     console.log(form2)
+    const [isSubmitting, setIsSubmitting] = useState(false)
+
     // const [form2, setform2] = useState([])
     // console.log(form2)
     // const navigate = useNavigate()
@@ -50,7 +52,6 @@ const Delivery = () => {
     const [centeredModal, setCenteredModal] = useState(false)
     const [centeredModal1, setCenteredModal1] = useState(false)
     const [centeredModal2, setCenteredModal2] = useState(false)
-    const [isSubmitting, setIsSubmitting] = useState(false)
 
     const [ordr, setordr] = useState([])
     console.log(ordr)
@@ -60,15 +61,7 @@ const Delivery = () => {
     const [nettd, setnettd] = useState([])
     // const [editdata, seteditdata] = useState([])
     const [totamount, settotamount] = useState([])
-
-    const [commtotamount, setcommtotamount] = useState([])
-    const [commgold, setcommgold] = useState([])
-    const [bagold, setbagold] = useState([])
-    const [bamount, setbamount] = useState([])
     const [balamount, setbalamount] = useState([])
-
-    const [balgold, setbalgold] = useState("0.000")
-    // const balgoldsdata = toFixed(balgold)
 
     const datas = localStorage.getItem("accessToken")
     console.log(datas)
@@ -83,34 +76,13 @@ const Delivery = () => {
         myUser[e.target.name] = e.target.value
         setform(myUser)
     }
-    const handleChange1 = (e) => {
-        const myUser = { ...form }
-        myUser[e.target.name] = e.target.value
-        setform(myUser)
-        if (bamount === "0") {
-            const count = parseFloat(totamount) - parseFloat(bamount) - parseFloat(e.target.value)
-            setbalamount(count)
-        } else {
-            const count = parseFloat(bamount) - parseFloat(e.target.value)
-            setbalamount(count)
-        }
-
-    }
-    const handleChange01 = (e) => {
-        const myUser = { ...form }
-        myUser[e.target.name] = e.target.value
-        setform(myUser)
-        if (bagold === "0.000") {
-
-            const count = parseFloat(nettd) - parseFloat(e.target.value)
-            setbalgold(count)
-        } else {
-            const count = parseFloat(bagold) - parseFloat(e.target.value)
-            setbalgold(count)
-        }
-
-    }
-
+    // const handleChange1 = (e) => {
+    //     const myUser = { ...form }
+    //     myUser[e.target.name] = e.target.value
+    //     setform(myUser)
+    //     const count = totamount - e.target.value
+    //     setbalamount(count)
+    // }
     const handleChange2 = (e) => {
         const myUser = { ...form1 }
         myUser[e.target.name] = e.target.value
@@ -139,18 +111,26 @@ const Delivery = () => {
         setbalamount(count)
     }
 
+    const [selectedMulti, setselectedMulti] = useState()
+    console.log(selectedMulti)
+    console.log(selectedMulti)
+    function handleMulti1(data) {
+        setselectedMulti(data)
+    }
+
     const [selectedMulti1, setselectedMulti1] = useState([])
 
     console.log(selectedMulti1)
     function handleMulti(data) {
         setselectedMulti1(data)
         console.log(data)
+        setselectedMulti("")
 
         const token = datas
         const params = {
             customerId: data.value
         }
-        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/payments/getcustomersdata", params,
+        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/delivery/getfinishedorders", params,
             {
                 headers: { Authorization: `Bearer ${token}` }
             }, {}
@@ -158,12 +138,8 @@ const Delivery = () => {
             if (res.status === 200) {
                 console.log(res.data)
                 setordr(res.data.orderResult)
-                setnettd(res.data.nettGoldAmount)
-                settotamount(res.data.totalSellAmount)
-                setcommgold(res.data.committedGoldWeight)
-                setcommtotamount(res.data.committedAmount)
-                setbagold(res.data.balanceGoldWeights)
-                setbamount(res.data.balanceAmounts)
+                // setnettd(res.data.nettData)
+                // settotamount(res.data.selltotalamountData)
             }
         },
             (error) => {
@@ -176,25 +152,19 @@ const Delivery = () => {
         )
 
     }
-    // const [selectedMulti, setselectedMulti] = useState()
-    // console.log(selectedMulti)
-    // console.log(selectedMulti)
-    // function handleMulti1(data) {
-    //     setselectedMulti(data)
-    // }
 
     const deliverydata = () => {
 
         const token = datas
         console.log(token)
-        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/payments/getallpayments",
+        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/delivery/getalldelivery",
             {
                 headers: { Authorization: `Bearer ${token}` }
             }, {}
         ).then((res) => {
             if (res.status === 200) {
                 console.log(res.data)
-                setdeli(res.data.paymentsResult)
+                setdeli(res.data.deliveryResult)
             }
         },
             (error) => {
@@ -208,17 +178,16 @@ const Delivery = () => {
     }
 
     const activecust = () => {
-
         const token = datas
         console.log(token)
-        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/customer/getactivecustomer",
+        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/delivery/getfinishedcustomer",
             {
                 headers: { Authorization: `Bearer ${token}` }
             }, {}
         ).then((res) => {
             if (res.status === 200) {
                 console.log(res.data)
-                setcustomer(res.data.activeCustomer)
+                setcustomer(res.data.customerList)
             }
         },
             (error) => {
@@ -231,12 +200,12 @@ const Delivery = () => {
         )
     }
 
-    // const ordrid = ordr.map((data) => (
-    //     { value: data.orderId, label: data.orderNo }
-    // ))
+    const ordrid = ordr.map((data) => (
+        { value: data.orderId, label: data.orderNo }
+    ))
 
     const empid = customer.map((data) => (
-        { value: data._id, label: data.customerName }
+        { value: data.customerId, label: data.customerDetails }
     ))
 
     useEffect(() => {
@@ -249,21 +218,19 @@ const Delivery = () => {
         const token = datas
         const params = {
             customerId: selectedMulti1.value,
-            submittedDate: form.submittedDate,
-            goldWeight: nettd,
-            amount: totamount,
+            orders: selectedMulti,
+            submittedDate: form.submittedDate
+            // goldWeight: nettd,
+            // amount: totamount,
             // balance: balamount,
-            receivedGoldWeight: form.receivedGoldWeight,
-            receivedAmount: form.receivedAmount,
-            particulars: form.particulars,
-            balanceAmount: balamount,
-            balanceGoldWeight: parseFloat(balgold).toFixed(3),
-            committedAmount: commtotamount,
-            comittedGoldWeight: commgold
+            // receivedGoldWeight: form.receivedGoldWeight,
+            // receivedAmount: form.receivedAmount,
+            // particulars: form.particulars
+
         }
 
         console.log(token)
-        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/payments/addpayments", params,
+        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/delivery/adddelivery", params,
             {
                 headers: { Authorization: `Bearer ${token}` }
             }, {}
@@ -274,16 +241,12 @@ const Delivery = () => {
                 setshow(false)
                 deliverydata()
                 setselectedMulti1("")
+                setselectedMulti("")
                 setnettd("")
                 settotamount("")
                 setbalamount("")
-                setbagold("")
-                setbamount("")
-                setbagold("")
-                setcommgold("")
-                setcommtotamount("")
-                setbalgold("")
                 setIsSubmitting(false)
+                // navigate("/drawing")
 
             }
         },
@@ -298,25 +261,11 @@ const Delivery = () => {
         )
     }
 
-    const dataclrea = () => {
-
-        setselectedMulti1("")
-        setnettd("")
-        settotamount("")
-        setbalamount("")
-        setbagold("")
-        setbamount("")
-        setbagold("")
-        setcommgold("")
-        setcommtotamount("")
-        setbalgold("")
-        setshow(false)
-    }
-
     const handleSubmit = (e) => {
         e.preventDefault()
         addOrders()
         setIsSubmitting(true)
+
     }
 
     const addOrders1 = () => {
@@ -378,7 +327,7 @@ const Delivery = () => {
     const delOrders = () => {
         const token = datas
         const dataid = form1._id
-        axios.delete(`http://103.186.185.77:5023/omsanthoshjewellery/admin/payments/deletepayments/${dataid}`,
+        axios.delete(`http://103.186.185.77:5023/omsanthoshjewellery/admin/delivery/deletedelivery/${dataid}`,
             {
                 headers: { Authorization: `Bearer ${token}` }
             }, {}
@@ -442,6 +391,11 @@ const Delivery = () => {
         addOrders2()
     }
 
+    const clreadata = () => {
+        setselectedMulti1("")
+        setselectedMulti("")
+        setshow(false)
+    }
     // const cadtada = (data) => {
     //     setform1(data)
     //     setCenteredModal(true)
@@ -484,14 +438,14 @@ const Delivery = () => {
 
         const token = datas
         console.log(token)
-        axios.post(`http://103.186.185.77:5023/omsanthoshjewellery/admin/payments/searchcustomer?searchQuery=${e.target.value}`,
+        axios.post(`http://103.186.185.77:5023/omsanthoshjewellery/admin/delivery/searchcustomer?searchQuery=${e.target.value}`,
             {
                 headers: { Authorization: `Bearer ${token}` }
             }, {}
         ).then((res) => {
             if (res.status === 200) {
                 console.log(res.data)
-                setdeli(res.data.paymentsResult)
+                setdeli(res.data.deliveryResult)
             }
         }).catch(function (error) {
             if (error.response) {
@@ -512,35 +466,20 @@ const Delivery = () => {
         setPageNumber(selected)
     }
 
-
     return (
         <Fragment>
             <div
                 data-aos="fade-down"
                 data-aos-easing="linear"
                 data-aos-duration="1000">
-                <BreadCrumbsPage data={[{ title: "Payments" }]} />
+                <BreadCrumbsPage data={[{ title: "Delivery" }]} />
 
                 {/* <Nav style={{width:'100%'}}/> */}
 
                 {show ? (
                     <Card className="mt-1">
                         <CardBody>
-                            <Row>
-                                <Col md="3">
-                                    <Label>Committed Gold </Label> : <span>{commgold}</span>
-                                </Col>
-                                <Col md="3">
-                                    <Label>Committed Amount </Label> : <span>{commtotamount}</span>
-                                </Col>
-                                <Col md="3">
-                                    <Label>Total Balance Gold </Label> : <span>{bagold}</span>
-                                </Col>
-                                <Col md="3">
-                                    <Label>Total Balance Amount </Label> : <span>{bamount}</span>
-                                </Col>
-                            </Row>
-                            <Form className="mt-3" onSubmit={(e) => { handleSubmit(e) }}>
+                            <Form onSubmit={(e) => { handleSubmit(e) }}>
                                 <Row className="mb-1">
 
                                     <Col sm="3">
@@ -558,26 +497,51 @@ const Delivery = () => {
                                             Customers : <span className="text-danger">*</span>
                                         </Label>
                                         <Select
-                                            name="employeeId"
+                                            name="customerId"
                                             value={selectedMulti1}
                                             onChange={handleMulti}
                                             options={empid}
                                             required
                                         />
                                     </Col>
-
                                     <Col sm="3">
+                                        <Label for="name" style={{ color: "black" }}>
+                                            Orders : <span className="text-danger">*</span>
+                                        </Label>
+                                        <Select
+                                            name="orders"
+                                            value={selectedMulti}
+                                            onChange={handleMulti1}
+                                            options={ordrid}
+                                            isMulti
+                                            required
+                                        />
+                                    </Col>
+
+                                    {/* <Col sm="3">
                                         <Label for="name" style={{ color: "black" }}>
                                             Particulars : <span className="text-danger">*</span>
                                         </Label>
                                         <Input required onChange={(e) => handleChange(e)} name="particulars" type="text" placeholder="Particulars " />
-                                    </Col>
+                                    </Col> */}
 
-                                    <Col sm="3">
+                                    {/* <Col sm="3">
+                                        <Label for="name" style={{ color: "black" }}>
+                                            Sales Order No : <span className="text-danger">*</span>
+                                        </Label>
+                                        <Select
+                                            value={selectedMulti}
+                                            onChange={handleMulti1}
+                                            required
+                                            name="orderId"
+                                            isMulti options={ordrid} />
+                                    </Col> */}
+
+                                    {/* <Col sm="3">
                                         <Label for="name" style={{ color: "black" }}>
                                             Gold Weight : <span className="text-danger">*</span>
                                         </Label>
-                                        <Input required name="goldWeight" value={nettd} type="text" placeholder="Gold Weight" />
+                                        <Input required name="goldWeigh" value={nettd} type="text" placeholder="Gold Weight" />
                                     </Col>
 
                                     <Col sm="3">
@@ -586,79 +550,37 @@ const Delivery = () => {
                                         </Label>
                                         <Input required name="amount" value={totamount} type="text" placeholder=" Amount" />
                                     </Col>
-                                    <>
-                                    </>
-                                    {commgold === "0.000" ? (
-                                        <Col sm="3">
-                                            <Label for="name" style={{ color: "black" }}>
-                                                Received Gold Weight :
-                                            </Label>
-                                            <Input onChange={(e) => handleChange01(e)} value="0.000" disabled name="receivedGoldWeight" type="text" placeholder="Total Gold Weight" />
-                                        </Col>
-                                    ) : (
-                                        <Col sm="3">
-                                            <Label for="name" style={{ color: "black" }}>
-                                                Received Gold Weight :
-                                            </Label>
-                                            <Input onChange={(e) => handleChange01(e)} name="receivedGoldWeight" type="text" placeholder="Total Gold Weight" />
-                                        </Col>
-                                    )}
-
                                     <Col sm="3">
-                                        <>
-                                            {bagold === "0" ? (
-                                                <>
-                                                    <Label for="name" style={{ color: "black" }}>
-                                                        Received Amount : <span className="text-danger">*</span>
-                                                    </Label>
-                                                    <Input disabled required onChange={(e) => handleChange1(e)} name="receivedAmount" type="number" placeholder="Received Amount" />
-                                                </>
-
-                                            ) : (
-                                                <>
-                                                    <Label for="name" style={{ color: "black" }}>
-                                                        Received Amount : <span className="text-danger">*</span>
-                                                    </Label>
-                                                    <Input required onChange={(e) => handleChange1(e)} name="receivedAmount" type="number" placeholder="Received Amount" />
-                                                </>
-                                            )}
-                                        </>
-
+                                        <Label for="name" style={{ color: "black" }}>
+                                            Received Gold Weight :
+                                        </Label>
+                                        <Input onChange={(e) => handleChange(e)} name="receivedGoldWeight" type="text" placeholder="Total Gold Weight" />
+                                    </Col>
+                                    <Col sm="3">
+                                        <Label for="name" style={{ color: "black" }}>
+                                            Received Amount : <span className="text-danger">*</span>
+                                        </Label>
+                                        <Input required onChange={(e) => handleChange1(e)} name="receivedAmount" type="text" placeholder="Received Amount" />
                                     </Col>
 
                                     <Col sm="3">
                                         <Label for="name" style={{ color: "black" }}>
-                                            Balance Amount : <span className="text-danger">*</span>
+                                            Balance : <span className="text-danger">*</span>
                                         </Label>
-                                        <Input required value={balamount} name="balanceAmount" disabled type="text" placeholder="Balance Amount" />
-                                    </Col>
-                                    {commgold === "0.000" ? (
-                                        <Col sm="3">
-                                            <Label for="name" style={{ color: "black" }}>
-                                                Balance Gold : <span className="text-danger">*</span>
-                                            </Label>
-                                            <Input required value="0.000" name="balanceGoldWeight" disabled type="text" placeholder="Balance Amount" />
-                                        </Col>
-                                    ) : (
-                                        <Col sm="3">
-                                            <Label for="name" style={{ color: "black" }}>
-                                                Balance Gold : <span className="text-danger">*</span>
-                                            </Label>
-                                            <Input required value={parseFloat(balgold).toFixed(3)} name="balanceGoldWeight" disabled type="text" placeholder="Balance Amount" />
-                                        </Col>
-                                    )}
+                                        <Input required value={balamount} name="balance" disabled type="text" placeholder="Balance Amount" />
+                                    </Col> */}
 
 
                                 </Row>
                                 <Row style={{ float: "right" }}>
                                     <Col>
                                         {/* <Link to={"/drawing"}> */}
-                                        <Button disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
-                                            {isSubmitting ? 'Submitting...' : 'Submit'} <ArrowRightCircle className='font-medium-2 pl-1' />
+                                        <Button  disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
+                                        {isSubmitting ? 'Submitting...' : 'Submit'} <ArrowRightCircle className='font-medium-2 pl-1' />
                                         </Button>
                                         {/* </Link> */}
                                         {/* <Link to={"/drawing"}> */}
-                                        <Button onClick={() => { dataclrea() }} outline size="sm" className="me-1 mt-1" color="danger" type="button">
+                                        <Button onClick={() => { clreadata() }} outline size="sm" className="me-1 mt-1" color="danger" type="button">
                                             <X className='font-medium-2 pl-1' /> Cancel
                                         </Button>
                                         {/* </Link> */}
@@ -672,13 +594,13 @@ const Delivery = () => {
                     ""
                 )}
 
-                {access.paymentsview === true || adrole === "admin" ? (
+                {access.deliveryview === true || adrole === "admin" ? (
                     <Row>
                         <Col sm='12'>
                             <Card>
                                 <Row>
                                     <Col md="6">
-                                    {access.paymentsadd === true || adrole === "admin" ? (
+                                    {access.deliveryadd === true || adrole === "admin" ? (
                                         <Button onClick={() => { setshow(!show) }} className="m-1 btn-sm" color="info">
                                             Add <i class="fa fa-plus-circle" aria-hidden="true"></i>
                                         </Button>
@@ -686,8 +608,8 @@ const Delivery = () => {
                                         ""
                                     )}
                                     </Col>
-
                                     <Col md="6" style={{ float: "right" }}>
+
                                         <Row>
                                             <Col md="6">
                                                 <Input
@@ -709,8 +631,6 @@ const Delivery = () => {
                                                 />
                                             </Col>
                                         </Row>
-
-
                                         {/* <Button className='m-1' color='success'> <i class="fa fa-file-excel-o" aria-hidden="true"></i> EXCEL</Button> */}
                                     </Col>
                                 </Row>
@@ -731,26 +651,10 @@ const Delivery = () => {
                                                 </th>
 
                                                 <th>
-                                                    Gold Weight
+                                                    Order Numbers
                                                 </th>
-                                                <th>
-                                                    Amount
-                                                </th>
-                                                <th>
-                                                    Received Gold Weight
-                                                </th>
-                                                <th>
-                                                    Received Amount
-                                                </th>
-                                                <th>
-                                                    Balance Gold
-                                                </th>
-                                                <th>
-                                                    Balance Amount
-                                                </th>
-                                                <th>
-                                                    Action
-                                                </th>
+                                                <th>Action</th>
+
                                             </tr>
                                         </thead>
                                         <tbody className='text-center'>
@@ -765,17 +669,21 @@ const Delivery = () => {
                                                         </Moment>
                                                     </td>
                                                     <td>{data.customerName}</td>
-                                                    <td>{data.goldWeight}</td>
+                                                    <td>
+                                                        {data.orders.map((data) => (
+                                                            <span>{data.label}, </span>
+                                                        ))}
+                                                    </td>
+                                                    {/* <td>{data.goldWeight}</td>
                                                     <td>{data.amount}</td>
                                                     <td>{data.receivedGoldWeight}</td>
                                                     <td>{data.receivedAmount}</td>
-                                                    <td>{data.balanceGoldWeight}</td>
-                                                    <td>{data.balanceAmount}</td>
+                                                    <td>{data.balance}</td> */}
 
                                                     <td>
                                                         {/* <Button style={{ margin: "5px" }} onClick={() => { cadtada(data) }} size="sm" outline color="success"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
                                                         <Button style={{ margin: "5px" }} onClick={() => { cadtada2(data) }} size="sm" outline color="warning"> <i class="fa fa-telegram" aria-hidden="true"></i></Button> */}
-                                                       {access.paymentsdel === true || adrole === "admin" ? (
+                                                       {access.deliverydel === true || adrole === "admin" ? (
                                                         <Button style={{ margin: "5px" }} onClick={() => { cadtada1(data) }} size="sm" outline color="danger"> <i class="fa fa-trash-o" aria-hidden="true"></i></Button>
                                                        ) : (
                                                         ""

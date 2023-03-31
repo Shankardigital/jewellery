@@ -26,9 +26,11 @@ import ExtensionsHeader from "@components/extensions-header"
 const Casting = () => {
 
   const [centeredModal, setCenteredModal] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   // const [picker, setPicker] = useState(new Date())
   // const [picker, setPicker] = useState(new Date())
-//   const [show, setshow] = useState(false)
+  //   const [show, setshow] = useState(false)
   const [forms, setforms] = useState([])
   const [ordr, setordr] = useState([])
   // const [ordr1, setordr1] = useState([])
@@ -74,45 +76,45 @@ const Casting = () => {
   //   setitems(data.itemName)
   // }
 
-//   const datess = []
+  //   const datess = []
 
-//   const convert = (NewDate) => {
-//     // console.log(NewDate[0])
-//     const date1 = format(new Date(NewDate[0]), "yyyy-MM-dd")
-//     const date2 = format(new Date(NewDate[1]), "yyyy-MM-dd")
-//     datess.push(date1)
-//     datess.push(date2)
-//     // if (NewDate === NewDate[1]) {
-//     // }
-//     console.log(datess)
-//   }
+  //   const convert = (NewDate) => {
+  //     // console.log(NewDate[0])
+  //     const date1 = format(new Date(NewDate[0]), "yyyy-MM-dd")
+  //     const date2 = format(new Date(NewDate[1]), "yyyy-MM-dd")
+  //     datess.push(date1)
+  //     datess.push(date2)
+  //     // if (NewDate === NewDate[1]) {
+  //     // }
+  //     console.log(datess)
+  //   }
 
-//   const face = { dates: datess }
+  //   const face = { dates: datess }
 
-//   const cadfilter = () => {
-//     const token = datas
-//     const params = face
-//     console.log(token)
-//     axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/polish2ndstage/filterWithDates", params,
-//       {
-//         headers: { Authorization: `Bearer ${token}` }
-//       }, {}
-//     ).then((res) => {
-//       if (res.status === 200) {
-//         console.log(res.data)
-//         setordr(res.data.twoDatesData)
-//         setshow(false)
-//       }
-//     },
-//       (error) => {
-//         if (error.response && error.response.status === 400) {
-//           toast.error(error.response.data.message)
-//           console.log(error.data.message)
+  //   const cadfilter = () => {
+  //     const token = datas
+  //     const params = face
+  //     console.log(token)
+  //     axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/polish2ndstage/filterWithDates", params,
+  //       {
+  //         headers: { Authorization: `Bearer ${token}` }
+  //       }, {}
+  //     ).then((res) => {
+  //       if (res.status === 200) {
+  //         console.log(res.data)
+  //         setordr(res.data.twoDatesData)
+  //         setshow(false)
+  //       }
+  //     },
+  //       (error) => {
+  //         if (error.response && error.response.status === 400) {
+  //           toast.error(error.response.data.message)
+  //           console.log(error.data.message)
 
-//         }
-//       }
-//     )
-//   }
+  //         }
+  //       }
+  //     )
+  //   }
 
   const actiordrs = () => {
     const token = datas
@@ -126,11 +128,11 @@ const Casting = () => {
         console.log(res.data)
         setordr(res.data.polish2ndStageResult)
       }
-        }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
+    }).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.message)
+        toast.error(error.response.data.message)
+      }
     })
 
   }
@@ -213,11 +215,11 @@ const Casting = () => {
         console.log(res.data)
         setordr(res.data.Polish2ndData)
       }
-        }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
+    }).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.message)
+        toast.error(error.response.data.message)
+      }
     })
 
   }
@@ -243,12 +245,14 @@ const Casting = () => {
         setCenteredModal(false)
         toast.success(res.data.message)
         actiordrs()
+        setIsSubmitting(false)
       }
-        }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
+    }).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.message)
+        toast.error(error.response.data.message)
+        setIsSubmitting(false)
+      }
     })
 
   }
@@ -256,23 +260,26 @@ const Casting = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     Addcasting()
+    setIsSubmitting(true)
   }
+
+  const percentage = forms02 * 100 / forms1.receivedGold
 
   const percent = []
   for (let i = 0; i < 5; i = i + 0.1) {
-      percent.push(i.toFixed(1))
-      // setpercent(perdata)
-      // setpercent(i.toFixed(1))
+    percent.push(i.toFixed(1))
+    // setpercent(perdata)
+    // setpercent(i.toFixed(1))
   }
 
-//   const navigate = useNavigate()
+  //   const navigate = useNavigate()
 
-//   const getonemmber = (data) => {
-//     sessionStorage.setItem("pols2id", data._id)
-//     sessionStorage.setItem("pols2item", data.itemName)
-//     sessionStorage.setItem("ordobid4", data.orderId)
-//     navigate("/stage11")
-//   }
+  //   const getonemmber = (data) => {
+  //     sessionStorage.setItem("pols2id", data._id)
+  //     sessionStorage.setItem("pols2item", data.itemName)
+  //     sessionStorage.setItem("ordobid4", data.orderId)
+  //     navigate("/stage11")
+  //   }
 
   const [listPerPage] = useState(10)
   const [pageNumber, setPageNumber] = useState(0)
@@ -301,7 +308,7 @@ const Casting = () => {
         data-aos-duration="1000">
         <ExtensionsHeader title="Polish 2nd Stage Received List" />
 
-{/* 
+        {/* 
         {show ? (
           <Card>
             <CardBody>
@@ -336,8 +343,8 @@ const Casting = () => {
         <Row>
           <Card>
             <div >
-            <Link to="/polish2-details"> <Button className="m-1" color="primary">
-              <i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i>  Back
+              <Link to="/polish2-details"> <Button className="m-1" color="primary">
+                <i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i>  Back
               </Button></Link>
 
               {/* <Button onClick={() => { setshow(!show) }} className="m-1" style={{ float: "right" }} color="info">
@@ -454,23 +461,23 @@ const Casting = () => {
         <Modal isOpen={centeredModal} toggle={() => setCenteredModal(!centeredModal)} className='modal-dialog-centered'>
           <ModalHeader toggle={() => setCenteredModal(!centeredModal)}>Edit polish 2nd stage</ModalHeader>
           <ModalBody>
-          <Form onSubmit={(e) => { handleSubmit(e) }}>
+            <Form onSubmit={(e) => { handleSubmit(e) }}>
               <Row>
                 <Col md={6}>
                   <Label>
                     Sales Order No <span className="text-danger">*</span>
                   </Label>
-                  <Input required  onChange={(e) => { handleChange(e) }} value={forms1.orderNo} type="text" placeholder="Sales Order Name">
-            
+                  <Input required onChange={(e) => { handleChange(e) }} value={forms1.orderNo} type="text" placeholder="Sales Order Name">
+
                   </Input>
                 </Col>
-                
+
                 <Col md={6}>
                   <Label for="name" style={{ color: "black" }}>
                     Item  : <span className="text-danger">*</span>
                   </Label>
                   <Input required value={forms1.itemName} type="text" placeholder="Item">
-                  
+
                   </Input>
                 </Col>
 
@@ -479,11 +486,11 @@ const Casting = () => {
                     Date <span className="text-danger">*</span>
                   </Label>
                   <Input
-                  //  max={ordr1.deliveryDate}
-                  //  min={ordr.submittedDate}
-                  onChange={(e) => { handleChange(e) }} 
-                  value={forms1.receivedDate}
-                   required  name="receivedDate" type="date" placeholder="Date" className="form-control mb-1" />
+                    //  max={ordr1.deliveryDate}
+                    //  min={ordr.submittedDate}
+                    onChange={(e) => { handleChange(e) }}
+                    value={forms1.receivedDate}
+                    required name="receivedDate" type="date" placeholder="Date" className="form-control mb-1" />
                 </Col>
 
                 <Col md={6}>
@@ -491,7 +498,7 @@ const Casting = () => {
                     Purity  : <span className="text-danger">*</span>
                   </Label>
                   <Input required value={forms1.purity} type="text" placeholder="Purity">
-                 
+
                   </Input>
                 </Col>
                 <Col md={6}>
@@ -499,7 +506,7 @@ const Casting = () => {
                     Karigar <span className="text-danger">*</span>
                   </Label>
                   <Input required value={forms1.employeeName} type="text" name="text" id="select-basic" className="form-control mb-1">
-                 
+
                   </Input>
                 </Col>
 
@@ -508,24 +515,31 @@ const Casting = () => {
                     Issued Gold <span className="text-danger">*</span>
                   </Label>
                   <Input required name="issuedGold" value={forms1.issuedGold}
-                  //  onChange={(e) => { handleChange(e) }}
+                    //  onChange={(e) => { handleChange(e) }}
                     type="text" placeholder="Enter Gold Weight Grams/kgs" className="form-control mb-1" />
                 </Col>
                 <Col md={6}>
                   <Label>
                     Received Gold <span className="text-danger">*</span>
                   </Label>
-                  <Input required value={forms1.receivedGold} name="receivedGold"  onChange={(e) => { handleChange(e) }} type="text" placeholder="Enter Gold Weight Grams/kgs" className="form-control mb-1" />
+                  <Input required value={forms1.receivedGold} name="receivedGold" onChange={(e) => { handleChange(e) }} type="text" placeholder="Enter Gold Weight Grams/kgs" className="form-control mb-1" />
                 </Col>
                 <Col md={6}>
                   <Label>
                     Percentage <span className="text-danger">*</span>
                   </Label>
-                  <select required onChange={ (e) => { handleChange2(e) }} className="form-select">
+                  <select
+                    value={(parseFloat(percentage).toFixed(1))}
+                    required
+                    onChange={(e) => handleChange2(e)}
+                    className="form-select"
+                  >
                     <option value="">Select</option>
-                    {percent.map((x) => {
-                      return <option value={x} >{x}</option>
-                    })}
+                    {percent.map((x) => (
+                      <option key={x} value={x} selected={x === (parseFloat(percentage).toFixed(1))}>
+                        {x}
+                      </option>
+                    ))}
                   </select>
                 </Col>
                 <Col md={6}>
@@ -534,25 +548,25 @@ const Casting = () => {
                   </Label>
                   <Input value={forms02} required name="wastage" type="number" placeholder="Wastage" className="form-control mb-1" />
                 </Col>
-              <Col md={6}>
+                <Col md={6}>
                   <Label>
                     Balance<span className="text-danger">*</span>
                   </Label>
-                  <Input required  name="balance" disabled value={forms01} type="text" placeholder="Loss" className="form-control mb-1" />
+                  <Input required name="balance" disabled value={forms01} type="text" placeholder="Loss" className="form-control mb-1" />
                 </Col>
               </Row>
               <Row className="mt-1" style={{ float: "right" }}>
                 <Col>
                   {/* <Link to={"/polish-details"}> */}
-                  <Button  outline size="sm" className="me-1 mt-1" color="success" type="submit">
-                    Submit 
+                  <Button disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
+                    {isSubmitting ? 'Submitting...' : 'Submit'}
                   </Button>
                   {/* </Link> */}
                   {/* <Link to={"/polish-details"}> */}
-                    <Button onClick={() => { setCenteredModal(false) }}  outline size="sm" className="me-1 mt-1" color="danger" type="button">
-                      Cancel
-                    </Button>
-                    {/* </Link> */}
+                  <Button onClick={() => { setCenteredModal(false) }} outline size="sm" className="me-1 mt-1" color="danger" type="button">
+                    Cancel
+                  </Button>
+                  {/* </Link> */}
 
                 </Col>
               </Row>

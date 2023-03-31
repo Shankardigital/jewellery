@@ -31,6 +31,7 @@ import toast from 'react-hot-toast'
 function Stage1() {
 
   const navigate = useNavigate()
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [ordr, setordr] = useState([])
   const [ordr12, setordr12] = useState([])
   console.log(ordr)
@@ -93,6 +94,7 @@ function Stage1() {
         console.log(res.data)
         toast.success(res.data.message)
         navigate("/casting")
+        setIsSubmitting(false)
         // setcustomer(res.data.employeeData)
       }
     },
@@ -100,6 +102,7 @@ function Stage1() {
         if (error.response && error.response.status === 400) {
           toast.error(error.response.data.message)
           console.log(error.data.message)
+          setIsSubmitting(false)
 
         }
       }
@@ -202,6 +205,7 @@ function Stage1() {
   const handlesubmit = (e) => {
     validateFun(e)
     e.preventDefault()
+    setIsSubmitting(true)
   }
 
 
@@ -362,8 +366,8 @@ function Stage1() {
               <Row style={{ float: "right" }}>
                 <Col>
                   {/* <Link to={"/casting"}> */}
-                  <Button outline size="sm" className="me-1 mt-1" color="success" type="submit">
-                    Submit <ArrowRightCircle className='font-medium-2 pl-1' />
+                  <Button  disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
+                  {isSubmitting ? 'Submitting...' : 'Submit'} <ArrowRightCircle className='font-medium-2 pl-1' />
                   </Button>
                   {/* </Link> */}
                   <Link to={"/casting"}>

@@ -36,18 +36,18 @@ const Sngsetting = () => {
     const adrole = data1.role
     const access = data1.rolesPermissions
 
-    const profiledet = () => {
+    const Partyamount = () => {
         const token = datas
         console.log(token)
         // const purity = "18"
-        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/partybalance/alldeliveredcustomer", 
+        axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/partybalance/allcustomerpayments", 
             {
                 headers: { Authorization: `Bearer ${token}` }
             }, {}
         ).then((res) => {
             if (res.status === 200) {
                 console.log(res.data)
-                setempl(res.data.deliveryData)
+                setempl(res.data.payments)
                 setempltot(res.data.balanceAmountTotal)
                 setempltot1(res.data.balanceGoldWeightTotal)
             }
@@ -89,7 +89,7 @@ const Sngsetting = () => {
     // }
 
     useEffect(() => {
-        profiledet()
+        Partyamount()
     }, [])
 
     const navigate = useNavigate()
@@ -162,7 +162,7 @@ const Sngsetting = () => {
                 data-aos="fade-down"
                 data-aos-easing="linear"
                 data-aos-duration="1000">
-                <Breadcrumbs title='Purchase Party Balanc' data={[{ title: 'Purchase Party Balanc' }]} />
+                <Breadcrumbs title='Party Balance' data={[{ title: 'Party Balance' }]} />
                 <Row>
 
                     <Col sm='12'>
@@ -243,7 +243,7 @@ const Sngsetting = () => {
                                                 {data.balanceGoldWeight}
                                                 </td>
                                                 <td>
-                                                   {data.balance}
+                                                   {data.balanceAmount}
                                                 </td>
                                                 {/* <td>
                                                     {data.percentage}

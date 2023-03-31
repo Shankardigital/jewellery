@@ -30,12 +30,13 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from "axios"
 import toast from 'react-hot-toast'
 const BreadCrumbs = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const navigate = useNavigate()
   const [ordr, setordr] = useState([])
-//   const [ordrtot, setordrtot] = useState([])
+  //   const [ordrtot, setordrtot] = useState([])
   console.log(ordr)
-//   const [ordr1, setordr1] = useState([])
+  //   const [ordr1, setordr1] = useState([])
   const [ordr01, setordr01] = useState([])
 
   console.log(ordr01)
@@ -50,9 +51,9 @@ const BreadCrumbs = () => {
   console.log(data1.fullName)
   const datas = localStorage.getItem("accessToken")
   // const caid = sessionStorage.getItem("pols2id")
-//   const ordid = sessionStorage.getItem("ordobid5")
+  //   const ordid = sessionStorage.getItem("ordobid5")
   const settid = sessionStorage.getItem("setobjid")
-//   const settitem = sessionStorage.getItem("setitem")
+  //   const settitem = sessionStorage.getItem("setitem")
 
   const handleChange = (i, e) => {
     console.log(i)
@@ -173,8 +174,8 @@ const BreadCrumbs = () => {
     setforms01(count2.toFixed(3))
   }
 
-//   const balanace = ordrtot - netwet
-//   console.log(balanace)
+  //   const balanace = ordrtot - netwet
+  //   console.log(balanace)
 
   const actiordrs = () => {
     const token = datas
@@ -198,37 +199,37 @@ const BreadCrumbs = () => {
         // console.log(res.data.outWeight)
         setordr01(res.data.SettingData.updatedOtherDetails)
       }
-        }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
+    }).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.message)
+        toast.error(error.response.data.message)
+      }
     })
 
   }
 
-//   const qrdetails = () => {
-//     const docid = ordid
-//     const token = datas
-//     axios.post(`http://103.186.185.77:5023/omsanthoshjewellery/admin/drawing/getOrderDetails/${docid}`,
-//       {
-//         headers: { Authorization: `Bearer ${token}` }
-//       }, {}
-//     ).then((res) => {
-//       if (res.status === 200) {
-//         console.log(res.data)
-//         setordr1(res.data.orderDetails)
-//       }
-//     },
-//       (error) => {
-//         if (error.response && error.response.status === 400) {
-//           toast.error(error.response.data.message)
-//           console.log(error.data.message)
+  //   const qrdetails = () => {
+  //     const docid = ordid
+  //     const token = datas
+  //     axios.post(`http://103.186.185.77:5023/omsanthoshjewellery/admin/drawing/getOrderDetails/${docid}`,
+  //       {
+  //         headers: { Authorization: `Bearer ${token}` }
+  //       }, {}
+  //     ).then((res) => {
+  //       if (res.status === 200) {
+  //         console.log(res.data)
+  //         setordr1(res.data.orderDetails)
+  //       }
+  //     },
+  //       (error) => {
+  //         if (error.response && error.response.status === 400) {
+  //           toast.error(error.response.data.message)
+  //           console.log(error.data.message)
 
-//         }
-//       }
-//     )
-//   }
+  //         }
+  //       }
+  //     )
+  //   }
 
   useEffect(() => {
     actiordrs()
@@ -245,6 +246,7 @@ const BreadCrumbs = () => {
         pkNo: x.pkNo,
         pieces: x.pieces,
         weight: x.weight,
+        quantityGm: x.quantityGm,
         returnPieces: x.returnPieces,
         returnPiecesWt: parseFloat(x.returnPiecesWt).toFixed(2),
         netPieces: parseFloat(x.netPieces),
@@ -278,26 +280,31 @@ const BreadCrumbs = () => {
         console.log(res.data)
         toast.success(res.data.message)
         navigate("/settingres")
+        setIsSubmitting(false)
         // setcustomer(res.data.employeeData)
       }
-        }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
+    }).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.message)
+        toast.error(error.response.data.message)
+        setIsSubmitting(false)
+      }
     })
 
   }
 
+  const percentage = forms02 * 100 / netwet
+
   const setsubmit = (e) => {
     e.preventDefault()
     updateset()
+    setIsSubmitting(true)
   }
 
   const percent = []
-    for (let i = 0; i < 5; i = i + 0.1) {
-      percent.push(i.toFixed(1))
-    }
+  for (let i = 0; i < 5; i = i + 0.1) {
+    percent.push(i.toFixed(1))
+  }
   console.log(percent)
 
   return (
@@ -307,7 +314,7 @@ const BreadCrumbs = () => {
         data-aos-easing="linear"
         data-aos-duration="1000">
         <BreadCrumbsPage data={[{ title: "Setting Received List" }]} />
-     
+
         <Card className="mt-1">
           <CardHeader>
             {/* <h5>Setting Details </h5> */}
@@ -325,17 +332,17 @@ const BreadCrumbs = () => {
                   <Label>
                     Item <span className="text-danger">*</span>
                   </Label>
-                  <Input value={ordr.itemName}  placeholder="Item" />
+                  <Input value={ordr.itemName} placeholder="Item" />
                 </Col>
                 <Col md={2}>
                   <Label>
                     Date <span className="text-danger">*</span>
                   </Label>
                   <Input
-                  // max={ordr1.deliveryDate}
-                  // min={ordr.submittedDate}
-                  value={ordr.receivedDate}
-                  required onChange={(e) => { handleChanges0(e) }} name="receivedDate" type="date" placeholder="Date" className="form-control mb-1" />
+                    // max={ordr1.deliveryDate}
+                    // min={ordr.submittedDate}
+                    value={ordr.receivedDate}
+                    required onChange={(e) => { handleChanges0(e) }} name="receivedDate" type="date" placeholder="Date" className="form-control mb-1" />
                 </Col>
                 <Col md={2}>
                   <Label>
@@ -373,13 +380,18 @@ const BreadCrumbs = () => {
                   <Label>
                     Percentage <span className="text-danger">*</span>
                   </Label>
-                  <select required
-                   onChange={(e) => { handleChange2(e) }}
-                    className="form-select">
+                  <select
+                    value={(parseFloat(percentage).toFixed(1))}
+                    required
+                    onChange={(e) => handleChange2(e)}
+                    className="form-select"
+                  >
                     <option value="">Select</option>
-                    {percent.map((x) => {
-                      return <option value={x} >{x}</option>
-                    })}
+                    {percent.map((x) => (
+                      <option key={x} value={x} selected={x === (parseFloat(percentage).toFixed(1))}>
+                        {x}
+                      </option>
+                    ))}
                   </select>
                 </Col>
 
@@ -409,7 +421,7 @@ const BreadCrumbs = () => {
                         <div className="col-12 col-md-4"><Label>
                           Pk No. <span className="text-danger">*</span>
                         </Label>
-                          <Input  disabled value={index.pkNo} type="text" placeholder="Pk No" className="form-control mb-1" />
+                          <Input disabled value={index.pkNo} type="text" placeholder="Pk No" className="form-control mb-1" />
                         </div>
                         <div className="col-12 col-md-4"><Label>
                           pieces <span className="text-danger">*</span>
@@ -453,7 +465,7 @@ const BreadCrumbs = () => {
                         <div className="col-12 col-md-6"><Label>
                           Weight <span className="text-danger">*</span>
                         </Label>
-                          <Input disabled type="text" name="netPiecesWt" key={i} value={index.netPiecesWt} placeholder="Weight" className="form-control mb-1" />
+                          <Input disabled type="text" name="netPiecesWt" key={i} value={parseFloat(index.netPiecesWt).toFixed(2)} placeholder="Weight" className="form-control mb-1" />
                         </div>
                       </Row>
                     </Col>
@@ -478,10 +490,10 @@ const BreadCrumbs = () => {
                   <Row>
                     <Col md="4">
                       <p className="text-center">
-                       
-                          <span>{sum5}</span>
-                     
-                        </p></Col>
+
+                        <span>{sum5}</span>
+
+                      </p></Col>
                     <Col md="4">
                       <p className="text-center">{sum6.toFixed(2)}</p></Col>
                   </Row>
@@ -497,8 +509,8 @@ const BreadCrumbs = () => {
               <Row className="mt-1" style={{ float: "right" }}>
                 <Col>
                   {/* <Link to={"/setting-details"}> */}
-                  <Button outline size="sm" className="me-1 mt-1" color="success" type="submit">
-                    Submit <ArrowRightCircle className='font-medium-2 pl-1' />
+                  <Button disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
+                    {isSubmitting ? 'Submitting...' : 'Submit'} <ArrowRightCircle className='font-medium-2 pl-1' />
                   </Button>
                   {/* </Link> */}
                   <Link to={"/settingres"}>

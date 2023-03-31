@@ -37,6 +37,7 @@ const BreadCrumbs = () => {
   const [forms01, setforms01] = useState([])
   const [forms02, setforms02] = useState([])
   console.log(forms02)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // console.log(ordr)
   // const [Files, setFiles] = useState("")
@@ -92,12 +93,14 @@ const BreadCrumbs = () => {
         console.log(res.data)
         toast.success(res.data.message)
         navigate("/ghat-details")
+        setIsSubmitting(false)
         // setcustomer(res.data.employeeData)
       }
     }).catch(function (error) {
       if (error.response) {
         console.log(error.response.data.message)
         toast.error(error.response.data.message)
+        setIsSubmitting(false)
       }
     })
 
@@ -176,6 +179,7 @@ const BreadCrumbs = () => {
   const handlesubmit = (e) => {
     validateFun(e)
     e.preventDefault()
+    setIsSubmitting(true)
     // activecust()
   }
 
@@ -385,8 +389,8 @@ const BreadCrumbs = () => {
               <Row className="mt-1" style={{ float: "right" }}>
                 <Col>
                   {/* <Link to={"/ghat-details"}> */}
-                  <Button outline size="sm" className="me-1 mt-1" color="success" type="submit">
-                    Submit <ArrowRightCircle className='font-medium-2 pl-1' />
+                  <Button  disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
+                  {isSubmitting ? 'Submitting...' : 'Submit'} <ArrowRightCircle className='font-medium-2 pl-1' />
                   </Button>
                   {/* </Link> */}
                   <Link to={"/ghat-details"}>

@@ -95,6 +95,7 @@ export default class JwtService {
   login(...args) {
     return axios.post(this.jwtConfig.loginEndpoint, ...args)
   }
+  
 
   register(...args) {
     return axios.post(this.jwtConfig.registerEndpoint, ...args)

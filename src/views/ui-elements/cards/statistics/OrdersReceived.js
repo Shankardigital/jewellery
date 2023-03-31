@@ -11,6 +11,7 @@ import StatsWithAreaChart from '@components/widgets/stats/StatsWithAreaChart'
 const OrdersReceived = ({ kFormatter, warning }) => {
   // ** State
   const [data, setData] = useState(null)
+  const seccard2 = sessionStorage.getItem("carddata2")
 
   const options = {
     chart: {
@@ -70,7 +71,7 @@ const OrdersReceived = ({ kFormatter, warning }) => {
     <StatsWithAreaChart
       icon={<Package size={21} />}
       color='warning'
-      stats={kFormatter("20 grams")}
+      stats={kFormatter(seccard2)}
       statTitle='Total Gold Process'
       options={options}
       series={data.series}

@@ -26,6 +26,8 @@ import Moment from 'react-moment'
 const Casting = () => {
 
     const [centeredModal, setCenteredModal] = useState(false)
+    const [isSubmitting, setIsSubmitting] = useState(false)
+
     // const [picker, setPicker] = useState(new Date())
     // const [picker, setPicker] = useState(new Date())
     //   const [show, setshow] = useState(false)
@@ -114,12 +116,12 @@ const Casting = () => {
                 console.log(res.data)
                 setordr(res.data.ghatDetailsResult)
             }
-            }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
-    })
+        }).catch(function (error) {
+            if (error.response) {
+                console.log(error.response.data.message)
+                toast.error(error.response.data.message)
+            }
+        })
 
     }
 
@@ -178,6 +180,7 @@ const Casting = () => {
 
     const [forms01, setforms01] = useState([])
     const [forms02, setforms02] = useState([])
+    // const [totper, settotper] = useState([])
 
     const handleChange2 = (e) => {
         const myUser = { ...forms1 }
@@ -189,12 +192,6 @@ const Casting = () => {
         const count2 = parseFloat(forms1.issuedWeight) - (parseFloat(forms1.receivedWeight) + parseFloat(count))
         setforms01(count2.toFixed(3))
     }
-
-    useEffect(() => {
-        actiordrs()
-        // actiordrs123()
-        // activecust()
-    }, [])
 
     const custsearch = (e) => {
         const myUser = { ...forms }
@@ -218,7 +215,7 @@ const Casting = () => {
                 toast.error(error.response.data.message)
             }
         })
-    
+
     }
 
     //   const navigate = useNavigate()
@@ -252,19 +249,22 @@ const Casting = () => {
                 setCenteredModal(false)
                 toast.success(res.data.message)
                 actiordrs()
+                setIsSubmitting(false)
             }
-            }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
-    })
+        }).catch(function (error) {
+            if (error.response) {
+                console.log(error.response.data.message)
+                toast.error(error.response.data.message)
+                setIsSubmitting(false)
+            }
+        })
 
     }
 
     const handleSubmit = (e) => {
         e.preventDefault()
         Addcasting()
+        setIsSubmitting(true)
     }
 
     const percent = []
@@ -284,12 +284,26 @@ const Casting = () => {
         setPageNumber(selected)
     }
 
+    // const totalper = () => {
+        const percentage = forms02 * 100 / forms1.receivedWeight
+        // settotper(parseFloat(percentage).toFixed(1))
+        console.log(parseFloat(percentage).toFixed(1))
+    // }
+
     const cadtada = (data) => {
+       
         setforms1(data)
         setCenteredModal(true)
         setforms02(data.wastage)
         setforms01(data.balance)
     }
+    useEffect(() => {
+        actiordrs()
+        // totalper()
+        // actiordrs123()
+        // activecust()
+    }, [])
+
 
     return (
         <Fragment >
@@ -499,11 +513,18 @@ const Casting = () => {
                                     <Label>
                                         Percentage <span className="text-danger">*</span>
                                     </Label>
-                                    <select required onChange={(e) => { handleChange2(e) }} className="form-select">
+                                    <select
+                                        value={(parseFloat(percentage).toFixed(1))}
+                                        required
+                                        onChange={(e) => handleChange2(e)}
+                                        className="form-select"
+                                    >
                                         <option value="">Select</option>
-                                        {percent.map((x) => {
-                                            return <option value={x} >{x}</option>
-                                        })}
+                                        {percent.map((x) => (
+                                            <option key={x} value={x} selected={x === (parseFloat(percentage).toFixed(1))}>
+                                                {x}
+                                            </option>
+                                        ))}
                                     </select>
                                 </Col>
                                 <Col md={6}>
@@ -529,15 +550,15 @@ const Casting = () => {
                             <Row className="mt-1" style={{ float: "right" }}>
                                 <Col>
                                     {/* <Link to={"/ghat-details"}> */}
-                                    <Button outline size="sm" className="me-1 mt-1" color="success" type="submit">
-                                        Submit
+                                    <Button disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
+                                        {isSubmitting ? 'Submitting...' : 'Submit'}
                                     </Button>
                                     {/* </Link> */}
                                     {/* <Link to={"/ghat-details"}> */}
-                                        <Button onClick={() => { setCenteredModal(false) }} outline size="sm" className="me-1 mt-1" color="danger" type="button">
-                                            Cancel
-                                        </Button>
-                                        {/* </Link> */}
+                                    <Button onClick={() => { setCenteredModal(false) }} outline size="sm" className="me-1 mt-1" color="danger" type="button">
+                                        Cancel
+                                    </Button>
+                                    {/* </Link> */}
 
                                 </Col>
                             </Row>

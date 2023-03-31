@@ -432,7 +432,7 @@ const Divider = () => {
 
         <Modal isOpen={formModal} toggle={() => setFormModal(!formModal)} className='modal-dialog-centered'>
           <Form onSubmit={(e) => { deprt(e) }} >
-            <ModalHeader toggle={() => setFormModal(!formModal)}> Add </ModalHeader>
+            <ModalHeader  toggle={() => clear()}> Add </ModalHeader>
             <ModalBody>
 
               <Row>

@@ -132,7 +132,25 @@ const Roles = () => {
 
         orderrep: false,
         finrep: false,
-        stonest: false
+        stonest: false,
+
+        partyview: false,
+        partyadd: false,
+        partyedit: false,
+        partydel: false,
+        finishedview: false,
+        workshop: false,
+        returnstock: false,
+        returnstockadd: false,
+
+        paymentsview: false,
+        paymentsadd: false,
+        paymentsdel: false,
+        deliveryview: false,
+        deliveryadd: false,
+        deliverydel: false,
+        dahboardview: false
+
     }
     const [roles, setroles] = useState(check)
     console.log(roles)
@@ -163,12 +181,12 @@ const Roles = () => {
                 console.log(res.data)
                 setcustomer(res.data.employeeResult)
             }
-            }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
-    })
+        }).catch(function (error) {
+            if (error.response) {
+                console.log(error.response.data.message)
+                toast.error(error.response.data.message)
+            }
+        })
 
     }
 
@@ -214,12 +232,12 @@ const Roles = () => {
                 console.log(res.data)
                 setroles(res.data.employeeResult.rolesPermissions[0])
             }
-            }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
-    })
+        }).catch(function (error) {
+            if (error.response) {
+                console.log(error.response.data.message)
+                toast.error(error.response.data.message)
+            }
+        })
 
     }
 
@@ -303,7 +321,7 @@ const Roles = () => {
                                                     {" "}
                                                     <p className="">Order Management : </p>
                                                 </Col>{" "}
-                                               <Col md={1}></Col>
+                                                <Col md={1}></Col>
                                                 {/* <Col md={2}>
                                                < div className='form-check me-3 me-lg-5'>
                                                         <Input checked={roles.allordersview}
@@ -360,7 +378,7 @@ const Roles = () => {
                                                         </Label>
                                                     </div>
                                                 </Col>
-                                                
+
                                                 <Col md={2}>
                                                     <div className='form-check me-3 me-lg-5'>
                                                         <Input
@@ -384,7 +402,7 @@ const Roles = () => {
                                                     {" "}
                                                     <p className="">Customer : </p>
                                                 </Col>{" "}
-                                               <Col md={1}></Col>
+                                                <Col md={1}></Col>
                                                 <Col md={2}>
                                                     <div className='form-check me-3 me-lg-5'>
                                                         <Input checked={roles.customerView}
@@ -427,7 +445,7 @@ const Roles = () => {
                                                         </Label>
                                                     </div>
                                                 </Col>
-                                                
+
                                                 <Col md={2}>
                                                     <div className='form-check me-3 me-lg-5'>
                                                         <Input disabled type='checkbox' id="custread3" />
@@ -444,7 +462,7 @@ const Roles = () => {
                                                     {" "}
                                                     <p className="">Departments : </p>
                                                 </Col>{" "}
-                                               <Col md={1}></Col>
+                                                <Col md={1}></Col>
                                                 <Col md={2}>
                                                     <div className='form-check me-3 me-lg-5'>
                                                         <Input checked={roles.dptView}
@@ -487,7 +505,7 @@ const Roles = () => {
                                                         </Label>
                                                     </div>
                                                 </Col>
-                                                
+
                                                 <Col md={2}>
                                                     <div className='form-check me-3 me-lg-5'>
                                                         <Input checked={roles.dptrDelete}
@@ -510,7 +528,7 @@ const Roles = () => {
                                                     {" "}
                                                     <p className="">Employees : </p>
                                                 </Col>{" "}
-                                               <Col md={1}></Col>
+                                                <Col md={1}></Col>
                                                 <Col md={2}>
                                                     <div className='form-check me-3 me-lg-5'>
                                                         <Input checked={roles.empView}
@@ -554,7 +572,7 @@ const Roles = () => {
                                                         </Label>
                                                     </div>
                                                 </Col>
-                                               
+
                                                 <Col md={2}>
                                                     <div className='form-check me-3 me-lg-5'>
                                                         <Input disabled type='checkbox' id="empl3" />
@@ -569,9 +587,77 @@ const Roles = () => {
                                             <Row className="mt-2">
                                                 <Col md={2}>
                                                     {" "}
+                                                    <p className="">Party Amount : </p>
+                                                </Col>{" "}
+                                                <Col md={1}></Col>
+                                                <Col md={2}>
+                                                    <div className='form-check me-3 me-lg-5'>
+                                                        <Input checked={roles.partyview}
+                                                            onClick={e => {
+                                                                handleChange1(e)
+                                                            }}
+                                                            value={roles.partyview}
+                                                            name="partyview"
+
+                                                            type='checkbox' id="partyview" />
+                                                        <Label onClick={e => { handleChange1(e) }} className='form-check-label' for="partyview">
+                                                            View
+                                                        </Label>
+                                                    </div>
+                                                </Col>
+                                                <Col md={2}>
+                                                    <div className='form-check  me-lg-5'>
+                                                        <Input checked={roles.partyadd}
+                                                            onClick={e => {
+                                                                handleChange1(e)
+                                                            }}
+                                                            value={roles.partyadd}
+                                                            name="partyadd"
+                                                            type='checkbox' id="partyadd" />
+                                                        <Label className='form-check-label' for="partyadd">
+                                                            Add
+                                                        </Label>
+                                                    </div>
+                                                </Col>
+                                                <Col md={2}>
+                                                    <div className='form-check me-3 me-lg-5'>
+                                                        <Input checked={roles.partyedit}
+                                                            onClick={e => {
+                                                                handleChange1(e)
+                                                            }}
+                                                            value={roles.partyedit}
+                                                            name="partyedit"
+                                                            type='checkbox' id="partyedit" />
+                                                        <Label className='form-check-label' for="partyedit">
+                                                            Edit
+                                                        </Label>
+                                                    </div>
+                                                </Col>
+
+                                                <Col md={2}>
+                                                    <div className='form-check me-3 me-lg-5'>
+                                                        <Input checked={roles.partydel}
+                                                            onClick={e => {
+                                                                handleChange1(e)
+                                                            }}
+                                                            value={roles.partydel}
+                                                            name="partydel"
+                                                            type='checkbox' id="partydel" />
+                                                        <Label className='form-check-label' for="partydel">
+                                                            Delete
+                                                        </Label>
+                                                    </div>
+                                                </Col>
+                                                <Col md={1}></Col>
+                                            </Row>
+
+
+                                            <Row className="mt-2">
+                                                <Col md={2}>
+                                                    {" "}
                                                     <p className="">Metal In Hand : </p>
                                                 </Col>{" "}
-                                               <Col md={1}></Col>
+                                                <Col md={1}></Col>
                                                 {/* <Col md={2}>
                                                 <div className='form-check me-3 me-lg-5'>
                                                         <Input checked={roles.metalView}
@@ -635,9 +721,216 @@ const Roles = () => {
                                             <Row className="mt-2">
                                                 <Col md={2}>
                                                     {" "}
+                                                    <p className="">Payments : </p>
+                                                </Col>{" "}
+                                                <Col md={1}></Col>
+                                                <Col md={2}>
+                                                    <div className='form-check  me-lg-5'>
+                                                        <Input checked={roles.paymentsview}
+                                                            onClick={e => {
+                                                                handleChange1(e)
+                                                            }}
+                                                            value={roles.paymentsview}
+                                                            name="paymentsview"
+                                                            type='checkbox' id="paymentsview" />
+                                                        <Label className='form-check-label' for="paymentsview">
+                                                            View
+                                                        </Label>
+                                                    </div>
+                                                </Col>
+                                                <Col md={3}>
+                                                    <div className='form-check me-3 me-lg-5'>
+                                                        <Input checked={roles.paymentsadd}
+                                                            onClick={e => {
+                                                                handleChange1(e)
+                                                            }}
+                                                            value={roles.paymentsadd}
+                                                            name="paymentsadd"
+                                                            type='checkbox' id="paymentsadd" />
+                                                        <Label className='form-check-label' for="paymentsadd">
+                                                            Add
+                                                        </Label>
+                                                    </div>
+                                                </Col>
+                                                <Col md={3}>
+                                                    <div className='form-check me-3 me-lg-5'>
+                                                        <Input checked={roles.paymentsdel}
+                                                            onClick={e => {
+                                                                handleChange1(e)
+                                                            }}
+                                                            value={roles.paymentsdel}
+                                                            name="paymentsdel"
+                                                            type='checkbox' id="paymentsdel" />
+                                                        <Label className='form-check-label' for="paymentsdel">
+                                                            Delete
+                                                        </Label>
+                                                    </div>
+                                                </Col>
+
+                                                <Col md={1}></Col>
+                                            </Row>
+                                            <Row className="mt-2">
+                                                <Col md={2}>
+                                                    {" "}
+                                                    <p className="">Delivery : </p>
+                                                </Col>{" "}
+                                                <Col md={1}></Col>
+                                                <Col md={2}>
+                                                    <div className='form-check  me-lg-5'>
+                                                        <Input checked={roles.deliveryview}
+                                                            onClick={e => {
+                                                                handleChange1(e)
+                                                            }}
+                                                            value={roles.deliveryview}
+                                                            name="deliveryview"
+                                                            type='checkbox' id="deliveryview" />
+                                                        <Label className='form-check-label' for="deliveryview">
+                                                            View
+                                                        </Label>
+                                                    </div>
+                                                </Col>
+                                                <Col md={3}>
+                                                    <div className='form-check me-3 me-lg-5'>
+                                                        <Input checked={roles.deliveryadd}
+                                                            onClick={e => {
+                                                                handleChange1(e)
+                                                            }}
+                                                            value={roles.deliveryadd}
+                                                            name="deliveryadd"
+                                                            type='checkbox' id="deliveryadd" />
+                                                        <Label className='form-check-label' for="deliveryadd">
+                                                            Add
+                                                        </Label>
+                                                    </div>
+                                                </Col>
+                                                <Col md={3}>
+                                                    <div className='form-check me-3 me-lg-5'>
+                                                        <Input checked={roles.deliverydel}
+                                                            onClick={e => {
+                                                                handleChange1(e)
+                                                            }}
+                                                            value={roles.deliverydel}
+                                                            name="deliverydel"
+                                                            type='checkbox' id="deliverydel" />
+                                                        <Label className='form-check-label' for="deliverydel">
+                                                            Delete
+                                                        </Label>
+                                                    </div>
+                                                </Col>
+
+                                                <Col md={1}></Col>
+                                            </Row>
+                                            <Row className="mt-2">
+                                                <Col md={2}>
+                                                    {" "}
+                                                    <p className="">Return Stock : </p>
+                                                </Col>{" "}
+                                                <Col md={1}></Col>
+                                                <Col md={2}>
+                                                    <div className='form-check  me-lg-5'>
+                                                        <Input checked={roles.returnstock}
+                                                            onClick={e => {
+                                                                handleChange1(e)
+                                                            }}
+                                                            value={roles.returnstock}
+                                                            name="returnstock"
+                                                            type='checkbox' id="returnstock" />
+                                                        <Label className='form-check-label' for="returnstock">
+                                                            View
+                                                        </Label>
+                                                    </div>
+                                                </Col>
+                                                <Col md={3}>
+                                                    <div className='form-check me-3 me-lg-5'>
+                                                        <Input checked={roles.returnstockadd}
+                                                            onClick={e => {
+                                                                handleChange1(e)
+                                                            }}
+                                                            value={roles.returnstockadd}
+                                                            name="returnstockadd"
+                                                            type='checkbox' id="returnstockadd" />
+                                                        <Label className='form-check-label' for="returnstockadd">
+                                                            Add
+                                                        </Label>
+                                                    </div>
+                                                </Col>
+                                                <Col md={3}>
+                                                    <div className='form-check me-3 me-lg-5'>
+                                                        <Input checked={roles.returnstockdel}
+                                                            onClick={e => {
+                                                                handleChange1(e)
+                                                            }}
+                                                            value={roles.returnstockdel}
+                                                            name="returnstockdel"
+                                                            type='checkbox' id="returnstockdel" />
+                                                        <Label className='form-check-label' for="returnstockdel">
+                                                            Delete
+                                                        </Label>
+                                                    </div>
+                                                </Col>
+
+                                                <Col md={1}></Col>
+                                            </Row>
+
+                                            <Row className="mt-2">
+                                                <Col md={2}>
+                                                    {" "}
+                                                    <p className="">Transfer Stock : </p>
+                                                </Col>{" "}
+                                                <Col md={1}></Col>
+                                                <Col md={2}>
+                                                    <div className='form-check  me-lg-5'>
+                                                        <Input checked={roles.transtock}
+                                                            onClick={e => {
+                                                                handleChange1(e)
+                                                            }}
+                                                            value={roles.transtock}
+                                                            name="transtock"
+                                                            type='checkbox' id="transtock" />
+                                                        <Label className='form-check-label' for="transtock">
+                                                            View
+                                                        </Label>
+                                                    </div>
+                                                </Col>
+                                                <Col md={3}>
+                                                    <div className='form-check me-3 me-lg-5'>
+                                                        <Input checked={roles.transtockadd}
+                                                            onClick={e => {
+                                                                handleChange1(e)
+                                                            }}
+                                                            value={roles.transtockadd}
+                                                            name="transtockadd"
+                                                            type='checkbox' id="transtockadd" />
+                                                        <Label className='form-check-label' for="transtockadd">
+                                                            Add
+                                                        </Label>
+                                                    </div>
+                                                </Col>
+                                                {/* <Col md={3}>
+                                                    <div className='form-check me-3 me-lg-5'>
+                                                        <Input checked={roles.transtockdel}
+                                                            onClick={e => {
+                                                                handleChange1(e)
+                                                            }}
+                                                            value={roles.transtockdel}
+                                                            name="transtockdel"
+                                                            type='checkbox' id="transtockdel" />
+                                                        <Label className='form-check-label' for="transtockdel">
+                                                            Delete
+                                                        </Label>
+                                                    </div>
+                                                </Col> */}
+
+                                                <Col md={1}></Col>
+                                            </Row>
+
+
+                                            <Row className="mt-2">
+                                                <Col md={2}>
+                                                    {" "}
                                                     <p className="">Expense : </p>
                                                 </Col>{" "}
-                                               <Col md={1}></Col>
+                                                <Col md={1}></Col>
                                                 {/* <Col md={2}>
                                                 <div className='form-check me-3 me-lg-5'>
                                                         <Input checked={roles.ExpeView}
@@ -717,7 +1010,7 @@ const Roles = () => {
                                                             name="purlist"
                                                             type='checkbox' id="Purcha" />
                                                         <Label onClick={e => { handleChange1(e) }} className='form-check-label' for="Purcha">
-                                                            Purchase List
+                                                            Purchase
                                                         </Label>
                                                     </div>
                                                 </Col>
@@ -747,6 +1040,76 @@ const Roles = () => {
                                                 <Col md={1}></Col>
                                             </Row>
 
+                                            <Row className="mt-2">
+                                                <Col md={2}>
+                                                    {" "}
+                                                    <p className="">Dashboard : </p>
+                                                </Col>{" "}
+                                                <Col md={1}></Col>
+                                                <Col md={2}>
+                                                    <div className='form-check  me-lg-5'>
+                                                        <Input checked={roles.dahboardview}
+                                                            onClick={e => {
+                                                                handleChange1(e)
+                                                            }}
+                                                            value={roles.dahboardview}
+                                                            name="dahboardview"
+                                                            type='checkbox' id="dahboardview" />
+                                                        <Label onClick={e => { handleChange1(e) }} className='form-check-label' for="dahboardview">
+                                                            Allows
+                                                        </Label>
+                                                    </div>
+                                                </Col>
+
+                                                <Col md={1}></Col>
+                                            </Row>
+
+                                            <Row className="mt-2">
+                                                <Col md={2}>
+                                                    {" "}
+                                                    <p className="">Finished Stock : </p>
+                                                </Col>{" "}
+                                                <Col md={1}></Col>
+                                                <Col md={2}>
+                                                    <div className='form-check  me-lg-5'>
+                                                        <Input checked={roles.finishedview}
+                                                            onClick={e => {
+                                                                handleChange1(e)
+                                                            }}
+                                                            value={roles.finishedview}
+                                                            name="finishedview"
+                                                            type='checkbox' id="finishedview" />
+                                                        <Label onClick={e => { handleChange1(e) }} className='form-check-label' for="finishedview">
+                                                            Allows
+                                                        </Label>
+                                                    </div>
+                                                </Col>
+
+                                                <Col md={1}></Col>
+                                            </Row>
+                                            <Row className="mt-2">
+                                                <Col md={2}>
+                                                    {" "}
+                                                    <p className="">Work shop : </p>
+                                                </Col>{" "}
+                                                <Col md={1}></Col>
+                                                <Col md={2}>
+                                                    <div className='form-check  me-lg-5'>
+                                                        <Input checked={roles.workshop}
+                                                            onClick={e => {
+                                                                handleChange1(e)
+                                                            }}
+                                                            value={roles.workshop}
+                                                            name="workshop"
+                                                            type='checkbox' id="workshop" />
+                                                        <Label onClick={e => { handleChange1(e) }} className='form-check-label' for="workshop">
+                                                            Allows
+                                                        </Label>
+                                                    </div>
+                                                </Col>
+
+                                                <Col md={1}></Col>
+                                            </Row>
                                             <Row className="mt-2">
                                                 <Col md={2}>
                                                     {" "}
@@ -786,6 +1149,7 @@ const Roles = () => {
 
                                                 <Col md={1}></Col>
                                             </Row>
+
                                             <Row className="mt-2">
                                                 <Col md={2}>
                                                     {" "}

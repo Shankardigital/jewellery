@@ -11,6 +11,7 @@ import StatsWithAreaChart from '@components/widgets/stats/StatsWithAreaChart'
 const QuarterlySales = ({ danger }) => {
   // ** State
   const [data, setData] = useState(null)
+  const seccard1 = sessionStorage.getItem("carddata1")
 
   const options = {
     chart: {
@@ -69,7 +70,7 @@ const QuarterlySales = ({ danger }) => {
     <StatsWithAreaChart
       icon={<ShoppingCart size={21} />}
       color='danger'
-      stats={("30 grams")}
+      stats={(seccard1)}
       statTitle='Total Gold In Hand'
       options={options}
       series={data.series}

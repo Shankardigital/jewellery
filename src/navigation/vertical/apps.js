@@ -188,13 +188,13 @@ export default [
         title: 'Customer List',
         icon: <Circle />,
         navLink: '/customer-list'
+      },
+      {
+        id: 'Customer List',
+        title: 'Party Amount',
+        icon: <Circle />,
+        navLink: '/partyamount'
       }
-      // {
-      //   id: 'Customer List',
-      //   title: 'Customer List',
-      //   icon: <Circle />,
-      //   navLink: '/Index2'
-      // }
       // {
       //   id: 'shopss',
       //   title: 'Customer List',
@@ -417,10 +417,16 @@ export default [
   },
 
   {
-    id: 'shops',
+    id: 'Payments',
     title: 'Payments',
     icon: <ShoppingBag />,
-    navLink: '/delivery_items'
+    navLink: '/payments'
+  },
+  {
+    id: 'shops',
+    title: 'Delivery',
+    icon: <CheckSquare />,
+    navLink: '/order_delivery'
   },
 
   // {
@@ -557,7 +563,7 @@ export default [
         id: 'Stone storage',
         title: 'Casting Karigar',
       icon: <Circle />,
-        navLink: '/casting-rep'
+        navLink: '/rep-casting'
       },
       {
         id: 'Stone storage',

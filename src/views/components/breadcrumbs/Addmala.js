@@ -43,6 +43,7 @@ const Addsetting = () => {
 
     // const [formValues, setFormValues] = useState([{ orderId: "", purity: "", weightOut: "", finishIn: "", scapIn: "", loss: "" }])
     const [form, setform] = useState([])
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     // const handleChange = (i, e) => {
     //   const newFormValues = [...formValues]
@@ -124,7 +125,9 @@ const Addsetting = () => {
         setitemvaldate(data.itemdate)
         // const set = [...orders, data]
         setselectedMulti(data)
-       
+        if (selectedMulti && selectedMulti.value !== data.value) {
+            setordritem([])
+          }
         const token = datas
         const params = {
             orderId: data.value
@@ -153,10 +156,12 @@ const Addsetting = () => {
     function handleMulti2(data, i) {
         console.log(data)
         inputList[i]['item'] = data.item
+        inputList[i]['stoneOutWeight'] = data.value
         // setpurity1(data.purity)
         const set = [...orders, data]
         setselectedMulti2(data)
         setorders(set)
+        console.log(inputList)
     }
 
     const handleChangewe = (e) => {
@@ -254,7 +259,7 @@ const Addsetting = () => {
     }
 
     const pktsid = stpkts.map((data) => (
-        { value: data.stoneOutWeight, label: data.stoneOutWeight, item: data.item }
+        { value: data.stoneOutWeight, label: data.stoneOutWeight, item: data.item, pieces:data.pieces }
     ))
 
     const ordrid = ordr.map((data) => (
@@ -275,10 +280,10 @@ const Addsetting = () => {
     const Addcasting = () => {
         const token = datas
         //const data=[]
-        const data = inputList.map((x, i) => (
+        const data = inputList.map((x) => (
             {
-                stoneOutWeight: orders[i]["value"],
-                item: orders[i]["item"],
+                stoneOutWeight: x.stoneOutWeight,
+                item:x.item,
                 pieces: x.pieces,
                 quantityGm: x.StoneRange,
                 quantityGmCts :(x.StoneRange === "Cts") ? parseFloat(x.quantityGmCts).toFixed(2) : parseFloat(x.quantityGmCts).toFixed(3) 
@@ -313,12 +318,14 @@ const Addsetting = () => {
                 console.log(res.data)
                 toast.success(res.data.message)
                 navigate("/mala-details")
+                setIsSubmitting(false)
                 // setcustomer(res.data.employeeData)
             }
             }).catch(function (error) {
         if (error.response) {
             console.log(error.response.data.message)
             toast.error(error.response.data.message)
+            setIsSubmitting(false)
         }
     })
 
@@ -327,6 +334,7 @@ const Addsetting = () => {
     const castsubmit = (e) => {
         e.preventDefault()
         Addcasting()
+        setIsSubmitting(true)
     }
 
     return (
@@ -448,8 +456,8 @@ const Addsetting = () => {
                                                     Pieces :
                                                 </Label>
                                                 <Input
-                                                    name="pieces" required value={x.pieces} onChange={e => handleInputChange(e, i)}
-                                                    type="text" id="select-basic" placeholder="Enter Pieces" className="form-control mb-1" />
+                                                    name="pieces" max={pktsid[i]?.pieces || ''} required value={x.pieces} onChange={e => handleInputChange(e, i)}
+                                                    type="number" id="select-basic" placeholder="Enter Pieces" className="form-control mb-1" />
                                             </Col>
 
                                             <Col md='2' sm='12' className='mb-1'>
@@ -463,7 +471,7 @@ const Addsetting = () => {
                                                         <option>Select</option>
                                                         {/* <option>Cts</option> */}
                                                         <option value="Cts">Cts</option>
-                                                        <option value="grms">grams</option>
+                                                        {/* <option value="grms">grams</option> */}
                                                     </Input>
                                                 </Col>
                                             </Col>
@@ -540,8 +548,8 @@ const Addsetting = () => {
                             <Row className="mt-1" style={{ float: "right" }}>
                                 <Col>
                                     {/* <Link to={"/casting"}> */}
-                                    <Button outline size="sm" className="me-1 mt-1" color="success" type="submit">
-                                        Submit <ArrowRightCircle className='font-medium-2 pl-1' />
+                                    <Button  disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
+                                    {isSubmitting ? 'Submitting...' : 'Submit'} <ArrowRightCircle className='font-medium-2 pl-1' />
                                     </Button>
                                     {/* </Link> */}
                                     <Link to={"/mala-details"}>

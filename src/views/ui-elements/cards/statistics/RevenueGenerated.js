@@ -11,6 +11,7 @@ import StatsWithAreaChart from '@components/widgets/stats/StatsWithAreaChart'
 const RevenueGenerated = ({ kFormatter, success }) => {
   // ** State
   const [data, setData] = useState(null)
+ const seccard = sessionStorage.getItem("carddata")
 
   const options = {
     chart: {
@@ -69,7 +70,7 @@ const RevenueGenerated = ({ kFormatter, success }) => {
     <StatsWithAreaChart
       icon={<CreditCard size={21} />}
       color='success'
-      stats={kFormatter("20 grams")}
+      stats={kFormatter(seccard)}
       statTitle='Out Gold Today'
       options={options}
       series={data.series}

@@ -91,11 +91,15 @@ console.log(datas)
     // setordritem(data.itemName)
     setdelvdate(data.deldat)
     setselectedMulti(data)
-    
+    if (selectedMulti && selectedMulti.value !== data.value) {
+      setordritem([])
+    }
+    // setordritem("")
   const token = datas
   const params = {
     orderId:data.value
   }
+
   console.log(token)
   axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/ghatdetails/getorderitemdetils", params,
     {
@@ -110,7 +114,7 @@ console.log(datas)
       }).catch(function (error) {
       if (error.response) {
           console.log(error.response.data.message)
-          toast.error(error.response.data.message)
+          // toast.error(error.response.data.message)
       }
   })
   }
@@ -160,7 +164,7 @@ console.log(datas)
         }).catch(function (error) {
         if (error.response) {
             console.log(error.response.data.message)
-            toast.error(error.response.data.message)
+            // toast.error(error.response.data.message)
         }
     })
 
@@ -202,6 +206,7 @@ console.log(datas)
   useEffect(() => {
     activecust()
     actiordrs()
+    // setordritem([])
   }, [])
 
   const addOrders = () => {

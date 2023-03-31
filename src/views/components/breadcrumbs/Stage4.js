@@ -31,13 +31,15 @@ import axios from "axios"
 import toast from 'react-hot-toast'
 const BreadCrumbs = () => {
 
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isDisabled, setIsDisabled] = useState(true)
   const navigate = useNavigate()
   const [ordr, setordr] = useState([])
   const [ordrtot, setordrtot] = useState([])
   console.log(ordr.outWeight)
   const [ordr1, setordr1] = useState([])
   const [ordr01, setordr01] = useState([])
-//{stoneOutWeight: "22", item: "Ruby", pieces: "5", quantityGm: "Cts", quantityGmCts: "50.00", returnPieces:"0", returnPiecesWt:"0", netPieces:"0", netPiecesWt:"0"}
+  //{stoneOutWeight: "22", item: "Ruby", pieces: "5", quantityGm: "Cts", quantityGmCts: "50.00", returnPieces:"0", returnPiecesWt:"0", netPieces:"0", netPiecesWt:"0"}
   console.log(ordr01)
   // const [pieces, setpieces] = useState([])
   // const [weight, setweight] = useState([])
@@ -97,11 +99,11 @@ const BreadCrumbs = () => {
         console.log(res.data.tikliTotalWt)
         setordr01(res.data.settingResult.otherDetails)
       }
-        }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
+    }).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.message)
+        toast.error(error.response.data.message)
+      }
     })
 
   }
@@ -121,17 +123,18 @@ const BreadCrumbs = () => {
     return prev + +current.quantityGmCts
   }, 0)
   console.log(ordr01.length)
-  let  sum4 = 0
+  let sum4 = 0
   if (ordr01.length > 0) {
-   sum4 = ordr01.reduce(function (prev, current) {
-    console.log(prev)
-    console.log(current.netPiecesWt)
-    return (prev + +current.netPiecesWt)
-  }, 0)
-}
+    sum4 = ordr01.reduce(function (prev, current) {
+      console.log(prev)
+      console.log(current.netPiecesWt)
+      return (prev + +current.netPiecesWt)
+    }, 0)
+  }
+
   console.log(sum4)
   const totalsum4 = sum4 / 5
-    console.log(totalsum4)
+  console.log(totalsum4)
 
   const sum6 = ordr01.reduce(function (prev, current) {
     return prev + +current.returnPiecesWt
@@ -149,8 +152,9 @@ const BreadCrumbs = () => {
     const myUser = { ...ordr }
     myUser[e.target.name] = e.target.value
     setordr(myUser)
-    console.log(ordr.outWeight)
+    console.log(ordr)
     const netweights = e.target.value - parseFloat(totalsum4)
+    console.log(netweights)
     setnetwet(netweights.toFixed(3))
 
   }
@@ -168,6 +172,7 @@ const BreadCrumbs = () => {
     const netweights = ordr.inWeight - parseFloat(totalsum4)
     console.log(netweights)
     setnetwet(netweights.toFixed(3))
+    setIsDisabled(false)
 
     // const totalrtgm = parseFloat(e.target.value) + parseFloat(e.target.value)
     // console.log(totalrtgm)
@@ -215,7 +220,7 @@ const BreadCrumbs = () => {
     const count = (netwet * e.target.value) / 100
     console.log(count)
     setforms02(count.toFixed(3))
-    const count2 = parseFloat(ordrtot) - (parseFloat(netwet)  + parseFloat(ordr.netWeights))
+    const count2 = parseFloat(ordrtot) - (parseFloat(netwet))
     setforms01(count2.toFixed(3))
   }
 
@@ -235,11 +240,11 @@ const BreadCrumbs = () => {
         console.log(res.data)
         setordr1(res.data.orderDetails)
       }
-        }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
+    }).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.message)
+        toast.error(error.response.data.message)
+      }
     })
 
   }
@@ -259,7 +264,7 @@ const BreadCrumbs = () => {
         pkNo: x.stoneOutWeight,
         pieces: x.pieces,
         weight: x.quantityGmCts,
-        quantityGm:x.quantityGm,
+        quantityGm: x.quantityGm,
         returnPieces: x.returnPieces,
         returnPiecesWt: parseFloat(x.returnPiecesWt).toFixed(2),
         netPieces: parseFloat(x.netPieces),
@@ -291,14 +296,17 @@ const BreadCrumbs = () => {
     ).then((res) => {
       if (res.status === 200) {
         console.log(res.data)
+        toast.success(res.data.message)
         navigate("/setting-details")
+        setIsSubmitting(false)
         // setcustomer(res.data.employeeData)
       }
-        }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
+    }).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.message)
+        toast.error(error.response.data.message)
+        setIsSubmitting(false)
+      }
     })
 
   }
@@ -306,12 +314,13 @@ const BreadCrumbs = () => {
   const setsubmit = (e) => {
     e.preventDefault()
     updateset()
+    setIsSubmitting(true)
   }
 
   const percent = []
-    for (let i = 0; i < 5; i = i + 0.1) {
-      percent.push(i.toFixed(1))
-    }
+  for (let i = 0; i < 5; i = i + 0.1) {
+    percent.push(i.toFixed(1))
+  }
   console.log(percent)
 
   return (
@@ -332,51 +341,51 @@ const BreadCrumbs = () => {
                 <h5 className="text-center mb-1">Order Details</h5>
 
                 <div className="text-center justify">
-                <Row className="mt-2 ">
-                  <Col>
-                    <ul className="list-unstyled">
-                      <li className="mb-75">
-                        <span className=" me-25">Order No: </span>
-                        <span>{ordr1.orderNo}</span>
-                      </li>
-                      <li className="mb-75">
-                        <span className=" me-25">Customer Name : </span>
-                        <span>{ordr1.customerDetails}</span>
-                      </li>
-                      <li className="mb-75">
-                        <span className="  me-25">Item Name : </span>
-                        <span>
-                         {ordr.itemName}
-                        </span>
-                      </li>
-                      <li className="mb-75">
-                        <span className="  me-25">Purity : </span>
-                        <span>{ordr1.itemPurity}K </span>
-                      </li>
-                    </ul>
-                  </Col>
-                  <Col>
-                    <ul className="list-unstyled">
-                    <li className="mb-75">
-                        <span className="  me-25">Aprox Gold : </span>
-                        <span>{ordr1.goldWeight} grams</span>
-                      </li>
-                      <li className="mb-75">
-                        <span className="  me-25">Diamond : </span>
-                        <span>{ordr1.itemDimondRangeCarat} cts</span>
-                      </li>
-                      <li className="mb-75">
-                        <span className="  me-25">Stone : </span>
-                        <span>{ordr1.itemStoneCarat} cts</span>
-                      </li>
-                      <li className="mb-75">
-                        <span className="  me-25">Remarks : </span>
-                        <span>{ordr1.itemSpecialRemarks}</span>
-                      </li>
-                     
-                    </ul>
-                  </Col>
-                </Row>
+                  <Row className="mt-2 ">
+                    <Col>
+                      <ul className="list-unstyled">
+                        <li className="mb-75">
+                          <span className=" me-25">Order No: </span>
+                          <span>{ordr1.orderNo}</span>
+                        </li>
+                        <li className="mb-75">
+                          <span className=" me-25">Customer Name : </span>
+                          <span>{ordr1.customerDetails}</span>
+                        </li>
+                        <li className="mb-75">
+                          <span className="  me-25">Item Name : </span>
+                          <span>
+                            {ordr.itemName}
+                          </span>
+                        </li>
+                        <li className="mb-75">
+                          <span className="  me-25">Purity : </span>
+                          <span>{ordr1.itemPurity}K </span>
+                        </li>
+                      </ul>
+                    </Col>
+                    <Col>
+                      <ul className="list-unstyled">
+                        <li className="mb-75">
+                          <span className="  me-25">Aprox Gold : </span>
+                          <span>{ordr1.goldWeight} grams</span>
+                        </li>
+                        <li className="mb-75">
+                          <span className="  me-25">Diamond : </span>
+                          <span>{ordr1.itemDimondRangeCarat} cts</span>
+                        </li>
+                        <li className="mb-75">
+                          <span className="  me-25">Stone : </span>
+                          <span>{ordr1.itemStoneCarat} cts</span>
+                        </li>
+                        <li className="mb-75">
+                          <span className="  me-25">Remarks : </span>
+                          <span>{ordr1.itemSpecialRemarks}</span>
+                        </li>
+
+                      </ul>
+                    </Col>
+                  </Row>
 
                 </div>
                 {/* <p className='text-center'>The excellent set of cameras offer excellent 
@@ -408,16 +417,16 @@ const BreadCrumbs = () => {
                   <Label>
                     Item <span className="text-danger">*</span>
                   </Label>
-                  <Input value={ordr.itemName}  placeholder="Item" />
+                  <Input value={ordr.itemName} placeholder="Item" />
                 </Col>
                 <Col md={2}>
                   <Label>
                     Date <span className="text-danger">*</span>
                   </Label>
                   <Input
-                  max={ordr1.deliveryDate}
-                  min={ordr.submittedDate}
-                  required onChange={(e) => { handleChanges0(e) }} name="receivedDate" type="date" placeholder="Date" className="form-control mb-1" />
+                    max={ordr1.deliveryDate}
+                    min={ordr.submittedDate}
+                    required onChange={(e) => { handleChanges0(e) }} name="receivedDate" type="date" placeholder="Date" className="form-control mb-1" />
                 </Col>
                 <Col md={2}>
                   <Label>
@@ -431,11 +440,13 @@ const BreadCrumbs = () => {
                   </Label>
                   <Input required value={ordrtot} type="text" placeholder="Enter Out Weight" className="form-control mb-1" />
                 </Col>
+
                 <Col md={2}>
                   <Label>
                     In Weight <span className="text-danger">*</span>
                   </Label>
-                  <Input required type="text" name="inWeight" onChange={(e) => { handleChanges1(e) }} placeholder="Enter In Weight" className="form-control mb-1" />
+                  <Input disabled={isDisabled} required  type="text" name="inWeight" onChange={(e) => { handleChanges1(e) }} placeholder="Enter In Weight" className="form-control mb-1" />
+
                 </Col>
 
                 <Col md={2}>
@@ -456,7 +467,8 @@ const BreadCrumbs = () => {
                     Percentage <span className="text-danger">*</span>
                   </Label>
                   <select required
-                   onChange={(e) => { handleChange2(e) }}
+                  name="percent"
+                    onChange={(e) => { handleChange2(e) }}
                     className="form-select">
                     <option value="">Select</option>
                     {percent.map((x) => {
@@ -492,7 +504,7 @@ const BreadCrumbs = () => {
                         <div className="col-12 col-md-4"><Label>
                           Pk No. <span className="text-danger">*</span>
                         </Label>
-                          <Input  disabled value={index.stoneOutWeight} type="text" placeholder="Pk No" className="form-control mb-1" />
+                          <Input disabled value={index.stoneOutWeight} type="text" placeholder="Pk No" className="form-control mb-1" />
                         </div>
                         <div className="col-12 col-md-4"><Label>
                           pieces <span className="text-danger">*</span>
@@ -500,7 +512,7 @@ const BreadCrumbs = () => {
                           <Input value={index.pieces} disabled type="text" placeholder=" pieces" className="form-control mb-1" />
                         </div>
                         <div className="col-12 col-md-4"><Label>
-                          Weight <span className="text-danger">*</span>
+                          Weight <span className="text-danger">*</span>({index.quantityGm})
                         </Label>
                           <Input value={index.quantityGmCts} disabled type="text" placeholder="Weight" className="form-control mb-1" />
                         </div>
@@ -519,7 +531,7 @@ const BreadCrumbs = () => {
                             onChange={(e) => { handleChange(i, e) }} name="returnPieces" value={index.returnPieces} type="number" placeholder="pieces" className="form-control mb-1" />
                         </div>
                         <div className="col-12 col-md-6"><Label>
-                          Weight <span className="text-danger">*</span>
+                          Weight <span className="text-danger">*</span>({index.quantityGm})
                         </Label>
                           <Input required max={index.quantityGmCts} type="text" onChange={(e) => { handleChange1(i, e) }} name="returnPiecesWt" value={index.returnPiecesWt} placeholder="Weight" className="form-control mb-1" />
                         </div>
@@ -532,12 +544,12 @@ const BreadCrumbs = () => {
                         <div className="col-12 col-md-6"><Label>
                           pieces<span className="text-danger">*</span>
                         </Label>
-                          <Input disabled type="text" name="netPieces" key={i} value={index.netPieces} placeholder=" pieces" className="form-control mb-1" />
+                          <Input disabled type="number" name="netPieces" key={i} value={index.netPieces} placeholder=" pieces" className="form-control mb-1" />
                         </div>
                         <div className="col-12 col-md-6"><Label>
-                          Weight <span className="text-danger">*</span>
+                          Weight <span className="text-danger">*</span> ({index.quantityGm})
                         </Label>
-                          <Input disabled type="text" name="netPiecesWt" key={i} value={index.netPiecesWt} placeholder="Weight" className="form-control mb-1" />
+                          <Input disabled type="text" name="netPiecesWt" key={i} value={parseFloat(index.netPiecesWt).toFixed(2)} placeholder="Weight" className="form-control mb-1" />
                         </div>
                       </Row>
                     </Col>
@@ -562,10 +574,10 @@ const BreadCrumbs = () => {
                   <Row>
                     <Col md="4">
                       <p className="text-center">
-                       
-                          <span>{sum5}</span>
-                     
-                        </p></Col>
+
+                        <span>{sum5}</span>
+
+                      </p></Col>
                     <Col md="4">
                       <p className="text-center">{sum6.toFixed(2)}</p></Col>
                   </Row>
@@ -581,8 +593,8 @@ const BreadCrumbs = () => {
               <Row className="mt-1" style={{ float: "right" }}>
                 <Col>
                   {/* <Link to={"/setting-details"}> */}
-                  <Button outline size="sm" className="me-1 mt-1" color="success" type="submit">
-                    Submit <ArrowRightCircle className='font-medium-2 pl-1' />
+                  <Button disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
+                  {isSubmitting ? 'Submitting...' : 'Submit'} <ArrowRightCircle className='font-medium-2 pl-1' />
                   </Button>
                   {/* </Link> */}
                   <Link to={"/setting-details"}>

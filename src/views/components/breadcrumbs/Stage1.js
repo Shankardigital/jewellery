@@ -44,6 +44,7 @@ import { useReactToPrint } from "react-to-print"
 function Stage1() {
 
   const [ghats, setghat] = useState([])
+  const [castdata, setcastdata] = useState([])
   const [bandini, setbandini] = useState([])
   const [polish1, setpolish1st] = useState([])
   const [polish2, setpolish2nd] = useState([])
@@ -77,6 +78,7 @@ function Stage1() {
       if (res.status === 200) {
         console.log(res.data)
         setghat(res.data.ghatReport)
+        setcastdata(res.data.castingArr)
         setpolish1st(res.data.polish1stArr)
         setpolish2nd(res.data.polish2ndArr)
         setpolishwast(res.data.polishTotalWaste)
@@ -90,11 +92,11 @@ function Stage1() {
         setcosting(res.data.costingDetails)
         setitems1(res.data.itemName)
       }
-        }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
+    }).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.message)
+        toast.error(error.response.data.message)
+      }
     })
 
   }
@@ -214,11 +216,84 @@ function Stage1() {
                               </Row>
                             </td>
                           </tr>
+                          <tr style={{ border: "1px solid gray", textAlign: "center" }} className='text-center' >
+                            <th style={{ border: "1px solid gray" }} colSpan="13" className="text-danger">Casting Details</th>
+                          </tr>
+
+                          <tr style={{ border: "1px solid gray" }} className='text-center text-danger'>
+                            <th style={{ border: "1px solid gray" }} colSpan="2" >
+                              Date
+                            </th>
+                            <th style={{ border: "1px solid gray" }} colSpan="2">
+                              Karigar
+                            </th>
+                            <th style={{ border: "1px solid gray" }} >
+                              Wt Out
+                            </th>
+                            <th style={{ border: "1px solid gray" }} >
+                              Finish In
+                            </th>
+                            <th style={{ border: "1px solid gray" }} >
+                              Scap In
+                            </th>
+                            <th style={{ border: "1px solid gray" }} >
+                              Loss
+                            </th >
+                            <th style={{ border: "1px solid gray" }} >
+                              Fine
+                            </th>
+                            <th style={{ border: "1px solid gray" }} >
+
+                            </th >
+                            <th style={{ border: "1px solid gray" }} >
+
+                            </th>
+                            <th style={{ border: "1px solid gray" }} >
+
+                            </th>
+
+                          </tr>
+                          {castdata.map((data) => (
+                            <tr style={{ border: "1px solid gray", textAlign: "center" }} >
+                              <td style={{ border: "1px solid gray" }} colSpan="2" scope="row">
+                                <Moment format="DD/MM/YYYY" >
+                                  {data.date}
+                                </Moment>
+                              </td>
+                              <td style={{ border: "1px solid gray" }} colSpan="2">
+                                {data.employeeName}
+                              </td>
+                              <td style={{ border: "1px solid gray" }} >
+                                {data.weightOut}
+                              </td>
+
+                              <td style={{ border: "1px solid gray" }} >
+                                {data.finishIn}
+                              </td >
+                              <td style={{ border: "1px solid gray" }}>
+                                {data.scapIn}
+                              </td>
+                              <td style={{ border: "1px solid gray" }}>
+                                {data.loss}
+                              </td>
+                              <td style={{ border: "1px solid gray" }}>
+                                {data.fine}
+                              </td>
+                              <td style={{ border: "1px solid gray" }}>
+
+                              </td>
+                              <td style={{ border: "1px solid gray" }}> </td>
+                              <td style={{ border: "1px solid gray" }}> </td>
+                            </tr>
+                          ))}
+                           <tr style={{ border: "1px solid gray" }}>
+                            <td style={{ border: "1px solid gray" }} className="p-1" colSpan="13">  </td>
+                          </tr>
 
                           <tr style={{ border: "1px solid gray", textAlign: "center" }} className='text-center' >
-                            <th style={{ border: "1px solid gray" }} colSpan="13" className="text-danger">Ghat Details</th>
+                            <th style={{ border: "1px solid gray" }} colSpan="13" className="text-success">Ghat Details</th>
                           </tr>
-                          <tr style={{ border: "1px solid gray" }} className='text-center text-danger'>
+                          <tr style={{ border: "1px solid gray" }} className='text-center text-success'>
                             <th style={{ border: "1px solid gray" }} colSpan="2" >
                               Date
                             </th>
@@ -426,7 +501,7 @@ function Stage1() {
                                 <th style={{ border: "1px solid gray" }} colSpan="2">
                                   Date In
                                 </th>
-                                <th style={{ border: "1px solid gray" }} colSpan="2"> 
+                                <th style={{ border: "1px solid gray" }} colSpan="2">
                                   Wt Out
                                 </th>
                                 <th style={{ border: "1px solid gray" }} >
@@ -550,7 +625,7 @@ function Stage1() {
                                 <th style={{ border: "1px solid gray" }}>
                                   Loss
                                 </th>
-                                <th  colSpan="2" style={{ border: "1px solid gray" }}>
+                                <th colSpan="2" style={{ border: "1px solid gray" }}>
                                   Nett Chura
                                 </th>
 
@@ -685,46 +760,46 @@ function Stage1() {
                             <td style={{ border: "1px solid gray" }} className="p-1" colSpan="13"></td>
                           </tr>
                           <tr style={{ border: "1px solid gray" }} className="text-center text-dark">
-                            <th style={{ border: "1px solid gray", color:"green" }} colSpan="13">Costing Details</th>
+                            <th style={{ border: "1px solid gray", color: "green" }} colSpan="13">Costing Details</th>
                           </tr>
-                          <tr style={{ border: "1px solid gray", color:"green" }} className='text-center text-dark'>
-                            <th style={{ border: "1px solid gray", color:"green" }} >
+                          <tr style={{ border: "1px solid gray", color: "green" }} className='text-center text-dark'>
+                            <th style={{ border: "1px solid gray", color: "green" }} >
                               Gross
                             </th>
-                            <th style={{ border: "1px solid gray", color:"green" }}>
+                            <th style={{ border: "1px solid gray", color: "green" }}>
                               Stone
                             </th>
-                            <th style={{ border: "1px solid gray", color:"green" }}>
+                            <th style={{ border: "1px solid gray", color: "green" }}>
                               Nett
                             </th>
-                            <th style={{ border: "1px solid gray", color:"green" }} >
+                            <th style={{ border: "1px solid gray", color: "green" }} >
                               Casting
                             </th>
-                            <th style={{ border: "1px solid gray", color:"green" }}>
+                            <th style={{ border: "1px solid gray", color: "green" }}>
                               Ghat
                             </th>
-                            <th style={{ border: "1px solid gray", color:"green" }} >
+                            <th style={{ border: "1px solid gray", color: "green" }} >
                               Polish
                             </th>
-                            <th style={{ border: "1px solid gray", color:"green" }}>
+                            <th style={{ border: "1px solid gray", color: "green" }}>
                               Setting
                             </th>
-                            <th style={{ border: "1px solid gray", color:"green" }}>
+                            <th style={{ border: "1px solid gray", color: "green" }}>
                               Bandini
                             </th>
-                            <th style={{ border: "1px solid gray", color:"green" }}>
+                            <th style={{ border: "1px solid gray", color: "green" }}>
                               mala
                             </th>
-                            <th style={{ border: "1px solid gray", color:"green" }}>
+                            <th style={{ border: "1px solid gray", color: "green" }}>
                               Total
                             </th>
-                            <th style={{ border: "1px solid gray", color:"green" }}>
+                            <th style={{ border: "1px solid gray", color: "green" }}>
                               Fine
                             </th>
-                            <th style={{ border: "1px solid gray", color:"green" }}>
+                            <th style={{ border: "1px solid gray", color: "green" }}>
                               Profit
                             </th>
-                            <th style={{ border: "1px solid gray", color:"green" }}>
+                            <th style={{ border: "1px solid gray", color: "green" }}>
                               Cash
                             </th>
 
@@ -734,44 +809,44 @@ function Stage1() {
                           <tr style={{ border: "1px solid gray", textAlign: "center" }}>
                             <td style={{ border: "1px solid gray" }} scope="row">
                               {/* <Moment format="DD/MM/YYYY"> */}
-                                {costing.Gross}
+                              {costing.Gross}
                               {/* </Moment> */}
                             </td>
                             <td style={{ border: "1px solid gray" }}>
-                            {costing.Stone}
+                              {costing.Stone}
                             </td>
                             <td style={{ border: "1px solid gray" }}>
-                            {costing.Nett}
+                              {costing.Nett}
                             </td>
                             <td style={{ border: "1px solid gray" }}>
-                            {costing.Casting}
+                              {costing.Casting}
                             </td>
                             <td style={{ border: "1px solid gray" }}>
-                            {costing.Ghat}
+                              {costing.Ghat}
                             </td>
                             <td style={{ border: "1px solid gray" }}>
-                            {costing.Polish}
+                              {costing.Polish}
                             </td>
                             <td style={{ border: "1px solid gray" }}>
-                            {costing.Setting}
+                              {costing.Setting}
                             </td>
                             <td style={{ border: "1px solid gray" }}>
-                            {costing.Bandini}
+                              {costing.Bandini}
                             </td>
                             <td style={{ border: "1px solid gray" }}>
-                            {costing.Mala}
+                              {costing.Mala}
                             </td>
                             <td style={{ border: "1px solid gray" }}>
-                            {costing.Total}
+                              {costing.Total}
                             </td>
                             <td style={{ border: "1px solid gray" }}>
-                            {costing.Fine}
+                              {costing.Fine}
                             </td>
                             <td style={{ border: "1px solid gray" }}>
-                            {costing.Profit}
+                              {costing.Profit}
                             </td>
                             <td style={{ border: "1px solid gray" }}>
-                            {costing.Cash}
+                              {costing.Cash}
                             </td>
                           </tr>
                           {/* costing Details */}

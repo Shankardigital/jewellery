@@ -217,6 +217,9 @@ const Costing = () => {
                                                     IGI
                                                 </th>
                                                 <th>
+                                                   Total Cost
+                                                </th>
+                                                <th>
                                                    Total Sale
                                                 </th>
                                                 <th>
@@ -290,12 +293,14 @@ const Costing = () => {
                                                         {data.igiAmount}
                                                     </td>
                                                     <td>
+                                                        {data.costAmount}
+                                                    </td>
+                                                    <td>
                                                         {data.totalAmount}
                                                     </td>
                                                     <td>
                                                        {data.metalProfit}
                                                     </td>
-
                                                     <td>
                                                         {data.cashProfit}
                                                     </td>

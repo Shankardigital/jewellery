@@ -52,9 +52,11 @@ const BreadCrumbs = () => {
   const navigate = useNavigate()
   const [ordr, setordr] = useState([])
   const [ordr1, setordr1] = useState([])
-  const [ordr12, setordr12] = useState([])
+  // const [ordr12, setordr12] = useState([])
   console.log(ordr)
   const [Files, setFiles] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   // const [customer, setcustomer] = useState([])
   const gets = localStorage.getItem("userData")
   const data1 = JSON.parse(gets)
@@ -130,7 +132,7 @@ const BreadCrumbs = () => {
           if (res.status === 200) {
               console.log(res.data)
               setordr1(res.data.orderDetails)
-              setordr12(res.data.orderDetails.itemNameMulti)
+              // setordr12(res.data.orderDetails.itemNameMulti)
           }
       },
           (error) => {
@@ -162,6 +164,7 @@ const BreadCrumbs = () => {
               console.log(res.data)
               toast.success(res.data.message)
               navigate("/drawing")
+              setIsSubmitting(false)
               // setcustomer(res.data.employeeData)
           }
       },
@@ -169,6 +172,7 @@ const BreadCrumbs = () => {
               if (error.response && error.response.status === 400) {
                   toast.error(error.response.data.message)
                   console.log(error.data.message)
+                  setIsSubmitting(false)
 
               }
           }
@@ -178,6 +182,7 @@ const BreadCrumbs = () => {
   const handlesubmit = (e) => {
     e.preventDefault()
     activecust()
+    setIsSubmitting(true)
   }
 
   useEffect(() => {
@@ -217,14 +222,14 @@ const BreadCrumbs = () => {
                         <span className=" me-25">Customer Name : </span>
                         <span>{ordr1.customerDetails}</span>
                       </li>
-                      <li className="mb-75">
+                      {/* <li className="mb-75">
                         <span className="  me-25">Item Name : </span>
                         <span>
                           {ordr12.map((data) => (
                           <span>{data.itemName}, </span>
                         ))} 
                         </span>
-                      </li>
+                      </li> */}
                       <li className="mb-75">
                         <span className="  me-25">Purity : </span>
                         <span>{ordr1.itemPurity}K </span>
@@ -381,13 +386,15 @@ const BreadCrumbs = () => {
               Select Image : <span className="text-danger">*</span>
               </Label>
                 <Input onChange={changeHandler}  required type="file" name="uploadImg" id="select-basic" />
+
+                {/* onChange={changeHandler}  required type="file" name="uploadImg" id="select-basic" */}
               </Col>
             </Row>
             <Row style={{ float: "right" }}>
               <Col>
               {/* <Link to={"/drawing"}> */}
-                <Button outline size="sm" className="me-1 mt-1" color="success" type="submit">
-                  Submit <ArrowRightCircle className='font-medium-2 pl-1' />
+                <Button disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
+                {isSubmitting ? 'Submitting...' : 'Submit'} <ArrowRightCircle className='font-medium-2 pl-1' />
                 </Button> 
                 {/* </Link> */}
               <Link to={"/drawing"}>

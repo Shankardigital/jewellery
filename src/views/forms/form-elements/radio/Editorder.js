@@ -42,6 +42,7 @@ const Radio = () => {
   const [form, setform] = useState([])
   console.log(form)
   const navigate = useNavigate()
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
 
   const handleChange = (e) => {
@@ -201,14 +202,14 @@ const Radio = () => {
     dataArray.append("grossWeight", parseFloat(form.grossWeight).toFixed(3))
     dataArray.append("goldWeight", parseFloat(form.goldWeight).toFixed(3))
     dataArray.append("itemDimondRange", form.itemDimondRange)
-    if (form.itemDimondRangeCarat === undefined) {
-      dataArray.append("itemDimondRangeCarat", 0)
+    if (form.itemDimondRange === "") {
+      dataArray.append("itemDimondRangeCarat", "0")
     } else {
       dataArray.append("itemDimondRangeCarat", parseFloat(form.itemDimondRangeCarat).toFixed(2))
     }
     dataArray.append("itemStoneRange", form.itemStoneRange)
-    if (form.itemStoneCarat === undefined) {
-      dataArray.append("itemStoneCarat", 0)
+    if (form.itemStoneRange === "") {
+      dataArray.append("itemStoneCarat", "0")
     } else {
       dataArray.append("itemStoneCarat", parseFloat(form.itemStoneCarat).toFixed(2))
     }
@@ -228,11 +229,13 @@ const Radio = () => {
         console.log(res.data)
         toast.success(res.data.message)
         navigate("/orderlist")
+        setIsSubmitting(false)
       }
         }).catch(function (error) {
         if (error.response) {
             console.log(error.response.data.message)
             toast.error(error.response.data.message)
+            setIsSubmitting(false)
         }
     })
 
@@ -241,6 +244,7 @@ const Radio = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     addOrders()
+    setIsSubmitting(true)
   }
 
   // const deleteitem = (data) => {
@@ -607,8 +611,9 @@ const Radio = () => {
                           style={{ margin: "5px" }}
                           color="success"
                           type="submit"
+                          disabled={isSubmitting}
                         >
-                          Submit
+                          {isSubmitting ? 'Submitting...' : 'Submit'}
                         </Button>
 
                         <Link to="/orderlist">

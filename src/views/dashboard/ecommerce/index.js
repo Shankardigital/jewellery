@@ -2,7 +2,7 @@
 import { useContext, useEffect, useState } from 'react'
 
 // ** Reactstrap Imports
-import { Row, Col, Card, CardBody, CardTitle, CardHeader, Table, Badge, UncontrolledDropdown, DropdownMenu, DropdownItem, DropdownToggle  } from 'reactstrap'
+import { Row, Col, Card, CardBody, CardTitle, CardHeader, Table, Badge, UncontrolledDropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap'
 
 // ** Context
 import { ThemeColors } from '@src/utility/context/ThemeColors'
@@ -12,8 +12,9 @@ import {
   Award,
   Truck,
   ShoppingBag,
+  Users,
   MessageSquare,
-  Settings, MoreVertical, Pocket, Check, DollarSign, CreditCard, TrendingUp   
+  Settings, MoreVertical, Pocket, Check, DollarSign, CreditCard, TrendingUp
 } from 'react-feather'
 import Avatar from '@components/avatar'
 import axios from 'axios'
@@ -44,6 +45,8 @@ import '@styles/base/pages/dashboard-ecommerce.scss'
 import InvoiceList from '@src/views/apps/invoice/list'
 import SupportTracker from '@src/views/ui-elements/cards/analytics/SupportTracker'
 import Chart from 'react-apexcharts'
+import StatsWithAreaChart from '@components/widgets/stats/StatsWithAreaChart'
+// import {  } from 'react-feather'
 
 const EcommerceDashboard = (props) => {
 
@@ -78,6 +81,90 @@ const EcommerceDashboard = (props) => {
   //   }
   // ]
 
+
+  // const transactionsArr = [
+  //   {
+  //     title: 'Total In Today Cash',
+  //     color: 'light-primary',
+  //     subtitle: 'Starbucks',
+  //     amount: '- 74₹',
+  //     down: true
+  //   },
+  //   {
+  //     title: 'Total Out Today Cash',
+  //     color: 'light-success',
+  //     subtitle: 'Add Money',
+  //     amount: '+ 480₹'
+  //   },
+  //   {
+  //     title: 'Total Out In Account',
+  //     color: 'light-danger',
+  //     subtitle: 'Add Money',
+  //     amount: '+ 590₹'
+  //   },
+  //   {
+  //     title: 'Total In Account',
+  //     color: 'light-warning',
+  //     subtitle: 'Ordered Food',
+  //     amount: '- 12₹',
+  //     down: true
+  //   },
+  //   {
+  //     title: 'Total Cash In Hand',
+  //     color: 'light-info',
+  //     subtitle: 'Refund',
+  //     amount: '+98₹'
+  //   },
+  //   {
+  //     title: 'Total Account In Hand',
+  //     color: 'light-info',
+  //     subtitle: 'Refund',
+  //     amount: '+ 980₹'
+  //   }
+  // ]
+
+  const [order, setorder] = useState([])
+  const [amount, setamount] = useState([])
+  const [count, setcount] = useState([])
+  console.log(order)
+
+  const gets = localStorage.getItem("userData")
+  const data1 = JSON.parse(gets)
+  const datas = localStorage.getItem("accessToken")
+  const adrole = data1.role
+  const access = data1.rolesPermissions
+  const actiordrs = () => {
+    const token = datas
+    axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/dashboard/getadmindashboard",
+      {
+        headers: { Authorization: `Bearer ${token}` }
+      }, {}
+    ).then((res) => {
+      if (res.status === 200) {
+        console.log(res.data)
+        setorder(res.data.orderCount)
+        setamount(res.data.graph)
+        setcount(res.data.goldFlowCards)
+        sessionStorage.setItem("carddata", res.data.goldFlowCards.outGoldToday)
+        sessionStorage.setItem("carddata1", res.data.goldFlowCards.totalAvailableGold)
+        sessionStorage.setItem("carddata2", res.data.goldFlowCards.totalProcessGold)
+      }
+    },
+      (error) => {
+        if (error.response && error.response.status === 400) {
+          // toast.error(error.response.data.message)
+          console.log(error.data.message)
+
+        }
+      }
+    )
+  }
+
+  useEffect(() => {
+    actiordrs()
+  }, [])
+
+
   const options = {
     chart: {
       toolbar: { show: false },
@@ -107,7 +194,7 @@ const EcommerceDashboard = (props) => {
     legend: {
       show: false
     },
-    colors: ['#df87f2'],
+    colors: ['#fb445a'],
     fill: {
       type: 'gradient',
       gradient: {
@@ -118,7 +205,7 @@ const EcommerceDashboard = (props) => {
         type: 'horizontal',
         opacityFrom: 1,
         opacityTo: 1,
-        stops: [0, 100, 100, 100]
+        stops: [0, 10000, 10000, 10000]
       }
     },
     markers: {
@@ -146,7 +233,7 @@ const EcommerceDashboard = (props) => {
       tickPlacement: 'on'
     },
     yaxis: {
-      tickAmount: 5,
+      tickAmount: 8,
       labels: {
         style: {
           colors: '#b9b9c3',
@@ -154,7 +241,8 @@ const EcommerceDashboard = (props) => {
           fontFamily: 'Montserrat'
         },
         formatter(val) {
-          return val > 999 ? `${(val / 1000).toFixed(1)}k` : val
+          // .toFixed(1)
+          return val > 999 ? `${(val / 1000)}k` : val
         }
       }
     },
@@ -162,89 +250,26 @@ const EcommerceDashboard = (props) => {
       x: { show: false }
     }
   },
-  series = [
-    {
-      name: 'Sales',
-      data: [140, 180, 150, 205, 160, 295, 125, 255, 205, 305, 240, 295]
-    }
-  ]
-
-    const transactionsArr = [
+    series = [
       {
-        title: 'Total In Today Cash',
-        color: 'light-primary',
-        subtitle: 'Starbucks',
-        amount: '- 74₹',
-        down: true
-      },
-      {
-        title: 'Total Out Today Cash',
-        color: 'light-success',
-        subtitle: 'Add Money',
-        amount: '+ 480₹'
-      },
-      {
-        title: 'Total Out In Account',
-        color: 'light-danger',
-        subtitle: 'Add Money',
-        amount: '+ 590₹'
-      },
-      {
-        title: 'Total In Account',
-        color: 'light-warning',
-        subtitle: 'Ordered Food',
-        amount: '- 12₹',
-        down: true
-      },
-      {
-        title: 'Total Cash In Hand',
-        color: 'light-info',
-        subtitle: 'Refund',
-        amount: '+98₹'
-      },
-      {
-        title: 'Total Account In Hand',
-        color: 'light-info',
-        subtitle: 'Refund',
-        amount: '+ 980₹'
+        name: 'Sales',
+        data: amount
       }
     ]
 
-    const [order, setorder] = useState([])
-    console.log(order)
+  const [data, setData] = useState(null)
 
-    const datas = localStorage.getItem("accessToken")
-    const actiordrs = () => {
-      const token = datas
-      axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/dashboard/getadmindashboard",
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }, {}
-      ).then((res) => {
-        if (res.status === 200) {
-          console.log(res.data)
-          setorder(res.data.orderCount)
-        }
-      },
-        (error) => {
-          if (error.response && error.response.status === 400) {
-            // toast.error(error.response.data.message)
-            console.log(error.data.message)
-  
-          }
-        }
-      )
-    }
+  useEffect(() => {
+    axios.get('/card/card-statistics/subscribers').then(res => setData(res.data))
+    return () => setData(null)
+  }, [])
 
-    useEffect(() => {
-      actiordrs()
-    }, [])
-    
+
   return (
-    <div  data-aos="fade-down"
-    data-aos-easing="linear"
-    data-aos-duration="1000"
-     id='dashboard-ecommerce'>
+    <div data-aos="fade-down"
+      data-aos-easing="linear"
+      data-aos-duration="1000"
+      id='dashboard-ecommerce'>
       {/* <CardTitle>Orders Amount</CardTitle>
       <Row className='match-height'>
 
@@ -253,49 +278,51 @@ const EcommerceDashboard = (props) => {
         </Col>
       </Row> */}
 
-      <Row>
-        <CardTitle>Orders Count</CardTitle>
-        <Col >
-          <StatsVertical icon={<Eye size={21} />} color='info' stats={order.totalOrders} statTitle='Total orders' />
-        </Col>
-        <Col >
-          <StatsVertical icon={<MessageSquare size={21} />} color='warning' stats={order.startedOrders} statTitle='Started orders' />
-        </Col>
-        <Col >
-          <StatsVertical icon={<ShoppingBag size={21} />} color='danger' stats={order.notStartOrders} statTitle='Not Yet Started ' />
-        </Col>
-        {/* <Col xl='2' md='4' sm='6'>
+      {access.dahboardview === true || adrole === "admin" ? (
+        <div>
+          <Row>
+            <CardTitle>Orders Count</CardTitle>
+            <Col >
+              <StatsVertical icon={<Eye size={21} />} color='info' stats={order.totalOrders} statTitle='Total orders' />
+            </Col>
+            <Col >
+              <StatsVertical icon={<MessageSquare size={21} />} color='warning' stats={order.startedOrders} statTitle='Started orders' />
+            </Col>
+            <Col >
+              <StatsVertical icon={<ShoppingBag size={21} />} color='danger' stats={order.notStartOrders} statTitle='Not Yet Started ' />
+            </Col>
+            {/* <Col xl='2' md='4' sm='6'>
           <StatsVertical icon={<RotateCw size={21} />} color='primary' stats='268' statTitle='Procesing Orders' />
         </Col> */}
-        <Col >
-          <StatsVertical icon={<Award size={21} />} color='success' stats={order.completedOrders} statTitle='Completed Orders' />
-        </Col>
-        {/* <Col  >
+            <Col >
+              <StatsVertical icon={<Award size={21} />} color='success' stats={order.completedOrders} statTitle='Completed Orders' />
+            </Col>
+            {/* <Col  >
           <StatsVertical icon={<Truck size={21} />} color='danger' stats={order.completedOrders} statTitle='Returns orders' />
         </Col> */}
-      </Row>
+          </Row>
 
-      <Row>
-      <Col lg='4' xs='12'>
-          <SupportTracker primary={colors.primary.main} danger={colors.danger.main} />
-        </Col>
+          <Row>
+            <Col lg='4' xs='12'>
+              <SupportTracker primary={colors.primary.main} danger={colors.danger.main} />
+            </Col>
 
-        <Col lg='8' sm='12'>
-        <Card>
-      <CardHeader className='align-items-start'>
-        <div>
-          <CardTitle className='mb-25' tag='h4'>
-            Amount
-          </CardTitle>
-          
-        </div>
-        <Settings size={18} className='text-muted cursor-pointer' />
-      </CardHeader>
-      <CardBody className='pb-0'>
-        <Chart options={options} series={series} type='line' height={270}  />
-      </CardBody>
-    </Card></Col>
-{/* 
+            <Col lg='8' sm='12'>
+              <Card>
+                <CardHeader className='align-items-start'>
+                  <div>
+                    <CardTitle className='mb-25' tag='h4'>
+                      Amount
+                    </CardTitle>
+
+                  </div>
+                  <Settings size={18} className='text-muted cursor-pointer' />
+                </CardHeader>
+                <CardBody className='pb-0'>
+                  <Chart options={options} series={series} type='line' height={270} />
+                </CardBody>
+              </Card></Col>
+            {/* 
     <Col lg='4' sm='12'>
         <Card>
       <CardHeader className='align-items-start'>
@@ -311,19 +338,19 @@ const EcommerceDashboard = (props) => {
       </CardBody>
     </Card>
     </Col> */}
-    
-      </Row>
-     
-      <Row className='match-height'>
-        <Col lg='8' xs='12'>
-          <CompanyTable />
-        </Col>
-        <Col lg='4' xs='12'>
-          <CardUserTimeline />
-        </Col>
-      </Row>
 
-      {/* <Row className='match-height'>
+          </Row>
+
+          <Row className='match-height'>
+            <Col lg='8' xs='12'>
+              <CompanyTable />
+            </Col>
+            <Col lg='4' xs='12'>
+              <CardUserTimeline />
+            </Col>
+          </Row>
+
+          {/* <Row className='match-height'>
         <Col lg='6' xs='12'>
           <Card>
             <CardHeader className='border-bottom'>
@@ -363,7 +390,7 @@ const EcommerceDashboard = (props) => {
         </Col>
       </Row> */}
 
-      {/* <Row>
+          {/* <Row>
         <Col lg='12' sm='12'>
         <Card>
       <CardHeader className='align-items-start'>
@@ -381,33 +408,43 @@ const EcommerceDashboard = (props) => {
     </Card></Col>
       </Row> */}
 
-{/* <Row className='match-height'>
+          {/* <Row className='match-height'>
         <Col lg='12' md='12'>
           <RevenueReport primary={colors.primary.main} warning={colors.warning.main} />
         </Col>
       </Row> */}
 
-      <Row>
-        <Col lg='3' sm='6'>
-          <SubscribersGained kFormatter={kFormatter} />
-        </Col>
-        <Col lg='3' sm='6'>
-          <RevenueGenerated kFormatter={kFormatter} success={context.colors.success.main} />
-        </Col>
-        <Col lg='3' sm='6'>
-          <QuaterlySales danger={context.colors.danger.main} />
-        </Col>
-        <Col lg='3' sm='6'>
-          <OrdersReceived kFormatter={kFormatter} warning={context.colors.warning.main} />
-        </Col>
-      </Row>
+          <Row>
+            <Col lg='3' sm='6'>
+              {/* <SubscribersGained kFormatter={kFormatter} /> */}
+              {data !== null ? (
+                <StatsWithAreaChart
+                  icon={<Users size={21} />}
+                  color='primary'
+                  stats={count.inGoldToday}
+                  statTitle='In Gold Today'
+                  series={data.series}
+                  type='area'
+                />
+              ) : null}
+            </Col>
+            <Col lg='3' sm='6'>
+              <RevenueGenerated kFormatter={kFormatter} success={context.colors.success.main} />
+            </Col>
+            <Col lg='3' sm='6'>
+              <OrdersReceived kFormatter={kFormatter} warning={context.colors.warning.main} />
+            </Col>
+            <Col lg='3' sm='6'>
+              <QuaterlySales danger={context.colors.danger.main} />
+            </Col>
 
-      <Row className='match-height'>
+          </Row>
+
+          {/* <Row className='match-height'>
         <Col xs='12'>
         <Card className='card-transaction'>
       <CardHeader>
         <CardTitle tag='h4'>Cash Flow</CardTitle>
-        {/* <MoreVertical size={18} className='cursor-pointer' /> */}
       </CardHeader>
       <CardBody>
         {transactionsArr.map(item => {
@@ -416,7 +453,6 @@ const EcommerceDashboard = (props) => {
           <div className='d-flex'>
             <div>
               <h6 className='transaction-title'>{item.title}</h6>
-              {/* <small>{item.subtitle}</small> */}
             </div>
           </div>
           <div className={`fw-bolder ${item.down ? 'text-danger' : 'text-success'}`}>{item.amount}</div>
@@ -427,7 +463,13 @@ const EcommerceDashboard = (props) => {
         </CardBody>
     </Card>
         </Col>
-      </Row>
+      </Row> */}
+        </div>
+      ) : (
+        <Card>
+          <h5 className='text-center p-2'>You don't have permission to access</h5>
+        </Card>
+      )}
     </div>
   )
 }

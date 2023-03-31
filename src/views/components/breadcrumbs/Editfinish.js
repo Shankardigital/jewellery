@@ -55,6 +55,8 @@ const Adddrawing = () => {
   // const [picker, setPicker] = useState(new Date())
   console.log(form)
   const navigate = useNavigate()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
 
   // const [selectedMulti1, setselectedMulti1] = useState([])
   // const [purity1, setpurity1] = useState([])
@@ -125,15 +127,18 @@ const Adddrawing = () => {
   console.log(costdet)
   // console.log(selldet)
 
-  const handleChangecost = (e, i) => {
-    const myUser = [...costdet]
-    myUser[i][e.target.name] = e.target.value
-    setcostdet(myUser)
+  // const handleChangecost = (e, i) => {
+  //   if (costdet[i].costItemType === "Making" || costdet[i].costItemType === "IGI" || costdet[i].costItemType === "Gold 18K" || costdet[i].costItemType === "Gold 22K" || costdet[i].costItemType === "Gold 24K") {
+  //   const myUser = [...costdet]
+  //   myUser[i][e.target.name] = e.target.value
+  //   setcostdet(myUser)
+  //   } 
 
-  }
+  // }
 
   const handleChangecost1 = (e, i, name) => {
     console.log(e.target.name)
+    if (costdet[i].costItemType === "Making" || costdet[i].costItemType === "IGI" || costdet[i].costItemType === "Gold 18K" || costdet[i].costItemType === "Gold 22K" || costdet[i].costItemType === "Gold 24K") {
     const myUser = [...costdet]
     myUser[i][e.target.name] = e.target.value
     setcostdet(myUser)
@@ -143,27 +148,43 @@ const Adddrawing = () => {
     } else {
         costdet[i].costAmount = costdet[i].costWeightInGr * e.target.value
     }
+  } else {
+    if (name === "IGI") {
+      console.log(e.target.value)
+      costdet[i].costAmount = costdet[i].costWeightInCtc
+    } else {
+        costdet[i].costAmount = costdet[i].costWeightInGr
+    }
+  }
   }
 
   const handleChangecost2 = (e, i) => {
     const myUser = [...costdet]
-    myUser[i][e.target.name] = e.target.value
-    setcostdet(myUser)
-    costdet[i].costAmount = parseFloat(costdet[i].costRatePerCtc) * e.target.value
+    if (costdet[i].costItemType === "Making" || costdet[i].costItemType === "IGI" || costdet[i].costItemType === "Gold 18K" || costdet[i].costItemType === "Gold 22K" || costdet[i].costItemType === "Gold 24K") {
+      myUser[i][e.target.name] = e.target.value
+      setcostdet(myUser)
+      costdet[i].costAmount = parseFloat(costdet[i].costRatePerCtc) * e.target.value
+    } else {
+      costdet[i].costAmount = parseFloat(costdet[i].costRatePerCtc)
+    }
+  
   }
 
   const handleChangecost3 = (e, i) => {
+    if (costdet[i].costItemType === "Making" || costdet[i].costItemType === "IGI" || costdet[i].costItemType === "Gold 18K" || costdet[i].costItemType === "Gold 22K" || costdet[i].costItemType === "Gold 24K") {
     const myUser = [...costdet]
     myUser[i][e.target.name] = e.target.value
     setcostdet(myUser)
     costdet[i].costAmount = parseFloat(costdet[i].costRatePerCtc) * e.target.value
+    } else {
+        costdet[i].costAmount = parseFloat(costdet[i].costRatePerCtc) 
+    }
   }
 
   const handleChangecost4 = (e, i, name) => {
     console.log(e.target.name)
     const myUser = [...costdet]
     myUser[i][e.target.name] = e.target.value
- 
 
     setcostdet(myUser)
     if (name === "Making" ||  name === "Gold 18K" ||  name === "Gold 22K" || name === "Gold 24K") {
@@ -174,20 +195,37 @@ const Adddrawing = () => {
   }
 
   const handleChangecost5 = (e, i) => {
-    const myUser = [...costdet]
-    myUser[i][e.target.name] = e.target.value
-    setcostdet(myUser)
-    costdet[i].sellWeightInCtc = e.target.value * 5
-    costdet[i].sellAmount = parseFloat(costdet[i].sellRatePerCtc) * (e.target.value * 5)
+    if (costdet[i].costItemType === "Making" || costdet[i].costItemType === "Gold 18K" || costdet[i].costItemType === "Gold 22K"  || costdet[i].costItemType === "Gold 24K") {
+      const myUser = [...costdet]
+      myUser[i][e.target.name] = e.target.value
+      setcostdet(myUser)
+      costdet[i].sellWeightInCtc = e.target.value * 5
+      costdet[i].sellAmount = parseFloat(costdet[i].sellRatePerCtc) * (e.target.value)
+    } else {
+      const myUser = [...costdet]
+      myUser[i][e.target.name] = e.target.value
+      setcostdet(myUser)
+      costdet[i].sellWeightInCtc = e.target.value * 5
+      costdet[i].sellAmount = parseFloat(costdet[i].sellRatePerCtc) * (e.target.value * 5)
+    }
+
     
   }
 
   const handleChangecost6 = (e, i) => {
+    if (costdet[i].costItemType === "Making" || costdet[i].costItemType === "Gold 18K" || costdet[i].costItemType === "Gold 22K"  || costdet[i].costItemType === "Gold 24K") {
     const myUser = [...costdet]
     myUser[i][e.target.name] = e.target.value
     setcostdet(myUser)
-    costdet[i].sellAmount = parseFloat(costdet[i].sellRatePerCtc) * e.target.value
+    costdet[i].sellAmount = parseFloat(costdet[i].sellRatePerCtc) * e.target.value / 5
     costdet[i].sellWeightInGr = e.target.value / 5
+    } else {
+      const myUser = [...costdet]
+      myUser[i][e.target.name] = e.target.value
+      setcostdet(myUser)
+      costdet[i].sellAmount = parseFloat(costdet[i].sellRatePerCtc) * e.target.value
+      costdet[i].sellWeightInGr = e.target.value / 5
+    }
   }
 
   // const handleChangesell = (e, i) => {
@@ -277,7 +315,7 @@ const Adddrawing = () => {
         }).catch(function (error) {
         if (error.response) {
             console.log(error.response.data.message)
-            toast.error(error.response.data.message)
+            // toast.error(error.response.data.message)
         }
     })
 
@@ -347,7 +385,7 @@ const Adddrawing = () => {
     setform(myUser)
     const counts = sum7 * parseFloat(e.target.value) / 100
     settotalcgst(counts)
-    const counts12 = sum7 + counts + totalsgst
+    const counts12 = sum7 + counts + Math.round(totalsgst)
     settotalam(counts12)
   }
 
@@ -358,7 +396,7 @@ const Adddrawing = () => {
     const counts = sum7 * parseFloat(e.target.value) / 100
     console.log(counts)
     settotalsgst(counts)
-    const counts12 = sum7 + counts + totalcgst
+    const counts12 = sum7 + counts + Math.round(totalcgst)
     settotalam(counts12)
   }
 
@@ -368,7 +406,7 @@ const Adddrawing = () => {
     setform(myUser)
     const counts = sum7 * parseFloat(e.target.value) / 100
     settotaligst(counts)
-    const counts12 = sum7 + counts
+    const counts12 = sum7 + Math.round(counts)
     settotalam(counts12)
   }
 
@@ -435,12 +473,14 @@ const Adddrawing = () => {
         console.log(res.data)
         toast.success(res.data.message)
         navigate("/costing-details")
+        setIsSubmitting(false)
 
       }
         }).catch(function (error) {
         if (error.response) {
             console.log(error.response.data.message)
             toast.error(error.response.data.message)
+            setIsSubmitting(false)
         }
     })
 
@@ -488,11 +528,11 @@ const Adddrawing = () => {
         // setordr(res.data.orderData)
         // setpurity1(res.data.orderData)
       }
-        }).catch(function (error) {
-        if (error.response) {
-            console.log(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
+        // }).catch(function (error) {
+        // if (error.response) {
+        //     console.log(error.response.data.message)
+        //     toast.error(error.response.data.message)
+        // }
     })
 
   }
@@ -501,6 +541,7 @@ const Adddrawing = () => {
     e.preventDefault()
     addOrders()
     finishimg()
+    setIsSubmitting(true)
   }
 
   return (
@@ -619,15 +660,19 @@ const Adddrawing = () => {
                       {costdet.map((data, i) => (
                         <tr className="text-center">
                           <td className="tabpad"> {data.costItemType} </td>
-                          <td className="tabpad"> <input dir="rtl" name="costWeightInGr"  value={data.costWeightInGr} onChange={(e) => { handleChangecost2(e, i) }} className="tableinput" type="text" /> </td>
+                          <td className="tabpad"> <input dir="rtl" name="costWeightInGr" disabled={false}  value={data.costWeightInGr} onChange={(e) => { handleChangecost2(e, i) }} className="tableinput" type="text" /> </td>
                           <td className="tabpad"> <input dir="rtl" name="costWeightInCtc" value={data.costWeightInCtc} onChange={(e) => { handleChangecost3(e, i) }} className="tableinput" type="text" /> </td>
                           <td className="tabpad"> <input dir="rtl" name="costRatePerCtc" value={data.costRatePerCtc} onChange={(e) => { handleChangecost1(e, i, data.costItemType) }} className="tableinput" type="text" /> </td>
-                          <td className="tabpad"> <input dir="rtl" name="costAmount" value={Math.round(data.costAmount)} onChange={(e) => { handleChangecost(e, i) }} className="tableinput" type="text" /> </td>
+                          <td className="tabpad"> <input dir="rtl" name="costAmount" value={Math.round(data.costAmount)}
+                          //  onChange={(e) => { handleChangecost(e, i) }} 
+                           className="tableinput" type="text" /> </td>
                           <td className="tabpad"> {data.sellItemType} </td>
                           <td className="tabpad"> <input dir="rtl" value={data.sellWeightInGr} name="sellWeightInGr" onChange={(e) => { handleChangecost5(e, i) }} className="tableinput" type="text" /> </td>
                           <td className="tabpad"> <input dir="rtl" value={data.sellWeightInCtc} name="sellWeightInCtc" onChange={(e) => { handleChangecost6(e, i) }} className="tableinput" type="text" /> </td>
                           <td className="tabpad"> <input dir="rtl" value={data.sellRatePerCtc} name="sellRatePerCtc" onChange={(e) => { handleChangecost4(e, i, data.sellItemType) }} className="tableinput" type="text" /> </td>
-                          <td className="tabpad"> <input dir="rtl" value={Math.round(data.sellAmount)} name="sellAmount" onChange={(e) => { handleChangecost(e, i) }} className="tableinput" type="text" /> </td>
+                          <td className="tabpad"> <input dir="rtl" value={Math.round(data.sellAmount)} name="sellAmount"
+                          //  onChange={(e) => { handleChangecost(e, i) }} 
+                           className="tableinput" type="text" /> </td>
                         </tr>
                       ))}
 
@@ -646,6 +691,7 @@ const Adddrawing = () => {
                     </tbody>
                   </Table>
 
+
                   <div>
                     <Row className="mt-1">
                       <Col md={9}>
@@ -655,49 +701,88 @@ const Adddrawing = () => {
                       </Col>
 
                       <Col md={3}>
-                        <Row >
-                          <Col>
-                            <select value={form.cgstptg}  onChange={(e) => handleChange12(e)} name="cgstptg" className="form-select">
-                              <option value="0">Select</option>
-                              <option value="0.125">0.125</option>
-                              <option value="0.75">0.75</option>
-                              <option value="1.5">1.5</option>
-                            </select>
-                          </Col>
-                          <Col>
-                            <Input
-                             value={totalcgst}
-                               name="cgst"  type="text" placeholder="CGST"></Input>
-                          </Col>
+                        {form.igstptg === "1.5" || form.igstptg === "0.25" || form.igstptg === "3" ? (
+                          <Row >
+                            <Col>
+                              <select value="0" disabled onChange={(e) => handleChange12(e)} name="cgstptg" className="form-select">
+                                <option value="0">Select</option>
+                                <option value="0.125">0.125</option>
+                                <option value="0.75">0.75</option>
+                                <option value="1.5">1.5</option>
+                              </select>
+                            </Col>
+                            <Col>
+                              <Input value="0" name="cgst" type="text" placeholder="CGST"></Input>
+                            </Col>
+                          </Row>
+                        ) : (
+                          <Row >
+                            <Col>
+                              <select  value={form.cgstptg} onChange={(e) => handleChange12(e)} name="cgstptg" className="form-select">
+                                <option value="0">Select</option>
+                                <option value="0.125">0.125</option>
+                                <option value="0.75">0.75</option>
+                                <option value="1.5">1.5</option>
+                              </select>
+                            </Col>
+                            <Col>
+                              <Input value={Math.round(totalcgst)} name="cgst" type="text" placeholder="CGST"></Input>
+                            </Col>
+                          </Row>
 
-                        </Row>
+                        )}
                       </Col>
                     </Row>
-                    <Row className="mt-1">
-                      <Col md={9}>
-                        <div className="text-end">
-                          <Label className="mt-1">SGST :</Label>
-                        </div>
-                      </Col>
-                      <Col md={3}>
-                        <Row >
-                          <Col>
-                            <select value={form.sgstptg} onChange={(e) => handleChange123(e)} name="sgstptg" className="form-select">
-                              <option value="0">Select</option>
-                              <option value="0.125">0.125</option>
-                              <option value="0.75">0.75</option>
-                              <option value="1.5">1.5</option>
-                            </select>
-                          </Col>
-                          <Col>
-                          <Input name="sgst" 
-                          value={totalsgst} 
-                           type="text" placeholder="SGST"></Input>
-                          </Col>
+                    {form.igstptg === "1.5" || form.igstptg === "0.25" || form.igstptg === "3" ? (
+                      <Row className="mt-1">
+                        <Col md={9}>
+                          <div className="text-end">
+                            <Label className="mt-1">SGST :</Label>
+                          </div>
+                        </Col>
+                        <Col md={3}>
+                          <Row >
+                            <Col>
+                              <select value="0" disabled onChange={(e) => handleChange123(e)} name="sgstptg" className="form-select">
+                                <option value="0">Select</option>
+                                <option value="0.125">0.125</option>
+                                <option value="0.75">0.75</option>
+                                <option value="1.5">1.5</option>
+                              </select>
+                            </Col>
+                            <Col>
+                              <Input name="sgst" value="0" type="text" placeholder="SGST"></Input>
+                            </Col>
 
-                        </Row>
-                      </Col>
-                    </Row>
+                          </Row>
+                        </Col>
+                      </Row>
+                    ) : (
+                      <Row className="mt-1">
+                        <Col md={9}>
+                          <div className="text-end">
+                            <Label className="mt-1">SGST :</Label>
+                          </div>
+                        </Col>
+                        <Col md={3}>
+                          <Row >
+                            <Col>
+                              <select  value={form.sgstptg} onChange={(e) => handleChange123(e)} name="sgstptg" className="form-select">
+                                <option value="0">Select</option>
+                                <option value="0.125">0.125</option>
+                                <option value="0.75">0.75</option>
+                                <option value="1.5">1.5</option>
+                              </select>
+                            </Col>
+                            <Col>
+                              <Input name="sgst" value={Math.round(totalsgst)} type="text" placeholder="SGST"></Input>
+                            </Col>
+
+                          </Row>
+                        </Col>
+                      </Row>
+
+                    )}
                     <Row className="mt-1">
                       <Col md={9}>
                         <div className="text-end">
@@ -705,21 +790,36 @@ const Adddrawing = () => {
                         </div>
                       </Col>
                       <Col md={3}>
-                        <Row >
-                          <Col>
-                            <select name="igstptg" value={form.igstptg}  onChange={(e) => handleChange1234(e)} className="form-select">
-                              <option value="0">Select</option>
-                              <option value="0.25">0.25</option>
-                              <option value="1.5">1.5</option>
-                              <option value="3">3</option>
-                            </select>
-                          </Col>
-                          <Col>
-                          <Input name="igst"
-                           value={totaligst} 
-                            type="text" placeholder="IGST"></Input>
-                          </Col>
-                        </Row>
+                        {form.sgstptg === "0.125" || form.sgstptg === "0.75" || form.sgstptg === "1.5" || form.cgstptg === "0.125" || form.cgstptg === "0.75" || form.cgstptg === "1.5" ? (
+                          <Row >
+                            <Col>
+                              <select value="0" disabled name="igstptg" onChange={(e) => handleChange1234(e)} className="form-select">
+                                <option value="0">Select</option>
+                                <option value="0.25">0.25</option>
+                                <option value="1.5">1.5</option>
+                                <option value="3">3</option>
+                              </select>
+                            </Col>
+                            <Col>
+                              <Input name="igst" value="0" type="text" placeholder="IGST"></Input>
+                            </Col>
+                          </Row>
+                        ) : (
+                          <Row >
+                            <Col>
+                              <select value={form.igstptg} name="igstptg" onChange={(e) => handleChange1234(e)} className="form-select">
+                                <option value="0">Select</option>
+                                <option value="0.25">0.25</option>
+                                <option value="1.5">1.5</option>
+                                <option value="3">3</option>
+                              </select>
+                            </Col>
+                            <Col>
+                              <Input name="igst" value={Math.round(totaligst)} type="text" placeholder="IGST"></Input>
+                            </Col>
+                          </Row>
+
+                        )}
                       </Col>
                     </Row>
                     <Row className="mt-1">
@@ -800,8 +900,8 @@ const Adddrawing = () => {
               <Row style={{ float: "right" }}>
                 <Col>
                   {/* <Link to={"/drawing"}> */}
-                  <Button outline size="sm" className="me-1 mt-1" color="success" type="submit">
-                    Submit <ArrowRightCircle className='font-medium-2 pl-1' />
+                  <Button disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
+                  {isSubmitting ? 'Submitting...' : 'Submit'} <ArrowRightCircle className='font-medium-2 pl-1' />
                   </Button>
                   {/* </Link> */}
                   <Link to={"/costing-details"}>

@@ -39,6 +39,7 @@ import trash from "../../../assets/images/latest/trash.gif"
 const Returnstock = () => {
 
     const [form, setform] = useState([])
+    const [forms, setforms] = useState([])
     const [form1, setform1] = useState([])
     const [form2, setform2] = useState([])
     console.log(form1)
@@ -56,6 +57,7 @@ const Returnstock = () => {
     const [deli, setdeli] = useState([])
 
     const [deliwa, setdeliwa] = useState([])
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     // const [nettd, setnettd] = useState([])
     // // const [editdata, seteditdata] = useState([])
@@ -149,7 +151,7 @@ const Returnstock = () => {
     function handleMulti1(data) {
         setselectedMulti(data)
 
-        
+
         const token = datas
         const params = {
             orderId: data.value
@@ -246,8 +248,8 @@ const Returnstock = () => {
             orderId: selectedMulti.value,
             submittedDate: form.submittedDate,
             goldWeight: deliwa.nett,
-            amount: deliwa.selltotalamount,
-            finishId:deliwa._id
+            amount: deliwa.totalAmount,
+            finishId: deliwa._id
         }
 
         console.log(token)
@@ -264,6 +266,7 @@ const Returnstock = () => {
                 setselectedMulti1("")
                 setselectedMulti("")
                 setdeliwa("")
+                setIsSubmitting(false)
                 // navigate("/drawing")
 
             }
@@ -272,6 +275,7 @@ const Returnstock = () => {
                 if (error.response && error.response.status === 400) {
                     toast.error(error.response.data.message)
                     console.log(error.data.message)
+                    setIsSubmitting(false)
 
                 }
             }
@@ -281,6 +285,7 @@ const Returnstock = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
         addOrders()
+        setIsSubmitting(true)
     }
 
     const addOrders1 = () => {
@@ -344,8 +349,8 @@ const Returnstock = () => {
         // const dataid = form1._id
         // console.log(dataid)
         const custdet = {
-            returnStockId:form1._id,
-            finishId:form1.finishId
+            returnStockId: form1._id,
+            finishId: form1.finishId
         }
         console.log(custdet)
         axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/returnstock/deletereturnstock", custdet,
@@ -421,6 +426,32 @@ const Returnstock = () => {
     //     setbalamount(data.balance)
     //     // seteditdata1({ value: data.employeeId, label: data.employeeName })
     // }
+
+    const custsearch = (e) => {
+        const myUser = { ...forms }
+        myUser[e.target.name] = e.target.value
+        setforms(myUser)
+
+        const token = datas
+        console.log(token)
+        axios.post(`http://103.186.185.77:5023/omsanthoshjewellery/admin/returnstock/searchreturnstock?searchQuery=${e.target.value}`,
+            {
+                headers: { Authorization: `Bearer ${token}` }
+            }, {}
+        ).then((res) => {
+            if (res.status === 200) {
+                console.log(res.data)
+                setdeli(res.data.returnStockResult)
+            }
+        }).catch(function (error) {
+            if (error.response) {
+                console.log(error.response.data.message)
+                toast.error(error.response.data.message)
+            }
+        })
+
+    }
+
 
     const genPdf = () => {
         html2canvas(document.getElementById("empTable")).then((canvas) => {
@@ -513,7 +544,7 @@ const Returnstock = () => {
                                             onChange={handleMulti1}
                                             required
                                             name="orderId"
-                                         options={ordrid} />
+                                            options={ordrid} />
                                     </Col>
 
                                     <Col sm="3">
@@ -527,7 +558,7 @@ const Returnstock = () => {
                                         <Label for="name" style={{ color: "black" }}>
                                             Amount : <span className="text-danger">*</span>
                                         </Label>
-                                        <Input required name="amount" value={deliwa.selltotalamount} type="text" placeholder=" Amount" />
+                                        <Input required name="amount" value={deliwa.totalAmount} type="text" placeholder=" Amount" />
                                     </Col>
 
                                     {/* <Col sm="3">
@@ -567,8 +598,8 @@ const Returnstock = () => {
                                 <Row style={{ float: "right" }}>
                                     <Col>
                                         {/* <Link to={"/drawing"}> */}
-                                        <Button outline size="sm" className="me-1 mt-1" color="success" type="submit">
-                                            Submit <ArrowRightCircle className='font-medium-2 pl-1' />
+                                        <Button  disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
+                                        {isSubmitting ? 'Submitting...' : 'Submit'} <ArrowRightCircle className='font-medium-2 pl-1' />
                                         </Button>
                                         {/* </Link> */}
                                         {/* <Link to={"/drawing"}> */}
@@ -586,28 +617,50 @@ const Returnstock = () => {
                     ""
                 )}
 
-                {access.orderrep === true || adrole === "admin" ? (
+                {access.returnstock === true || adrole === "admin" ? (
                     <Row>
                         <Col sm='12'>
                             <Card>
                                 <div>
-                                    <Button onClick={() => { setshow(!show) }} className="m-1 btn-sm" color="info">
-                                        Add <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                                    </Button>
-                                    <div style={{ float: "right" }}>
+                                    <Row>
+                                        <Col md="6">
+                                        {access.returnstockadd === true || adrole === "admin" ? (
+                                            <Button onClick={() => { setshow(!show) }} className="m-1 btn-sm" color="info">
+                                                Add <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                            </Button>
+                                        ) : (
+                                            ""
+                                        )}
+                                        </Col>
+                                        <Col md="6">
+                                            <Row>
+                                                <Col md="6">
+                                                    <Input
+                                                        value={forms.search}
+                                                        onChange={custsearch}
+                                                        type="text" placeholder="Search..." className="form-control mt-1" />
 
-                                        <Button onClick={downloadImage} className='btn-sm' color='warning'><i class="fa fa-file-image-o" aria-hidden="true"></i> IMG</Button>
-                                        <Button onClick={genPdf} className='m-1 btn-sm' color='danger'><i class="fa fa-file-pdf-o" aria-hidden="true"></i> PDF</Button>
-                                        <ReactHTMLTableToExcel
-                                            className="btn btn-success btn-sm fa fa-file-excel-o "
-                                            table="empTable"
-                                            filename="ReportExcel"
-                                            sheet="Sheet"
-                                            buttonText=" Excel"
-                                            style={{ color: "white" }}
-                                        />
-                                        {/* <Button className='m-1' color='success'> <i class="fa fa-file-excel-o" aria-hidden="true"></i> EXCEL</Button> */}
-                                    </div>
+                                                </Col>
+                                                <Col md="6">
+                                                    <div style={{ float: "right" }}>
+
+                                                        <Button onClick={downloadImage} className='btn-sm' color='warning'><i class="fa fa-file-image-o" aria-hidden="true"></i> IMG</Button>
+                                                        <Button onClick={genPdf} className='m-1 btn-sm' color='danger'><i class="fa fa-file-pdf-o" aria-hidden="true"></i> PDF</Button>
+                                                        <ReactHTMLTableToExcel
+                                                            className="btn btn-success btn-sm fa fa-file-excel-o "
+                                                            table="empTable"
+                                                            filename="ReportExcel"
+                                                            sheet="Sheet"
+                                                            buttonText=" Excel"
+                                                            style={{ color: "white" }}
+                                                        />
+                                                        {/* <Button className='m-1' color='success'> <i class="fa fa-file-excel-o" aria-hidden="true"></i> EXCEL</Button> */}
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                        </Col>
+
+                                    </Row>
                                 </div>
                                 <CardBody>
 
@@ -621,9 +674,9 @@ const Returnstock = () => {
                                                 <th>
                                                     Customer Name
                                                 </th>
-                                               
+
                                                 <th>
-                                                Sales Order No
+                                                    Sales Order No
                                                 </th>
 
                                                 <th>
@@ -632,7 +685,7 @@ const Returnstock = () => {
                                                 <th>
                                                     Amount
                                                 </th>
-                                               
+
                                                 <th>
                                                     Action
                                                 </th>
@@ -656,8 +709,12 @@ const Returnstock = () => {
                                                     <td>
                                                         {/* <Button style={{ margin: "5px" }} onClick={() => { cadtada(data) }} size="sm" outline color="success"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i></Button> */}
                                                         {/* <Button style={{ margin: "5px" }} onClick={() => { cadtada2(data) }} size="sm" outline color="warning"> <i class="fa fa-telegram" aria-hidden="true"></i></Button> */}
+                                                        {access.returnstockdel === true || adrole === "admin" ? (
                                                         <Button style={{ margin: "5px" }} onClick={() => { cadtada1(data) }} size="sm" outline color="danger"> <i class="fa fa-trash-o" aria-hidden="true"></i></Button>
-                                                    </td>
+                                                        ) : (
+                                                            ""
+                                                        )}
+                                                        </td>
                                                 </tr>
                                             ))}
 
@@ -732,16 +789,16 @@ const Returnstock = () => {
                                 </Col>
 
                                 <Col sm="6">
-                                        <Label for="name" style={{ color: "black" }}>
-                                            Sales Order No : <span className="text-danger">*</span>
-                                        </Label>
-                                        <Select
-                                            value={selectedMulti}
-                                            onChange={handleMulti1}
-                                            required
-                                            name="orderId"
-                                             options={ordrid} />
-                                    </Col>
+                                    <Label for="name" style={{ color: "black" }}>
+                                        Sales Order No : <span className="text-danger">*</span>
+                                    </Label>
+                                    <Select
+                                        value={selectedMulti}
+                                        onChange={handleMulti1}
+                                        required
+                                        name="orderId"
+                                        options={ordrid} />
+                                </Col>
 
                                 <Col sm="6">
                                     <Label for="name" style={{ color: "black" }}>
@@ -837,20 +894,20 @@ const Returnstock = () => {
                                     </Label>
                                     <Input required onChange={(e) => handleChange4(e)} name="particulars" type="text" placeholder="Particulars" />
                                 </Col>
-                                
+
 
                                 <Col sm="6">
                                     <Label for="name" style={{ color: "black" }}>
                                         Gold Weight : <span className="text-danger">*</span>
                                     </Label>
-                                    <Input  onChange={(e) => handleChange4(e)} name="balanceGoldWeight"  type="text" placeholder="Gold Weight" />
+                                    <Input onChange={(e) => handleChange4(e)} name="balanceGoldWeight" type="text" placeholder="Gold Weight" />
                                 </Col>
 
                                 <Col sm="6">
                                     <Label for="name" style={{ color: "black" }}>
                                         Amount : <span className="text-danger">*</span>
                                     </Label>
-                                    <Input max={form2.balance} onChange={(e) => handleChange5(e)} name="amoubalanceAmountnt"  type="number" placeholder=" Amount" />
+                                    <Input max={form2.balance} onChange={(e) => handleChange5(e)} name="amoubalanceAmountnt" type="number" placeholder=" Amount" />
                                 </Col>
                                 <Col sm="6">
                                     <Label for="name" style={{ color: "black" }}>

@@ -42,6 +42,8 @@ const Casting = () => {
   console.log(datas)
 
   const [forms1, setforms1] = useState([])
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   // const [items, setitems] = useState([])
 
   const handleChange = (e) => {
@@ -116,7 +118,7 @@ const Casting = () => {
         }).catch(function (error) {
         if (error.response) {
             console.log(error.response.data.message)
-            toast.error(error.response.data.message)
+            // toast.error(error.response.data.message)
         }
     })
 
@@ -138,7 +140,7 @@ const Casting = () => {
         }).catch(function (error) {
         if (error.response) {
             console.log(error.response.data.message)
-            toast.error(error.response.data.message)
+            // toast.error(error.response.data.message)
         }
     })
 
@@ -160,7 +162,7 @@ const Casting = () => {
         }).catch(function (error) {
         if (error.response) {
             console.log(error.response.data.message)
-            toast.error(error.response.data.message)
+            // toast.error(error.response.data.message)
         }
     })
 
@@ -200,7 +202,7 @@ const Casting = () => {
         }).catch(function (error) {
         if (error.response) {
             console.log(error.response.data.message)
-            toast.error(error.response.data.message)
+            // toast.error(error.response.data.message)
         }
     })
 
@@ -229,11 +231,13 @@ const Casting = () => {
         setCenteredModal(false)
         toast.success(res.data.message)
         actiordrs()
+        setIsSubmitting(false)
       }
         }).catch(function (error) {
         if (error.response) {
             console.log(error.response.data.message)
             toast.error(error.response.data.message)
+            setIsSubmitting(false)
         }
     })
 
@@ -242,6 +246,7 @@ const Casting = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     Addcasting()
+    setIsSubmitting(true)
   }
 
 
@@ -542,8 +547,8 @@ const Casting = () => {
               <Row style={{ float: "right" }}>
                 <Col>
                   {/* <Link to={"/drawing"}> */}
-                  <Button outline size="sm" className="me-1 mt-1" color="success" type="submit">
-                    Submit
+                  <Button disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
+                  {isSubmitting ? 'Submitting...' : 'Submit'}
                   </Button>
                   {/* </Link> */}
                   <Link to={"/polish2-details"}>

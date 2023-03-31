@@ -263,12 +263,12 @@ const Costing = () => {
                                                 <th>
                                                    Total Sale
                                                 </th>
-                                                <th>
+                                                {/* <th>
                                                    Metal Profit
                                                 </th>
                                                 <th>
                                                    Cash Profit
-                                                </th>
+                                                </th> */}
 
                                             </tr>
                                         </thead>
@@ -335,13 +335,13 @@ const Costing = () => {
                                                     <td>
                                                         {data.totalAmount}
                                                     </td>
-                                                    <td>
+                                                    {/* <td>
                                                        {data.metalProfit}
                                                     </td>
 
                                                     <td>
                                                         {data.cashProfit}
-                                                    </td>
+                                                    </td> */}
                                                 </tr>
                                             ))}
 

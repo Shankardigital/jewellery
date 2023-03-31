@@ -28,6 +28,8 @@ import toast from 'react-hot-toast'
 const Drawing = () => {
 
   const [centeredModal, setCenteredModal] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   // const toggle = () => setCenteredModal(!centeredModal)
   // const [picker, setPicker] = useState(new Date())
   // const [picker, setPicker] = useState(new Date())
@@ -245,6 +247,7 @@ const Drawing = () => {
             setCenteredModal(false)
             toast.success(res.data.message)
             actiordrs()
+            setIsSubmitting(false)
             // navigate("/drawing")
            
         }
@@ -253,6 +256,7 @@ const Drawing = () => {
             if (error.response && error.response.status === 400) {
                 toast.error(error.response.data.message)
                 console.log(error.data.message)
+                setIsSubmitting(false)
 
             }
         }
@@ -262,6 +266,7 @@ const Drawing = () => {
 const handleSubmit = (e) => {
   e.preventDefault()
   addOrders()
+  setIsSubmitting(true)
 }
 
 //   const navigate = useNavigate()
@@ -284,6 +289,7 @@ const handleSubmit = (e) => {
   const cadtada = (data) => {
     setforms1(data)
     setCenteredModal(true)
+    
     // seteditdata({value:data.orderId, label: data.orderNo})
     // seteditdata1({value:data.employeeId, label: data.employeeName})
   }
@@ -467,8 +473,8 @@ const handleSubmit = (e) => {
             <Row style={{ float: "right" }}>
               <Col>
               {/* <Link to={"/drawing"}> */}
-                <Button  outline size="sm" className="me-1 mt-1" color="success" type="submit">
-                  Submit 
+                <Button disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
+                {isSubmitting ? 'Submitting...' : 'Submit'} 
                 </Button> 
                 {/* </Link> */}
                 <Button onClick={() => { setCenteredModal(false) }} outline size="sm" className="me-1 mt-1" color="danger" type="button">
