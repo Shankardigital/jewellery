@@ -95,6 +95,7 @@ const Login = () => {
           toast(t => (
             <ToastContent t={t} role={"admin" || 'admin' || "CAD"}  />
           ))
+         
           navigate(getHomeRouteForLoggedInUser("admin"))
         })
         // .catch(err => console.log(err))
@@ -174,6 +175,7 @@ const Login = () => {
                   control={control}
                   render={({ field }) => (
                     <Input
+                    required
                       autoFocus
                       type='email'
                       placeholder='Enter Email'
@@ -198,7 +200,7 @@ const Login = () => {
                   name='password'
                   control={control}
                   render={({ field }) => (
-                    <InputPasswordToggle className='input-group-merge' invalid={errors.password && true} {...field} />
+                    <InputPasswordToggle className='input-group-merge' required invalid={errors.password && true} {...field} />
                   )}
                 />
               </div>

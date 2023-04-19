@@ -476,7 +476,7 @@ const Casting = () => {
                 <Input 
                 required
                 value={forms1.receivedDate}
-                // min={ordr.submittedDate}
+                min={forms1.receivedDate}
                 // max={ordr1.deliveryDate}
                  onChange={ (e) => { handleChange(e) }}
                   type="date" name="receivedDate" id="select-basic" placeholder="Enter date" className="form-control mb-1"/>

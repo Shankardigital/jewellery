@@ -126,7 +126,8 @@ const Addsetting = () => {
   }
 
   const [itemdate, setitemdate] = useState([])
-  const [ites, setites] = useState([])
+  console.log(itemdate)
+  // const [ites, setites] = useState([])
   const [ordrdate, setordrdate] = useState([])
   console.log(ordrdate)
   const [selectedMulti, setselectedMulti] = useState()
@@ -137,12 +138,8 @@ const Addsetting = () => {
     setitemdate(data.caddate)
     setordrdate(data.ordrdate)
 
-    // if (selectedMulti && selectedMulti.value !== data.value) {
-    //   setites([])
-    // }
-
     inputList[i]['purity'] = data.purity
-    inputList[i]['itemNameMulti'] = data.itemName
+    inputList[i]['itemNameMulti'] = data.itemNameMulti
     inputList[i]['value'] = data.value
     inputList[i]['label'] = data.label
     inputList[i]['weightOut'] = ""
@@ -151,40 +148,13 @@ const Addsetting = () => {
     setselectedMulti(data)
     setorders(set)
     console.log(data)
+   
+    // if (selectedMulti && selectedMulti.value !== data.value) {
+    //   setites([])
+    // }
 
-    const token = datas
-    const params = {
-      orderId: data.value
-    }
-    console.log(token)
-    axios.post("http://103.186.185.77:5023/omsanthoshjewellery/admin/casting/getorderitems", params,
-      {
-        headers: { Authorization: `Bearer ${token}` }
-      }, {}
-    ).then((res) => {
-      if (res.status === 200) {
-        console.log(res.data)
-        if (res.data.itemData.length > 0) {
-
-          // const objIndex = ites.findIndex((obj) => res.data.itemData.every((obj2) => obj2._id === obj._id))
-
-          //  const objIndex = ites.findIndex((obj) => obj._id === res.data.itemData[0]["_id"])
-
-          const arr = [...ites]
-          console.log(ites)
-          arr.push(res.data.itemData)
-          setites(arr)
-          // console.log(ites)
-          // console.log(objIndex, "objeindex")
-        }
-      }
-    }).catch(function (error) {
-      if (error.response) {
-        console.log(error.response.data.message)
-        toast.error(error.response.data.message)
-      }
-    })
-
+    const selectElement = document.getElementsByName("itemId")[i]
+    selectElement.selectedIndex = 0
   }
 
   const actiordrs = () => {
@@ -235,7 +205,7 @@ const Addsetting = () => {
   }
 
   const ordrid = ordr.map((data) => (
-    { value: data._id, label: data.orderNo, purity: data.itemPurity, caddate: data.cadReceivedDate, ordrdate: data.orderDeliveryDate }
+    { value: data._id, label: data.orderNo, purity: data.itemPurity, itemNameMulti: data.items, caddate: data.cadReceivedDate, ordrdate: data.orderDeliveryDate }
   ))
   // setselectitem(ordrid.itemName)
   console.log(ordrid)
@@ -370,17 +340,20 @@ const Addsetting = () => {
                         <Label for="name" style={{ color: "black" }}>
                           Item  : <span className="text-danger">*</span>
                         </Label>
-                        <select onChange={e => handleInputChange(e, i)} className="form-select"
+                        <select  onChange={e => handleInputChange(e, i)} className="form-select"
                           required name="itemId" placeholder="Item" type="text">
                           <option value="">Select</option>
+                          {x.itemNameMulti.map((data) => (
+                            <option value={data._id} >{data.itemName}</option>
+                          ))}
                           {/* {
                             (ites.length > 0) ? ites[i].map((data) => (
                               <option value={data._id} >{data.itemName}</option>
                             )) : ""
-                          } */}
-                          {ites?.length > 0 && ites[i]?.map((data) => (
+                          } */} 
+                          {/* {ites?.length > 0 && ites[i]?.map((data) => (
                             <option key={data._id} value={data._id}>{data.itemName}</option>
-                          ))}
+                          ))} */}
 
                         </select>
                         {/* <Select

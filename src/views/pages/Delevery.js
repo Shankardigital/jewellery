@@ -588,7 +588,7 @@ const Delivery = () => {
                                     </Col>
                                     <>
                                     </>
-                                    {commgold === "0.000" ? (
+                                    {commgold === "0.000" || bagold === "0.000" ? (
                                         <Col sm="3">
                                             <Label for="name" style={{ color: "black" }}>
                                                 Received Gold Weight :
@@ -606,7 +606,7 @@ const Delivery = () => {
 
                                     <Col sm="3">
                                         <>
-                                            {bagold === "0" ? (
+                                            {commtotamount === "0" || bamount === "0" ? (
                                                 <>
                                                     <Label for="name" style={{ color: "black" }}>
                                                         Received Amount : <span className="text-danger">*</span>
@@ -632,7 +632,7 @@ const Delivery = () => {
                                         </Label>
                                         <Input required value={balamount} name="balanceAmount" disabled type="text" placeholder="Balance Amount" />
                                     </Col>
-                                    {commgold === "0.000" ? (
+                                    {commgold === "0.000" || bagold === "0.000"  ? (
                                         <Col sm="3">
                                             <Label for="name" style={{ color: "black" }}>
                                                 Balance Gold : <span className="text-danger">*</span>
@@ -653,9 +653,15 @@ const Delivery = () => {
                                 <Row style={{ float: "right" }}>
                                     <Col>
                                         {/* <Link to={"/drawing"}> */}
-                                        <Button disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
+                                        { bagold === "0" || bamount === "0" ? (
+                                        <Button style={{display:"none"}} disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
                                             {isSubmitting ? 'Submitting...' : 'Submit'} <ArrowRightCircle className='font-medium-2 pl-1' />
                                         </Button>
+                                        ) : (
+                                            <Button disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
+                                            {isSubmitting ? 'Submitting...' : 'Submit'} <ArrowRightCircle className='font-medium-2 pl-1' />
+                                        </Button>
+                                        )}
                                         {/* </Link> */}
                                         {/* <Link to={"/drawing"}> */}
                                         <Button onClick={() => { dataclrea() }} outline size="sm" className="me-1 mt-1" color="danger" type="button">

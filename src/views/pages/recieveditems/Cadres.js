@@ -451,7 +451,7 @@ const handleSubmit = (e) => {
               </Label>
               <Input
               required
-            //   max={new Date().toISOString().split("T")[0]}
+              min={forms1.receivedDate}
               value={forms1.receivedDate}
               type="date" onChange={ (e) => handleChange(e) } placeholder="Enter date" name="receivedDate" />
               </Col>

@@ -369,6 +369,7 @@ const Divider = () => {
                       <th>Item</th>
                       <th>Pieces</th>
                       <th>Quantity</th>
+                      <th>Qty per Cts Amount</th>
                       <th >Total Amount</th>
                       <th>Status</th>
                       <th style={{ width: "160px" }}>Actions</th>
@@ -383,6 +384,7 @@ const Divider = () => {
                         <td>{data.itemType}</td>
                         <td>{data.pieces}</td>
                         <td>{data.qtCt}</td>
+                        <td>{data.qtAmount}</td>
                         <td>{data.totalAmount}</td>
                         {/* <td>{data.status}</td> */}
                         <td>{data.status === "active" ? (
@@ -504,7 +506,7 @@ const Divider = () => {
 
         <Modal isOpen={formModal1} toggle={() => setFormModal1(!formModal1)} className='modal-dialog-centered'>
           <Form onSubmit={(e) => { eddeprt(e) }} >
-            <ModalHeader toggle={() => setFormModal1(!formModal1)}>Edit</ModalHeader>
+            <ModalHeader  toggle={() => setFormModal1(!formModal1)}>Edit</ModalHeader>
             <ModalBody>
 
               <Row>

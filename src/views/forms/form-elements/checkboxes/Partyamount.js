@@ -239,15 +239,13 @@ const Delivery = () => {
                 // navigate("/drawing")
 
             }
-        },
-            (error) => {
-                if (error.response && error.response.status === 400) {
-                    toast.error(error.response.data.message)
-                    console.log(error.data.message)
-
-                }
+        }).catch(function (error) {
+            if (error.response) {
+                console.log(error.response.data.message)
+                toast.error(error.response.data.message)
+                // setIsSubmitting(false)
             }
-        )
+        })
     }
 
     const handleSubmit = (e) => {
@@ -278,15 +276,13 @@ const Delivery = () => {
                 // navigate("/drawing")
 
             }
-        },
-            (error) => {
-                if (error.response && error.response.status === 400) {
-                    toast.error(error.response.data.message)
-                    console.log(error.data.message)
-
-                }
+        }).catch(function (error) {
+            if (error.response) {
+                console.log(error.response.data.message)
+                toast.error(error.response.data.message)
+                // setIsSubmitting(false)
             }
-        )
+        })
     }
 
     const handleSubmit1 = (e) => {

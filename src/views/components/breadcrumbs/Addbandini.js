@@ -458,7 +458,7 @@ const Addsetting = () => {
 
                                             <Col sm="2">
                                                 <Label for="name" style={{ color: "black" }}>
-                                                    Pieces :
+                                                    Pieces : 
                                                 </Label>
                                                 <Input
                                                     name="pieces" required max={pktsid[i]?.pieces || ''} value={x.pieces} onChange={e => handleInputChange(e, i)}

@@ -144,6 +144,16 @@ const BreadCrumbs = () => {
   console.log(netwet)
   // const [baln, setbaln] = useState([])
 
+  // const handleChanges1 = (e) => {
+  //   const myUser = { ...ordr }
+  //   myUser[e.target.name] = e.target.value
+  //   setordr(myUser)
+  //   console.log(ordr.outWeight)
+  //   const netweights = e.target.value - parseFloat(totalsum4)
+  //   setnetwet(netweights.toFixed(3))
+  // }
+  const percentage = forms02 * 100 / netwet
+  
   const handleChanges1 = (e) => {
     const myUser = { ...ordr }
     myUser[e.target.name] = e.target.value
@@ -152,7 +162,14 @@ const BreadCrumbs = () => {
     const netweights = e.target.value - parseFloat(totalsum4)
     setnetwet(netweights.toFixed(3))
 
+    const count = (netweights.toFixed(3) * (percentage).toFixed(1)) / 100
+    console.log(count)
+    setforms02(count.toFixed(3))
+    const count2 = parseFloat(ordr.outWeight) - (parseFloat(netweights.toFixed(3)))
+    setforms01(count2.toFixed(3))
+
   }
+
   const handleChanges0 = (e) => {
     const myUser = { ...ordr }
     myUser[e.target.name] = e.target.value
@@ -293,8 +310,6 @@ const BreadCrumbs = () => {
 
   }
 
-  const percentage = forms02 * 100 / netwet
-
   const setsubmit = (e) => {
     e.preventDefault()
     updateset()
@@ -340,7 +355,7 @@ const BreadCrumbs = () => {
                   </Label>
                   <Input
                     // max={ordr1.deliveryDate}
-                    // min={ordr.submittedDate}
+                    min={ordr.receivedDate}
                     value={ordr.receivedDate}
                     required onChange={(e) => { handleChanges0(e) }} name="receivedDate" type="date" placeholder="Date" className="form-control mb-1" />
                 </Col>

@@ -126,7 +126,7 @@ function Stage1() {
     const myUser = { ...ordr }
     myUser[e.target.name] = e.target.value
     setordr(myUser)
-    const count = parseFloat(ordr.weightOut) - (parseFloat(ordr.scapIn) + parseFloat(ordr.finishInReceived)  + parseFloat(ordr.scapIns) + parseFloat(e.target.value))
+    const count = parseFloat(ordr.weightOut) - (parseFloat(ordr.scapIn) + parseFloat(ordr.finishInReceived) + parseFloat(e.target.value) + parseFloat(ordr.wastage))
     console.log(count.toFixed(3))
     setforms01(count.toFixed(3))
   }
@@ -144,7 +144,7 @@ function Stage1() {
     const newadmin = { ...ordr }
     newadmin[e.target.name] = e.target.value
     setordr(newadmin)
-    const count = parseFloat(ordr.weightOut) - (parseFloat(ordr.finishIn) +  parseFloat(ordr.finishInReceived) + parseFloat(ordr.scapIns) +  parseFloat(e.target.value))
+    const count = parseFloat(ordr.weightOut) - (parseFloat(ordr.finishIn) +  parseFloat(ordr.finishInReceived) +  parseFloat(e.target.value) + parseFloat(ordr.wastage))
     console.log(count.toFixed(3))
     setforms01(count.toFixed(3))
   }

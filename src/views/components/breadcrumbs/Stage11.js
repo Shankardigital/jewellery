@@ -56,7 +56,7 @@ const BreadCrumbs = () => {
     setordr(myUser)
     const count = ordr.issuedGold - e.target.value
     console.log(count)
-    setforms01(count)
+    setforms01(count.toFixed(3))
   }
   const handleChange0 = (e) => {
     const myUser = { ...ordr }

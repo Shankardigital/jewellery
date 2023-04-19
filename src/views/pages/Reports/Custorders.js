@@ -40,12 +40,36 @@ const Custorders = () => {
 
     const [selectedMulti1, setselectedMulti1] = useState([])
     console.log(selectedMulti1.value)
+
+    const [selectedMulti, setselectedMulti] = useState([])
+    console.log(selectedMulti)
+
+    const cleardata = () => {
+        setselectedMulti1("")
+        setselectedMulti("")
+        setform("")
+        setshow(false)
+    }
+
+    const cleardata1 = () => {
+        // setselectedMulti1("")
+        setselectedMulti("")
+        setform("")
+        // setshow(false)
+    }
+    const cleardata2 = () => {
+        // setselectedMulti1("")
+        setselectedMulti("")
+        // setform("")
+        // setshow(false)
+    }
+
     function handleMulti(data) {
         console.log(data)
         setselectedMulti1(data)
+        cleardata1()
     }
-    const [selectedMulti, setselectedMulti] = useState([])
-    console.log(selectedMulti)
+
 
     function handleMulti1(data) {
         console.log(data)
@@ -70,6 +94,7 @@ const Custorders = () => {
             if (res.status === 200) {
                 console.log(res.data)
                 setordr(res.data.orderResult)
+                cleardata2()
                 // setselectedMulti("")
                 // setform("")
             }
@@ -126,14 +151,6 @@ const Custorders = () => {
                 toast.error(error.response.data.message)
             }
         })
-
-    }
-
-    const cleardata = () => {
-        setselectedMulti1("")
-        setselectedMulti("")
-        setform("")
-        setshow(false)
 
     }
 
@@ -257,7 +274,7 @@ const Custorders = () => {
                                     </Col>
                                     <Col md="3" >
                                         <Label>Purity <span className="text-danger">*</span> </Label>
-                                        <Input id="exampleSelect" type="select" name="itemPurity"
+                                        <Input value={form.itemPurity} id="exampleSelect" type="select" name="itemPurity"
 
                                             onChange={(e) => {
                                                 handleChange(e)

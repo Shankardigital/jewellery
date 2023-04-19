@@ -118,7 +118,7 @@ const Addsetting = () => {
         setselectedMulti(data)
         if (selectedMulti && selectedMulti.value !== data.value) {
             setordritem([])
-          }
+        }
         const token = datas
         const params = {
             orderId: data.value
@@ -143,6 +143,7 @@ const Addsetting = () => {
 
     }
     const [selectedMulti2, setselectedMulti2] = useState()
+    console.log(selectedMulti2)
 
     const handleChange1 = (e) => {
         const myUser = { ...form }
@@ -162,13 +163,19 @@ const Addsetting = () => {
         setorders(set)
         console.log(inputList)
     }
-    const [totalwe, settotalwe] = useState([])
+    const [totalwe, settotalwe] = useState([0])
     const handleChange12 = (e) => {
         const myUser = { ...form }
         myUser[e.target.name] = e.target.value
         setform(myUser)
-        const count = parseFloat(itemval) + parseFloat(e.target.value)
-        settotalwe(count.toFixed(3))
+        // if (form.tikliPieces === "0") {
+        //     const count = parseFloat(itemval) +  parseFloat(0)
+        //     settotalwe(count.toFixed(3))
+        // } else {
+            const count = parseFloat(itemval) + parseFloat(e.target.value)
+            settotalwe(count.toFixed(3))
+        // }
+
     }
 
     const actiordrs = () => {
@@ -235,8 +242,10 @@ const Addsetting = () => {
     }
 
     const pktsid = stpkts.map((data) => (
-        { value: data.stoneOutWeight, label: data.stoneOutWeight, item: data.item, pieces:data.pieces }
+        { value: data.stoneOutWeight, label: data.stoneOutWeight, item: data.item, pieces: data.pieces }
     ))
+
+    console.log(pktsid)
 
     const ordrid = ordr.map((data) => (
         { value: data._id, label: data.orderNo, purity: data.itemPurity, itemName: data.itemNameMulti, itemdat: data.deliveryDate }
@@ -289,7 +298,7 @@ const Addsetting = () => {
         const data = inputList.map((x) => (
             {
                 stoneOutWeight: x.stoneOutWeight,
-                item:x.item,
+                item: x.item,
                 pieces: x.pieces,
                 quantityGm: x.StoneRange,
                 quantityGmCts: (x.StoneRange === "Cts") ? parseFloat(x.quantityGmCts).toFixed(2) : parseFloat(x.quantityGmCts).toFixed(3)
@@ -434,13 +443,21 @@ const Addsetting = () => {
                                         name="tikliPieces" onChange={(e) => { handleChange1(e) }}
                                         type="text" id="select-basic" placeholder="Enter Tikili Pieces" className="form-control mb-1" />
                                 </Col>
+
                                 <Col sm="2">
                                     <Label for="name" style={{ color: "black" }}>
                                         Tikili Weight:
                                     </Label>
-                                    <Input required
-                                        name="tikliweight" onChange={(e) => { handleChange12(e) }}
-                                        type="text" id="select-basic" placeholder="Enter Tikili Weight" className="form-control mb-1" />
+                                    {form.tikliPieces === "0" ? (
+                                        <Input required disabled
+                                            name="tikliweight" onChange={(e) => { handleChange12(e) }}
+                                            type="text" value="0" id="select-basic" placeholder="Enter Tikili Weight" className="form-control mb-1" />
+                                    ) : (
+                                        <Input required
+                                            name="tikliweight" onChange={(e) => { handleChange12(e) }}
+                                            type="text" id="select-basic" placeholder="Enter Tikili Weight" className="form-control mb-1" />
+                                    )}
+
                                 </Col>
                                 <Col sm="2">
                                     <Label for="name" style={{ color: "black" }}>
@@ -465,6 +482,7 @@ const Addsetting = () => {
                                                     // onChange={handleMulti1}
                                                     value={pktsid.find(function (pktsid) {
                                                         return pktsid.value === selectedMulti2
+
                                                     })}
                                                     // value={x.orderId}
                                                     required
@@ -486,8 +504,20 @@ const Addsetting = () => {
                                                     Pieces :
                                                 </Label>
                                                 <Input
+                                                    name="pieces"
+                                                    max={selectedMulti2?.pieces}
+                                                    required
+                                                    value={x.pieces}
+                                                    onChange={(e) => handleInputChange(e, i)}
+                                                    type="number"
+                                                    id="select-basic"
+                                                    placeholder="Enter Pieces"
+                                                    className="form-control mb-1"
+                                                />
+                                                {/* <Input
                                                     name="pieces" max={pktsid[i]?.pieces || ''} required  value={x.pieces} onChange={e => handleInputChange(e, i)}
-                                                    type="number" id="select-basic" placeholder="Enter Pieces" className="form-control mb-1" />
+                                                    type="number" id="select-basic" placeholder="Enter Pieces" className="form-control mb-1" /> */}
+
                                             </Col>
 
                                             <Col md='2' sm='12' className='mb-1'>
@@ -582,7 +612,7 @@ const Addsetting = () => {
                                 <Col>
                                     {/* <Link to={"/casting"}> */}
                                     <Button disabled={isSubmitting} outline size="sm" className="me-1 mt-1" color="success" type="submit">
-                                    {isSubmitting ? 'Submitting...' : 'Submit'} <ArrowRightCircle className='font-medium-2 pl-1' />
+                                        {isSubmitting ? 'Submitting...' : 'Submit'} <ArrowRightCircle className='font-medium-2 pl-1' />
                                     </Button>
                                     {/* </Link> */}
                                     <Link to={"/setting-details"}>
